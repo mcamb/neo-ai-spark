@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useCallback } from 'react';
 import MainLayout from '@/components/MainLayout';
 import ClientsHeader from '@/components/clients/ClientsHeader';
@@ -105,8 +104,26 @@ const Clients = () => {
       // Show pending toast
       const pendingToast = toast.loading("Deleting client...");
       
-      // Execute the delete operation without any select
-      console.log("Sending DELETE request to Supabase for client ID:", selectedClientId);
+      console.log("First checking for related records in relevance_scores table");
+      
+      // First delete any related scores that might be preventing deletion
+      const { error: relatedError } = await supabase
+        .from('relevance_scores')
+        .delete()
+        .eq('client_id', selectedClientId);
+        
+      if (relatedError) {
+        console.warn("Note: Error while cleaning related records:", relatedError);
+        // Continue with deletion attempt even if this fails
+      } else {
+        console.log("Successfully removed related records or none existed");
+      }
+      
+      // Brief delay to ensure related records deletion completes
+      await new Promise(resolve => setTimeout(resolve, 200));
+      
+      // Now attempt to delete the actual client
+      console.log("Now sending DELETE request to Supabase for client ID:", selectedClientId);
       const { error } = await supabase
         .from('clients')
         .delete()
@@ -130,11 +147,11 @@ const Clients = () => {
       setSelectedClientId(null);
       
       // Refetch data after successful deletion
-      // Delay refetch slightly to ensure database has completed the operation
+      // Delay refetch significantly to ensure the database has time to process the deletion
       setTimeout(() => {
         console.log("Triggering refetch after deletion");
         refetch();
-      }, 1000); // Increased timeout to ensure the database has time to process the deletion
+      }, 2000); // Increased timeout further to ensure the database has time to process the deletion
     } catch (e) {
       console.error("Exception during client deletion:", e);
       toast.error("Error deleting client: " + (e instanceof Error ? e.message : String(e)));
