@@ -1,6 +1,9 @@
 
 import React from 'react';
-import ClientCard from './ClientCard';
+import { ChevronRight, Eye, Pencil, Trash2 } from 'lucide-react';
+import ClientStatusBadge from './ClientStatusBadge';
+import { Button } from '@/components/ui/button';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 
 interface Client {
   id: string;
@@ -42,14 +45,49 @@ const ClientsList: React.FC<ClientsListProps> = ({
   }
   
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div className="space-y-2">
       {filteredClients.map((client) => (
-        <ClientCard 
-          key={client.id} 
-          client={client} 
-          countryName={countryNames[client.country]} 
-          onDelete={onDeleteClient}
-        />
+        <div 
+          key={client.id}
+          className="flex items-center justify-between py-3 px-4 hover:bg-gray-50 rounded-md transition-colors"
+        >
+          <div className="flex items-center gap-4">
+            <Avatar className="h-10 w-10 bg-gray-100">
+              <AvatarFallback className="text-gray-700">
+                {client.name.charAt(0)}
+              </AvatarFallback>
+            </Avatar>
+            
+            <div className="flex flex-col min-w-[180px]">
+              <span className="font-medium">{client.name}</span>
+              <span className="text-sm text-gray-600">{countryNames[client.country]}</span>
+            </div>
+            
+            <ClientStatusBadge status={client.agent_status} />
+          </div>
+          
+          <div className="flex items-center gap-1">
+            <Button 
+              variant="ghost" 
+              size="icon"
+              disabled={client.agent_status !== 'ready'}
+              className={`${client.agent_status !== 'ready' ? 'opacity-50 cursor-not-allowed' : ''}`}
+            >
+              <Eye className="h-4 w-4" />
+            </Button>
+            <Button variant="ghost" size="icon">
+              <Pencil className="h-4 w-4" />
+            </Button>
+            <Button 
+              variant="ghost" 
+              size="icon"
+              onClick={() => onDeleteClient(client.id)}
+            >
+              <Trash2 className="h-4 w-4" />
+            </Button>
+            <ChevronRight className="h-4 w-4 text-gray-400 ml-1" />
+          </div>
+        </div>
       ))}
     </div>
   );
