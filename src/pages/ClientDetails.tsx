@@ -69,7 +69,7 @@ const mockClientDetails: Record<string, ClientDetails> = {
       { platform: 'Facebook', score: 55, rationale: 'Declining organic reach but still valuable for community building and customer service. Higher engagement with older demographics.' },
       { platform: 'LinkedIn', score: 90, rationale: 'Excellent platform for B2B outreach, thought leadership content, and recruitment. Our industry expertise content performs exceptionally well.' },
       { platform: 'WhatsApp', score: 40, rationale: 'Limited direct marketing use but potential for customer service applications and community building. Privacy concerns limit widespread adoption for marketing.' },
-      { platform: 'Snapchat', score: 30, rationale: 'Minimal presence and engagement. Demographics don't strongly align with our primary target audience. Limited ROI for current marketing efforts.' }
+      { platform: 'Snapchat', score: 30, rationale: "Minimal presence and engagement. Demographics don't strongly align with our primary target audience. Limited ROI for current marketing efforts." }
     ]
   },
   '2': {
@@ -106,7 +106,7 @@ const mockClientDetails: Record<string, ClientDetails> = {
     country: 'ca',
     domain: 'techfuture.ca',
     description: 'Pioneering tech company focused on next-generation software solutions and AI integration for businesses and consumers.',
-    brandPromise: 'TechFuture is dedicated to creating accessible technology that makes tomorrow's innovations available today, with a focus on intuitive design and seamless integration into everyday life.',
+    brandPromise: 'TechFuture is dedicated to creating accessible technology that makes tomorrow\'s innovations available today, with a focus on intuitive design and seamless integration into everyday life.',
     brandChallenge: 'Standing out in an oversaturated tech market while convincing potential customers that complex AI solutions can be user-friendly and provide meaningful value to their specific use cases.',
     targetAudience: {
       b2c: {
