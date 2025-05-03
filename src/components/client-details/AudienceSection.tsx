@@ -61,13 +61,17 @@ export const AudienceSection: React.FC<AudienceSectionProps> = ({
   }, [audienceType, isEditing, targetAudience]);
 
   return (
-    <div className="space-y-6 p-6 rounded-lg">
-      <div className="flex items-center justify-between mb-2">
-        <h2 className="text-xl font-semibold text-black">Target Audience</h2>
+    <div className="space-y-6 p-6 rounded-lg bg-[#FFFFFF]">
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-xl font-semibold text-black relative pb-2">
+          Target Audience
+          <span className="absolute bottom-0 left-0 w-16 h-1 bg-[#FF4B4F]"></span>
+        </h2>
         <Button 
           variant="ghost" 
           size="sm" 
           onClick={isEditing ? onSaveEdits : onStartEditing}
+          className="text-[#FF4B4F] hover:text-[#FF4B4F] hover:bg-[#FF4B4F]/10"
         >
           {isEditing ? (
             <>
@@ -83,49 +87,54 @@ export const AudienceSection: React.FC<AudienceSectionProps> = ({
         </Button>
       </div>
       
-      <div className="space-y-6">
-        {/* Toggle between B2C and B2B using Switch */}
-        <div className="flex items-center space-x-2 mb-4">
-          <span className={`font-medium ${audienceType === 'b2c' ? 'text-black' : 'text-gray-400'}`}>B2C</span>
-          <Switch 
-            checked={audienceType === 'b2b'}
-            onCheckedChange={(checked) => onSetAudienceType(checked ? 'b2b' : 'b2c')}
-          />
-          <span className={`font-medium ${audienceType === 'b2b' ? 'text-black' : 'text-gray-400'}`}>B2B</span>
+      {/* Toggle between B2C and B2B using Switch with more spacing */}
+      <div className="flex items-center space-x-2 mb-8">
+        <span className={`font-medium ${audienceType === 'b2c' ? 'text-black' : 'text-gray-400'}`}>B2C</span>
+        <Switch 
+          checked={audienceType === 'b2b'}
+          onCheckedChange={(checked) => onSetAudienceType(checked ? 'b2b' : 'b2c')}
+          className="data-[state=checked]:bg-[#FF4B4F]"
+        />
+        <span className={`font-medium ${audienceType === 'b2b' ? 'text-black' : 'text-gray-400'}`}>B2B</span>
+      </div>
+      
+      {/* Show selected audience type */}
+      <div className="grid md:grid-cols-2 gap-6">
+        <div className="space-y-2">
+          <h4 className="text-sm font-medium text-black">Primary</h4>
+          <div ref={primaryRef}>
+            <MarkdownBox
+              isEditing={isEditing}
+              onEdit={(value) => onEditTargetAudience(audienceType, 'primary', value)}
+              value={editedTargetAudience[audienceType].primary}
+              style={{
+                minHeight: equalHeight && !isEditing ? `${equalHeight}px` : undefined,
+                backgroundColor: isEditing ? "white" : "#E8E5DE"
+              }}
+            >
+              {isEditing 
+                ? editedTargetAudience[audienceType].primary 
+                : targetAudience[audienceType].primary}
+            </MarkdownBox>
+          </div>
         </div>
         
-        {/* Show selected audience type */}
-        <div className="grid md:grid-cols-2 gap-6">
-          <div className="space-y-2">
-            <h4 className="text-sm font-medium text-black">Primary</h4>
-            <div ref={primaryRef}>
-              <MarkdownBox
-                isEditing={isEditing}
-                onEdit={(value) => onEditTargetAudience(audienceType, 'primary', value)}
-                value={editedTargetAudience[audienceType].primary}
-                style={equalHeight && !isEditing ? { minHeight: `${equalHeight}px` } : undefined}
-              >
-                {isEditing 
-                  ? editedTargetAudience[audienceType].primary 
-                  : targetAudience[audienceType].primary}
-              </MarkdownBox>
-            </div>
-          </div>
-          
-          <div className="space-y-2">
-            <h4 className="text-sm font-medium text-black">Secondary</h4>
-            <div ref={secondaryRef}>
-              <MarkdownBox
-                isEditing={isEditing}
-                onEdit={(value) => onEditTargetAudience(audienceType, 'secondary', value)}
-                value={editedTargetAudience[audienceType].secondary}
-                style={equalHeight && !isEditing ? { minHeight: `${equalHeight}px` } : undefined}
-              >
-                {isEditing 
-                  ? editedTargetAudience[audienceType].secondary 
-                  : targetAudience[audienceType].secondary}
-              </MarkdownBox>
-            </div>
+        <div className="space-y-2">
+          <h4 className="text-sm font-medium text-black">Secondary</h4>
+          <div ref={secondaryRef}>
+            <MarkdownBox
+              isEditing={isEditing}
+              onEdit={(value) => onEditTargetAudience(audienceType, 'secondary', value)}
+              value={editedTargetAudience[audienceType].secondary}
+              style={{
+                minHeight: equalHeight && !isEditing ? `${equalHeight}px` : undefined,
+                backgroundColor: isEditing ? "white" : "#E8E5DE"
+              }}
+            >
+              {isEditing 
+                ? editedTargetAudience[audienceType].secondary 
+                : targetAudience[audienceType].secondary}
+            </MarkdownBox>
           </div>
         </div>
       </div>

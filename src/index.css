@@ -43,6 +43,12 @@
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 357 83% 57%;
+    
+    /* Custom colors */
+    --accent-color: 355 100% 65%;
+    --text-color: 0 0% 0%;
+    --background-alt: 36 19% 89%;
+    --status-green: 114 28% 69%;
   }
 
   .dark {
@@ -92,5 +98,47 @@
   body {
     @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
+  }
+  
+  h2 {
+    @apply relative;
+  }
+  
+  h2::after {
+    content: '';
+    @apply absolute bottom-0 left-0 w-16 h-1 bg-[#FF4B4F];
+    display: block;
+  }
+}
+
+/* Custom classes for our specified color scheme */
+@layer components {
+  .accent-bg {
+    @apply bg-[#FF4B4F];
+  }
+  
+  .accent-text {
+    @apply text-[#FF4B4F];
+  }
+  
+  .bg-alt {
+    @apply bg-[#E8E5DE];
+  }
+  
+  .status-success {
+    @apply bg-[#94C29D];
+  }
+  
+  .section-title {
+    @apply text-xl font-semibold text-black relative pb-2;
+  }
+  
+  .section-title::after {
+    content: '';
+    @apply absolute bottom-0 left-0 w-16 h-1 bg-[#FF4B4F];
+  }
+  
+  .section-card {
+    @apply bg-white rounded-lg shadow-sm p-6;
   }
 }

@@ -9,6 +9,7 @@ interface MarkdownBoxProps {
   onEdit?: (value: string) => void;
   value?: string;
   style?: React.CSSProperties;
+  className?: string;
 }
 
 export const MarkdownBox: React.FC<MarkdownBoxProps> = ({ 
@@ -16,13 +17,14 @@ export const MarkdownBox: React.FC<MarkdownBoxProps> = ({
   isEditing = false, 
   onEdit, 
   value,
-  style 
+  style,
+  className
 }) => {
   if (isEditing && onEdit) {
     return (
       <div className="relative">
         <Textarea 
-          className="min-h-[120px] w-full border border-gray-300 rounded-lg focus:border-neo-red text-black" 
+          className="min-h-[120px] w-full border border-gray-300 rounded-lg focus:border-[#FF4B4F] text-black" 
           value={value} 
           onChange={(e) => onEdit(e.target.value)}
           style={style}
@@ -35,7 +37,10 @@ export const MarkdownBox: React.FC<MarkdownBoxProps> = ({
   }
 
   return (
-    <div className="p-4 bg-white border border-gray-200 rounded-lg prose prose-black max-w-none" style={style}>
+    <div 
+      className={`p-4 bg-white border border-gray-200 rounded-lg prose prose-black max-w-none ${className || ''}`} 
+      style={style}
+    >
       <ReactMarkdown>
         {typeof children === 'string' ? children : ''}
       </ReactMarkdown>

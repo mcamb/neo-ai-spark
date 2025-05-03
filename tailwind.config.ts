@@ -26,7 +26,7 @@ export default {
 				background: 'hsl(var(--background))',
 				foreground: 'hsl(var(--foreground))',
 				neo: {
-					red: '#ea384c',
+					red: '#FF4B4F', // Updated to requested accent color
 					black: '#000000',
 					darkgray: '#333333',
 					lightgray: '#F3F3F3',
@@ -68,6 +68,14 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				// Custom colors as requested
+				custom: {
+					accent: '#FF4B4F',     // Accent color
+					text: '#000000',       // Text color
+					white: '#FFFFFF',      // Pure white
+					background: '#E8E5DE', // Alternative background
+					status: '#94C29D'      // Status indicators
 				}
 			},
 			borderRadius: {
