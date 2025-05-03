@@ -42,7 +42,6 @@ const Clients = () => {
       throw error;
     }
     
-    // Refetch clients to get the latest data
     refetch();
   }, [refetch]);
 
@@ -72,7 +71,6 @@ const Clients = () => {
   };
 
   const handleAddClient = () => {
-    // Refetch clients after a new client is added
     refetch();
   };
 
@@ -91,51 +89,45 @@ const Clients = () => {
     setDeleteDialogOpen(true);
   };
 
+  // Completely revised deletion function with a simple, direct approach
   const handleDeleteClient = async () => {
     if (!selectedClientId || isDeleting) return;
     
     setIsDeleting(true);
     setDeleteDialogOpen(false);
     
-    const toastId = toast.loading("Deleting client...");
-    
     try {
-      console.log("Deleting client with ID:", selectedClientId);
+      // Simple, direct deletion
+      const deleteToastId = toast.loading("Deleting client...");
       
-      // First, delete related relevance scores
-      const { error: relScoresError } = await supabase
+      // Delete related records first (in a single operation)
+      await supabase
         .from('relevance_scores')
         .delete()
         .eq('client_id', selectedClientId);
-        
-      if (relScoresError) {
-        console.error("Error deleting related relevance scores:", relScoresError);
-        // Continue with client deletion attempt even if this fails
-      } else {
-        console.log("Successfully deleted related relevance scores");
-      }
       
-      // Now delete the client
-      const { error: clientError } = await supabase
+      // Then delete the client
+      const { error } = await supabase
         .from('clients')
         .delete()
         .eq('id', selectedClientId);
-      
-      if (clientError) {
-        console.error("Error deleting client:", clientError);
-        toast.dismiss(toastId);
-        toast.error(`Failed to delete client: ${clientError.message}`);
+        
+      if (error) {
+        toast.dismiss(deleteToastId);
+        toast.error(`Deletion failed: ${error.message}`);
+        console.error("Database error:", error);
       } else {
-        console.log("Client successfully deleted!");
-        toast.dismiss(toastId);
+        toast.dismiss(deleteToastId);
         toast.success("Client deleted successfully");
-        refetch(); // Refetch data after successful deletion
+        
+        // Update the client list after deletion
+        setTimeout(() => {
+          refetch();
+        }, 500);
       }
-    } catch (e) {
-      const errorMessage = e instanceof Error ? e.message : String(e);
-      console.error("Exception during deletion:", e);
-      toast.dismiss(toastId);
-      toast.error(`Error: ${errorMessage}`);
+    } catch (err) {
+      toast.error("An unexpected error occurred");
+      console.error("Exception:", err);
     } finally {
       setIsDeleting(false);
       setSelectedClientId(null);
