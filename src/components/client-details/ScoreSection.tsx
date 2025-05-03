@@ -44,7 +44,7 @@ export const ScoreSection: React.FC<ScoreSectionProps> = ({ socialMediaScores })
   return (
     <div className="space-y-6 bg-white shadow-sm rounded-lg">
       <div className="p-6">
-        <h2 className="text-xl font-semibold text-black relative pb-2 mb-4">
+        <h2 className="text-xl font-semibold text-black relative pb-2 mb-6">
           Relevance Score
           <span className="absolute bottom-0 left-0 w-16 h-1 bg-[#FF4B4F]"></span>
         </h2>

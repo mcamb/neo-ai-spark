@@ -30,7 +30,7 @@ const Sidebar = () => {
           "flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-md transition-colors",
           active 
             ? "text-white bg-neo-red" 
-            : "text-gray-700 hover:bg-neo-lightgray"
+            : "text-black hover:bg-neo-lightgray"
         )}
       >
         <Icon size={18} />
