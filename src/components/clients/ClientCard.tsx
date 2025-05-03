@@ -27,16 +27,19 @@ const ClientCard: React.FC<ClientCardProps> = ({ client, countryName, onDelete }
     <Card className="overflow-hidden border border-gray-200 bg-custom-background rounded-lg">
       <CardContent className="p-6">
         <div className="flex flex-col space-y-4">
-          <div className="flex items-center gap-4">
-            <div className="w-16 h-16 flex items-center justify-center rounded-md bg-white border border-white text-gray-700 font-medium text-xl">
-              {client.name.charAt(0)}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <div className="w-16 h-16 flex items-center justify-center rounded-md bg-white border border-white text-gray-700 font-medium text-xl">
+                {client.name.charAt(0)}
+              </div>
+              <div>
+                <h3 className="font-medium text-lg">{client.name}</h3>
+                <Badge variant="outline" className="text-xs w-fit mt-1 bg-white text-gray-700 border border-gray-200">
+                  {countryName}
+                </Badge>
+              </div>
             </div>
-            <div>
-              <h3 className="font-medium text-lg">{client.name}</h3>
-              <Badge variant="outline" className="text-xs w-fit mt-1 bg-white text-gray-700 border border-gray-200">
-                {countryName}
-              </Badge>
-            </div>
+            <ClientStatusBadge status={client.agent_status} />
           </div>
           
           <div className="flex items-center justify-between">
@@ -50,13 +53,20 @@ const ClientCard: React.FC<ClientCardProps> = ({ client, countryName, onDelete }
                 </Button>
               </Link>
             </div>
-            <div>
+            <div className="flex gap-2">
               <Button variant="outline" size="icon" className="border-gray-200 bg-white">
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="4" cy="10" r="1.5" fill="#333"/>
-                  <circle cx="10" cy="10" r="1.5" fill="#333"/>
-                  <circle cx="16" cy="10" r="1.5" fill="#333"/>
-                </svg>
+                <Eye className="h-4 w-4" />
+              </Button>
+              <Button variant="outline" size="icon" className="border-gray-200 bg-white">
+                <Pencil className="h-4 w-4" />
+              </Button>
+              <Button 
+                variant="outline" 
+                size="icon" 
+                className="border-gray-200 bg-white"
+                onClick={() => onDelete(client.id)}
+              >
+                <Trash2 className="h-4 w-4" />
               </Button>
             </div>
           </div>

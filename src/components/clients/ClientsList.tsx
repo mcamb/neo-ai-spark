@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Link } from 'react-router-dom';
 import { Badge } from '@/components/ui/badge';
+import ClientCard from './ClientCard';
 
 interface Client {
   id: string;
@@ -49,41 +50,12 @@ const ClientsList: React.FC<ClientsListProps> = ({
   return (
     <div className="space-y-4 p-2">
       {filteredClients.map((client) => (
-        <div 
+        <ClientCard 
           key={client.id}
-          className="flex items-center justify-between p-4 rounded-lg bg-custom-background shadow-sm"
-        >
-          <div className="flex items-center gap-4">
-            <div className="w-16 h-16 flex items-center justify-center bg-white rounded-md border border-white">
-              <span className="text-xl font-medium">{client.name.charAt(0)}</span>
-            </div>
-            
-            <div className="flex flex-col">
-              <span className="font-medium text-lg">{client.name}</span>
-              <Badge variant="outline" className="text-xs w-fit mt-1 bg-white text-gray-700 border border-gray-200">
-                {countryNames[client.country]}
-              </Badge>
-            </div>
-          </div>
-          
-          <div className="flex items-center gap-2">
-            <Link to={client.agent_status === 'ready' ? `/clients/${client.id}` : '#'}>
-              <Button 
-                variant="default" 
-                className="bg-custom-accent text-white hover:bg-custom-accent/90"
-              >
-                Open
-              </Button>
-            </Link>
-            <Button variant="outline" size="icon" className="border-gray-200 bg-white">
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="4" cy="10" r="1.5" fill="#333"/>
-                <circle cx="10" cy="10" r="1.5" fill="#333"/>
-                <circle cx="16" cy="10" r="1.5" fill="#333"/>
-              </svg>
-            </Button>
-          </div>
-        </div>
+          client={client}
+          countryName={countryNames[client.country]}
+          onDelete={onDeleteClient}
+        />
       ))}
     </div>
   );
