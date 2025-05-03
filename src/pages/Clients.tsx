@@ -137,6 +137,7 @@ const Clients = () => {
           searchQuery={searchQuery}
           onDeleteClient={handleDeletePrompt}
           onEditClient={handleEditClient}
+          refetch={refetch}  // Fix: Pass the refetch function to the ClientsContent component
         />
       </div>
       
