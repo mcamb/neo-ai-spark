@@ -21,12 +21,11 @@ export const ScoreSection: React.FC<ScoreSectionProps> = ({ socialMediaScores })
   }));
 
   return (
-    <div className="space-y-6 p-6 rounded-lg">
-      <div className="flex items-center justify-between mb-2">
+    <div className="space-y-6 bg-white shadow-sm rounded-lg">
+      <div className="p-6">
         <h2 className="text-xl font-semibold text-black">Relevance Score</h2>
+        <ScoreChart data={chartData} />
       </div>
-      
-      <ScoreChart data={chartData} />
     </div>
   );
 };

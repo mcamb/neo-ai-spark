@@ -8,7 +8,7 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  LabelList
+  Cell
 } from 'recharts';
 
 interface ScoreItem {
@@ -25,55 +25,41 @@ export const ScoreChart: React.FC<ScoreChartProps> = ({ data }) => {
   // Sort data by score (highest to lowest)
   const sortedData = [...data].sort((a, b) => b.score - a.score);
   
+  // Colors for bars
+  const barColor = '#9b87f5';
+  
   return (
-    <div className="h-80 w-full bg-white p-4 rounded-md shadow-sm">
+    <div className="w-full h-[400px] bg-white rounded-md">
       <ResponsiveContainer width="100%" height="100%">
         <BarChart
           data={sortedData}
-          layout="horizontal"
-          margin={{ top: 5, right: 50, left: 20, bottom: 5 }}
-          barGap={8}
+          layout="vertical"
+          margin={{ top: 20, right: 30, left: 80, bottom: 10 }}
         >
-          <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={false} stroke="#f0f0f0" />
-          <XAxis 
-            type="number" 
+          <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={false} />
+          <XAxis
+            type="number"
             domain={[0, 100]}
-            tickLine={false}
-            axisLine={true}
-            tick={{ fill: '#333333', fontSize: 12 }}
+            tickCount={6}
           />
-          <YAxis 
-            type="category"
+          <YAxis
             dataKey="name"
-            tickLine={false}
-            axisLine={true}
-            tick={{ fill: '#333333', fontSize: 13 }}
-            width={120}
+            type="category"
+            width={80}
+            tick={{ fontSize: 13 }}
           />
-          <Tooltip 
+          <Tooltip
             formatter={(value: number) => [`${value}/100`, 'Score']}
             cursor={{ fill: 'rgba(0, 0, 0, 0.05)' }}
-            contentStyle={{ 
-              borderRadius: '4px', 
-              border: '1px solid #e0e0e0',
-              boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)'
-            }}
           />
-          <Bar 
-            dataKey="score" 
-            fill="#9b87f5"
+          <Bar
+            dataKey="score"
             radius={[0, 4, 4, 0]}
-            animationDuration={800}
-            className="transition-opacity"
+            label={{ position: 'right', formatter: (value: number) => `${value}`, fill: '#333' }}
           >
-            <LabelList 
-              dataKey="score" 
-              position="right"
-              offset={10}
-              fill="#333333"
-              fontSize={12}
-              formatter={(value: number) => `${value}`}
-            />
+            {sortedData.map((entry, index) => (
+              <Cell key={`cell-${index}`} fill={barColor} />
+            ))}
           </Bar>
         </BarChart>
       </ResponsiveContainer>
