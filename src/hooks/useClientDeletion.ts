@@ -47,15 +47,17 @@ export const useClientDeletion = ({ refetch }: UseClientDeletionProps) => {
         toast.success("Client deleted successfully");
         
         // Update the client list after deletion
+        // Use a slight delay to ensure UI updates properly
         setTimeout(() => {
           refetch();
-        }, 500);
+          setIsDeleting(false);
+        }, 800);
       }
     } catch (err) {
       toast.error("An unexpected error occurred");
       console.error("Exception:", err);
-    } finally {
       setIsDeleting(false);
+    } finally {
       setSelectedClientId(null);
     }
   };

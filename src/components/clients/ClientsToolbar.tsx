@@ -1,36 +1,40 @@
 
 import React from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Search } from 'lucide-react';
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Plus } from "lucide-react";
 
 interface ClientsToolbarProps {
   searchQuery: string;
   onSearchChange: (query: string) => void;
   onAddClient: () => void;
+  isDisabled?: boolean;
 }
 
-const ClientsToolbar: React.FC<ClientsToolbarProps> = ({
-  searchQuery,
+const ClientsToolbar: React.FC<ClientsToolbarProps> = ({ 
+  searchQuery, 
   onSearchChange,
-  onAddClient
+  onAddClient,
+  isDisabled = false
 }) => {
   return (
     <div className="flex flex-col sm:flex-row justify-between gap-4">
-      <div className="relative flex-1">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-        <Input 
-          placeholder="Type here to search" 
-          className="pl-10 border-gray-300 focus:border-neo-red focus:ring-neo-red" 
-          value={searchQuery} 
-          onChange={e => onSearchChange(e.target.value)} 
+      <div className="w-full sm:max-w-xs">
+        <Input
+          placeholder="Search clients..."
+          value={searchQuery}
+          onChange={(e) => onSearchChange(e.target.value)}
+          className="w-full"
+          disabled={isDisabled}
         />
       </div>
       <Button 
-        onClick={onAddClient} 
+        onClick={onAddClient}
         className="bg-neo-red hover:bg-red-600 text-white"
+        disabled={isDisabled}
       >
-        Add client
+        <Plus className="h-4 w-4 mr-2" />
+        Add Client
       </Button>
     </div>
   );

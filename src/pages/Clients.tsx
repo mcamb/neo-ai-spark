@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useCallback } from 'react';
 import MainLayout from '@/components/MainLayout';
 import ClientsHeader from '@/components/clients/ClientsHeader';
@@ -63,6 +64,9 @@ const Clients = () => {
     }
   }, [error]);
 
+  // Combine loading states for better UX
+  const isPageLoading = isLoading || isDeleting;
+
   return (
     <MainLayout>
       <div className="space-y-6">
@@ -75,11 +79,12 @@ const Clients = () => {
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}
           onAddClient={handleOpenAddModal}
+          isDisabled={isPageLoading}
         />
         
         <ClientsContent 
           clients={clients} 
-          isLoading={isLoading || isDeleting} 
+          isLoading={isPageLoading} 
           error={error} 
           searchQuery={searchQuery}
           onDeleteClient={handleDeletePrompt}

@@ -10,6 +10,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { Loader } from 'lucide-react';
 
 interface DeleteClientDialogProps {
   open: boolean;
@@ -34,13 +35,20 @@ const DeleteClientDialog: React.FC<DeleteClientDialogProps> = ({
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
           <AlertDialogAction 
             onClick={onDelete} 
             className="bg-red-500 hover:bg-red-600"
             disabled={isDeleting}
           >
-            Delete
+            {isDeleting ? (
+              <>
+                <Loader className="mr-2 h-4 w-4 animate-spin" />
+                Deleting...
+              </>
+            ) : (
+              'Delete'
+            )}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
