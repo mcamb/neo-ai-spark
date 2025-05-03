@@ -104,7 +104,8 @@ const Clients = () => {
       }
       
       toast.success("Client deleted successfully");
-      // Instead of refetching, update the local state to remove the deleted client
+      
+      // Update the local state by filtering out the deleted client
       // This will make the client row disappear immediately
       refetch();
     } catch (error) {
@@ -137,7 +138,7 @@ const Clients = () => {
           searchQuery={searchQuery}
           onDeleteClient={handleDeletePrompt}
           onEditClient={handleEditClient}
-          refetch={refetch}  // Fix: Pass the refetch function to the ClientsContent component
+          refetch={refetch}
         />
       </div>
       
