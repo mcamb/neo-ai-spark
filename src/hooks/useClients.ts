@@ -23,7 +23,8 @@ const fetchClients = async () => {
       name,
       agent_status,
       logo,
-      country:countries(id, country)
+      country_id,
+      countries(id, country)
     `);
 
   if (error) {
@@ -39,8 +40,8 @@ const fetchClients = async () => {
       id: item.id,
       domain: item.domain,
       name: item.name || item.domain.split('.')[0], // Use name from DB or fallback to domain
-      country: item.country?.country?.toLowerCase().substring(0, 2) || 'us', // Convert to country code format
-      country_id: item.country?.id,
+      country: item.countries?.country?.toLowerCase().substring(0, 2) || 'us', // Convert to country code format
+      country_id: item.country_id,
       agent_status: item.agent_status, // Now using the actual agent_status from the database
       logo: item.logo,
     };

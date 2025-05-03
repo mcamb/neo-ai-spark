@@ -3,6 +3,7 @@ import React from 'react';
 import ClientsList from './ClientsList';
 import { Client } from '@/hooks/useClients';
 import { countryNames } from '@/utils/clientDataUtils';
+import { Loader } from 'lucide-react';
 
 interface ClientsContentProps {
   clients: Client[];
@@ -19,8 +20,18 @@ const ClientsContent: React.FC<ClientsContentProps> = ({
   searchQuery,
   onDeleteClient
 }) => {
+  console.log("ClientsContent received clients:", clients);
+  console.log("ClientsContent isLoading:", isLoading);
+
   if (isLoading) {
-    return <div className="text-center py-10">Loading clients...</div>;
+    return (
+      <div className="flex justify-center items-center py-10">
+        <div className="flex flex-col items-center gap-2">
+          <Loader className="h-6 w-6 animate-spin text-neo-red" />
+          <span className="text-gray-500">Loading clients...</span>
+        </div>
+      </div>
+    );
   }
 
   if (error) {
