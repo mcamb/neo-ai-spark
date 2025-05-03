@@ -20,6 +20,10 @@ import {
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { useQuery } from '@tanstack/react-query';
+import { Loader } from 'lucide-react';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { useForm } from 'react-hook-form';
 
 interface CountryOption {
   id: string;
@@ -33,10 +37,82 @@ const fetchCountries = async (): Promise<CountryOption[]> => {
     .order('country');
 
   if (error) {
+    console.error("Error fetching countries:", error);
     throw new Error(error.message);
   }
 
   return data || [];
+};
+
+// Function to create a new country
+const createCountry = async (countryName: string): Promise<CountryOption> => {
+  console.log("Creating new country:", countryName);
+  const { data, error } = await supabase
+    .from('countries')
+    .insert({ country: countryName })
+    .select()
+    .single();
+
+  if (error) {
+    console.error("Error creating country:", error);
+    throw new Error(error.message);
+  }
+
+  console.log("Created new country:", data);
+  return data;
+};
+
+interface NewCountryFormProps {
+  onSubmit: (countryName: string) => Promise<void>;
+  onCancel: () => void;
+  isSubmitting: boolean;
+}
+
+const NewCountryForm: React.FC<NewCountryFormProps> = ({ onSubmit, onCancel, isSubmitting }) => {
+  const form = useForm({
+    defaultValues: {
+      countryName: '',
+    }
+  });
+
+  const handleSubmit = async (values: { countryName: string }) => {
+    await onSubmit(values.countryName);
+  };
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
+        <FormField
+          control={form.control}
+          name="countryName"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Country Name</FormLabel>
+              <FormControl>
+                <Input placeholder="United States" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <DialogFooter>
+          <Button type="button" variant="outline" onClick={onCancel}>
+            Cancel
+          </Button>
+          <Button type="submit" disabled={isSubmitting}>
+            {isSubmitting ? (
+              <>
+                <Loader className="mr-2 h-4 w-4 animate-spin" />
+                Creating...
+              </>
+            ) : (
+              "Create Country"
+            )}
+          </Button>
+        </DialogFooter>
+      </form>
+    </Form>
+  );
 };
 
 interface NewClientModalProps {
@@ -52,8 +128,14 @@ const NewClientModal: React.FC<NewClientModalProps> = ({ isOpen, onClose, onSubm
   const [domain, setDomain] = useState('');
   const [logo, setLogo] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isAddingCountry, setIsAddingCountry] = useState(false);
+  const [isCreatingCountry, setIsCreatingCountry] = useState(false);
 
-  const { data: countries = [], isLoading: isLoadingCountries } = useQuery({
+  const { 
+    data: countries = [], 
+    isLoading: isLoadingCountries,
+    refetch: refetchCountries
+  } = useQuery({
     queryKey: ['countries'],
     queryFn: fetchCountries
   });
@@ -93,80 +175,136 @@ const NewClientModal: React.FC<NewClientModalProps> = ({ isOpen, onClose, onSubm
     setIsSubmitting(false);
     onClose();
   };
+
+  const handleAddCountry = async (countryName: string) => {
+    try {
+      setIsCreatingCountry(true);
+      const newCountry = await createCountry(countryName);
+      await refetchCountries();
+      setCountryId(newCountry.id);
+      setIsAddingCountry(false);
+      toast({
+        title: "Success",
+        description: `Country "${countryName}" created successfully`
+      });
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: `Failed to create country: ${error.message}`,
+        variant: "destructive"
+      });
+    } finally {
+      setIsCreatingCountry(false);
+    }
+  };
   
   return (
-    <Sheet open={isOpen} onOpenChange={onClose}>
-      <SheetContent className="w-full sm:max-w-md">
-        <SheetHeader className="mb-6">
-          <SheetTitle>New Client</SheetTitle>
-          <SheetDescription>
-            Add a new client to manage their social media presence.
-          </SheetDescription>
-        </SheetHeader>
-        
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="space-y-2">
-            <Label htmlFor="name">Client Name *</Label>
-            <Input 
-              id="name"
-              value={name} 
-              onChange={(e) => setName(e.target.value)} 
-              placeholder="Acme Inc."
-              required
-            />
-          </div>
+    <>
+      <Sheet open={isOpen} onOpenChange={onClose}>
+        <SheetContent className="w-full sm:max-w-md">
+          <SheetHeader className="mb-6">
+            <SheetTitle>New Client</SheetTitle>
+            <SheetDescription>
+              Add a new client to manage their social media presence.
+            </SheetDescription>
+          </SheetHeader>
           
-          <div className="space-y-2">
-            <Label htmlFor="country">Country *</Label>
-            <Select value={countryId} onValueChange={setCountryId} required>
-              <SelectTrigger id="country">
-                <SelectValue placeholder="Select a country" />
-              </SelectTrigger>
-              <SelectContent>
-                {isLoadingCountries ? (
-                  <SelectItem value="loading" disabled>Loading countries...</SelectItem>
-                ) : (
-                  countries.map(country => (
-                    <SelectItem key={country.id} value={country.id}>
-                      {country.country}
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="space-y-2">
+              <Label htmlFor="name">Client Name *</Label>
+              <Input 
+                id="name"
+                value={name} 
+                onChange={(e) => setName(e.target.value)} 
+                placeholder="Acme Inc."
+                required
+              />
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="country">Country *</Label>
+              {isLoadingCountries ? (
+                <div className="flex items-center gap-2">
+                  <Loader className="h-4 w-4 animate-spin" />
+                  <span className="text-sm text-gray-500">Loading countries...</span>
+                </div>
+              ) : countries.length > 0 ? (
+                <Select value={countryId} onValueChange={setCountryId} required>
+                  <SelectTrigger id="country">
+                    <SelectValue placeholder="Select a country" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {countries.map(country => (
+                      <SelectItem key={country.id} value={country.id}>
+                        {country.country}
+                      </SelectItem>
+                    ))}
+                    <SelectItem value="add-new" className="text-neo-red">
+                      + Add new country
                     </SelectItem>
-                  ))
-                )}
-              </SelectContent>
-            </Select>
-          </div>
-          
-          <div className="space-y-2">
-            <Label htmlFor="domain">Domain *</Label>
-            <Input 
-              id="domain"
-              value={domain} 
-              onChange={(e) => setDomain(e.target.value)} 
-              placeholder="example.com"
-              required
-            />
-          </div>
+                  </SelectContent>
+                </Select>
+              ) : (
+                <div className="flex items-center gap-2">
+                  <Button 
+                    type="button" 
+                    onClick={() => setIsAddingCountry(true)}
+                    className="w-full"
+                  >
+                    Add a country first
+                  </Button>
+                </div>
+              )}
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="domain">Domain *</Label>
+              <Input 
+                id="domain"
+                value={domain} 
+                onChange={(e) => setDomain(e.target.value)} 
+                placeholder="example.com"
+                required
+              />
+            </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="logo">Logo URL (Optional)</Label>
-            <Input 
-              id="logo"
-              value={logo} 
-              onChange={(e) => setLogo(e.target.value)} 
-              placeholder="https://example.com/logo.png"
-            />
-          </div>
-          
-          <Button 
-            type="submit" 
-            disabled={isSubmitting}
-            className="w-full bg-neo-red hover:bg-red-600 text-white"
-          >
-            {isSubmitting ? "Adding Client..." : "Add Client"}
-          </Button>
-        </form>
-      </SheetContent>
-    </Sheet>
+            <div className="space-y-2">
+              <Label htmlFor="logo">Logo URL (Optional)</Label>
+              <Input 
+                id="logo"
+                value={logo} 
+                onChange={(e) => setLogo(e.target.value)} 
+                placeholder="https://example.com/logo.png"
+              />
+            </div>
+            
+            <Button 
+              type="submit" 
+              disabled={isSubmitting || !countryId}
+              className="w-full bg-neo-red hover:bg-red-600 text-white"
+            >
+              {isSubmitting ? "Adding Client..." : "Add Client"}
+            </Button>
+          </form>
+        </SheetContent>
+      </Sheet>
+
+      <Dialog open={isAddingCountry} onOpenChange={setIsAddingCountry}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Add New Country</DialogTitle>
+            <DialogDescription>
+              Enter a country name to add to the database.
+            </DialogDescription>
+          </DialogHeader>
+          <NewCountryForm 
+            onSubmit={handleAddCountry}
+            onCancel={() => setIsAddingCountry(false)}
+            isSubmitting={isCreatingCountry}
+          />
+        </DialogContent>
+      </Dialog>
+    </>
   );
 };
 

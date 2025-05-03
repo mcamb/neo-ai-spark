@@ -8,5 +8,11 @@ export const countryNames: Record<string, string> = {
   'fr': 'France',
   'jp': 'Japan',
   'ge': 'Germany',
-  'un': 'United States' // Fallback mapping
+  'un': 'United States', // Fallback mapping
+  'sp': 'Spain',
+  'it': 'Italy',
+  'br': 'Brazil',
+  'mx': 'Mexico',
+  'ch': 'China',
+  'in': 'India'
 };

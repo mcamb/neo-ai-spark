@@ -96,7 +96,7 @@ export const addTestClient = async () => {
     console.log("No countries found, creating a test country...");
     const { data: newCountry, error: countryError } = await supabase
       .from('countries')
-      .insert({ country: 'United States' })
+      .insert([{ country: 'United States' }])
       .select();
       
     if (countryError) {
@@ -248,3 +248,4 @@ export const useClients = () => {
     updateClientStatus
   };
 };
+
