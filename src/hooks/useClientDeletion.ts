@@ -21,16 +21,23 @@ export const useClientDeletion = ({ refetch }: UseClientDeletionProps) => {
     if (!selectedClientId || isDeleting) return;
     
     setIsDeleting(true);
-    setDeleteDialogOpen(false);
     
     try {
       const deleteToastId = toast.loading("Deleting client...");
       
-      // Delete related records first
-      await supabase
+      // First delete related records in relevance_scores
+      const { error: relatedError } = await supabase
         .from('relevance_scores')
         .delete()
         .eq('client_id', selectedClientId);
+      
+      if (relatedError) {
+        console.error("Error deleting related records:", relatedError);
+        toast.dismiss(deleteToastId);
+        toast.error(`Failed to delete related records: ${relatedError.message}`);
+        setIsDeleting(false);
+        return;
+      }
       
       // Then delete the client
       const { error } = await supabase
@@ -47,18 +54,15 @@ export const useClientDeletion = ({ refetch }: UseClientDeletionProps) => {
         toast.success("Client deleted successfully");
         
         // Update the client list after deletion
-        // Use a slight delay to ensure UI updates properly
-        setTimeout(() => {
-          refetch();
-          setIsDeleting(false);
-        }, 800);
+        refetch();
       }
     } catch (err) {
       toast.error("An unexpected error occurred");
       console.error("Exception:", err);
-      setIsDeleting(false);
     } finally {
+      setIsDeleting(false);
       setSelectedClientId(null);
+      setDeleteDialogOpen(false);
     }
   };
 

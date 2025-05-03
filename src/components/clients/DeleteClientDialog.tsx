@@ -25,8 +25,14 @@ const DeleteClientDialog: React.FC<DeleteClientDialogProps> = ({
   onDelete,
   isDeleting
 }) => {
+  const handleDelete = () => {
+    // Call the delete function without closing the dialog
+    // The dialog will be closed in the useClientDeletion hook after the deletion is complete
+    onDelete();
+  };
+
   return (
-    <AlertDialog open={open} onOpenChange={onOpenChange}>
+    <AlertDialog open={open} onOpenChange={isDeleting ? undefined : onOpenChange}>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Are you sure?</AlertDialogTitle>
@@ -37,7 +43,7 @@ const DeleteClientDialog: React.FC<DeleteClientDialogProps> = ({
         <AlertDialogFooter>
           <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
           <AlertDialogAction 
-            onClick={onDelete} 
+            onClick={handleDelete} 
             className="bg-red-500 hover:bg-red-600"
             disabled={isDeleting}
           >
