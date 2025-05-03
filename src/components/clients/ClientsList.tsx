@@ -39,8 +39,8 @@ const ClientsList: React.FC<ClientsListProps> = ({
     return (
       <div className="flex items-center justify-center p-10 border border-dashed rounded-lg bg-custom-background">
         <div className="text-center">
-          <p className="text-gray-500">No clients found.</p>
-          <p className="text-sm text-gray-400 mt-1">Add a new client to get started.</p>
+          <p className="text-gray-500">No clients found matching your search criteria.</p>
+          <p className="text-sm text-gray-400 mt-1">Try adjusting your search or add a new client.</p>
         </div>
       </div>
     );

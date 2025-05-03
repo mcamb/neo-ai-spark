@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import MainLayout from '@/components/MainLayout';
 import NewClientModal from '@/components/NewClientModal';
 import { useClients } from '@/hooks/useClients';
@@ -7,10 +7,12 @@ import { useClientPolling } from '@/hooks/useClientPolling';
 import ClientsHeader from '@/components/clients/ClientsHeader';
 import ClientsToolbar from '@/components/clients/ClientsToolbar';
 import ClientsContent from '@/components/clients/ClientsContent';
+import { useToast } from '@/hooks/use-toast';
 
 const ClientsPage = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { toast } = useToast();
   
   const {
     clients,
@@ -20,6 +22,16 @@ const ClientsPage = () => {
     deleteClient,
     updateClientStatus
   } = useClients();
+
+  useEffect(() => {
+    if (error) {
+      toast({
+        title: "Error loading clients",
+        description: error.message,
+        variant: "destructive"
+      });
+    }
+  }, [error, toast]);
 
   // Set up client polling
   useClientPolling({
