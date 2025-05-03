@@ -10,25 +10,24 @@ import { toast } from "sonner";
 import { supabase } from '@/integrations/supabase/client';
 import { useClientPolling } from '@/hooks/useClientPolling';
 import EditClientModal from '@/components/EditClientModal';
-import { 
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
+import DeleteClientDialog from '@/components/clients/DeleteClientDialog';
+import { useClientDeletion } from '@/hooks/useClientDeletion';
 
 const Clients = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedClientId, setSelectedClientId] = useState<string | null>(null);
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
   const { clients, isLoading, error, refetch } = useClients();
+  
+  // Client deletion logic
+  const { 
+    isDeleting,
+    deleteDialogOpen,
+    setDeleteDialogOpen,
+    handleDeletePrompt,
+    handleDeleteClient
+  } = useClientDeletion({ refetch });
   
   // Function to update client status
   const updateClientStatus = useCallback(async (clientId: string, status: 'ready' | 'in_progress') => {
@@ -84,56 +83,6 @@ const Clients = () => {
     setSelectedClientId(null);
   };
 
-  const handleDeletePrompt = (id: string) => {
-    setSelectedClientId(id);
-    setDeleteDialogOpen(true);
-  };
-
-  // Completely revised deletion function with a simple, direct approach
-  const handleDeleteClient = async () => {
-    if (!selectedClientId || isDeleting) return;
-    
-    setIsDeleting(true);
-    setDeleteDialogOpen(false);
-    
-    try {
-      // Simple, direct deletion
-      const deleteToastId = toast.loading("Deleting client...");
-      
-      // Delete related records first (in a single operation)
-      await supabase
-        .from('relevance_scores')
-        .delete()
-        .eq('client_id', selectedClientId);
-      
-      // Then delete the client
-      const { error } = await supabase
-        .from('clients')
-        .delete()
-        .eq('id', selectedClientId);
-        
-      if (error) {
-        toast.dismiss(deleteToastId);
-        toast.error(`Deletion failed: ${error.message}`);
-        console.error("Database error:", error);
-      } else {
-        toast.dismiss(deleteToastId);
-        toast.success("Client deleted successfully");
-        
-        // Update the client list after deletion
-        setTimeout(() => {
-          refetch();
-        }, 500);
-      }
-    } catch (err) {
-      toast.error("An unexpected error occurred");
-      console.error("Exception:", err);
-    } finally {
-      setIsDeleting(false);
-      setSelectedClientId(null);
-    }
-  };
-
   return (
     <MainLayout>
       <div className="space-y-6">
@@ -174,26 +123,12 @@ const Clients = () => {
         />
       )}
 
-      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-            <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete the client and remove all associated data.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction 
-              onClick={handleDeleteClient} 
-              className="bg-red-500 hover:bg-red-600"
-              disabled={isDeleting}
-            >
-              Delete
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      <DeleteClientDialog 
+        open={deleteDialogOpen}
+        onOpenChange={setDeleteDialogOpen}
+        onDelete={handleDeleteClient}
+        isDeleting={isDeleting}
+      />
     </MainLayout>
   );
 };
