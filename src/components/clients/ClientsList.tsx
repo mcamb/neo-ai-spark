@@ -36,7 +36,7 @@ const ClientsList: React.FC<ClientsListProps> = ({
       return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
     }
     // Otherwise use the id as a fallback
-    return a.id < b.id ? 1 : -1;
+    return a.id.localeCompare(b.id);
   });
   
   console.log("Filtered and sorted clients:", sortedClients);

@@ -100,14 +100,32 @@
     font-feature-settings: "rlig" 1, "calt" 1;
   }
   
-  h2 {
-    @apply relative;
+  /* Update headline styles to make the red line match text width */
+  h1, h2, h3 {
+    @apply relative inline-block;
   }
   
-  h2::after {
+  /* Make the red underline match the text width */
+  h1::after, h2::after, h3::after {
     content: '';
-    @apply absolute bottom-0 left-0 w-16 h-1 bg-[#FF4B4F];
+    @apply absolute bottom-0 left-0 h-1 bg-[#FF4B4F] w-full;
     display: block;
+  }
+  
+  /* Disable red underline in modals and sign-up page */
+  .dialog h1::after, 
+  .dialog h2::after, 
+  .dialog h3::after,
+  [class*="modal"] h1::after, 
+  [class*="modal"] h2::after, 
+  [class*="modal"] h3::after,
+  [class*="sign-in"] h1::after,
+  [class*="sign-in"] h2::after,
+  [class*="sign-in"] h3::after,
+  [class*="sign-up"] h1::after,
+  [class*="sign-up"] h2::after,
+  [class*="sign-up"] h3::after {
+    @apply hidden;
   }
 }
 
@@ -130,12 +148,12 @@
   }
   
   .section-title {
-    @apply text-xl font-semibold text-black relative pb-2;
+    @apply text-xl font-semibold text-black relative inline-block pb-2;
   }
   
   .section-title::after {
     content: '';
-    @apply absolute bottom-0 left-0 w-16 h-1 bg-[#FF4B4F];
+    @apply absolute bottom-0 left-0 w-full h-1 bg-[#FF4B4F];
   }
   
   .section-card {

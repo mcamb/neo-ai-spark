@@ -17,13 +17,13 @@ const Index = () => {
   
   return <div className="flex min-h-screen">
       {/* Left side - Login form */}
-      <div className="flex flex-1 items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
+      <div className="flex flex-1 items-center justify-center px-4 py-12 sm:px-6 lg:px-8 sign-up">
         <div className="w-full max-w-sm space-y-8">
           <div className="flex flex-col items-center">
-            <LogoIcon className="mb-4" />
-            <h2 className="text-center text-2xl font-bold text-gray-900">
-              NEO AI
-            </h2>
+            <div className="flex items-center gap-2">
+              <LogoIcon />
+              <span className="font-semibold text-xl text-neo-black">NEO AI</span>
+            </div>
             <p className="text-center text-sm text-gray-600 py-[10px]">
               Your Social Media Automation Partner
             </p>

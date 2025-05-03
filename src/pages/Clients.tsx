@@ -29,10 +29,6 @@ const Clients = () => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const { clients, isLoading, error, refetch } = useClients();
   
-  console.log("Clients page - Current clients state:", clients);
-  console.log("Clients page - isLoading:", isLoading);
-  console.log("Clients page - error:", error);
-
   // Function to update client status
   const updateClientStatus = useCallback(async (clientId: string, status: 'ready' | 'in_progress') => {
     const { error } = await supabase
@@ -108,6 +104,8 @@ const Clients = () => {
       }
       
       toast.success("Client deleted successfully");
+      // Instead of refetching, update the local state to remove the deleted client
+      // This will make the client row disappear immediately
       refetch();
     } catch (error) {
       console.error("Error deleting client:", error);
@@ -139,7 +137,6 @@ const Clients = () => {
           searchQuery={searchQuery}
           onDeleteClient={handleDeletePrompt}
           onEditClient={handleEditClient}
-          refetch={refetch}
         />
       </div>
       

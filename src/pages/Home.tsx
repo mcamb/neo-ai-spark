@@ -49,14 +49,23 @@ const cta_items = [
   }
 ];
 
+// This would be replaced with actual user authentication in a real app
+const getCurrentUser = () => {
+  // Hard-coded for now, but would be replaced with actual user data
+  return {
+    firstName: 'Marcus'
+  };
+};
+
 const Home = () => {
   const navigate = useNavigate();
+  const user = getCurrentUser();
   
   return <MainLayout>
       <div className="max-w-5xl mx-auto">
         <div className="flex flex-col md:flex-row items-center justify-between mb-12">
           <div>
-            <h1 className="text-3xl font-bold mb-2">Hi Marcus!</h1>
+            <h1 className="text-3xl font-bold pb-2">Hi {user.firstName}!</h1>
             <p className="text-custom-text">
               Welcome to NEO AI - our very own AI platform.
             </p>
