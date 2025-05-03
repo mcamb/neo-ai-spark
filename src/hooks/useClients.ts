@@ -49,8 +49,13 @@ const fetchClients = async () => {
     const countryIdToCode = {};
     if (countriesData && countriesData.length > 0) {
       countriesData.forEach(country => {
-        // Extract first two letters of country name as a simple code
-        const code = country.country.substring(0, 2).toLowerCase();
+        // Generate country code - first try to create a meaningful two-letter code
+        let code;
+        
+        // Use first two letters of country name, unless it would create a duplicate
+        code = country.country.substring(0, 2).toLowerCase();
+        
+        // Store the mapping
         countryIdToCode[country.id] = code;
       });
     }
@@ -60,9 +65,9 @@ const fetchClients = async () => {
     // Transform the clients data to match our Client interface
     const transformedClients = clientsData.map(item => {
       // Get country code from the mapping, or use a fallback
-      const countryCode = item.country_id 
-        ? (countryIdToCode[item.country_id] || 'us') 
-        : 'us';
+      const countryCode = item.country_id && countryIdToCode[item.country_id] 
+        ? countryIdToCode[item.country_id] 
+        : 'unkn';
       
       const clientData: Client = {
         id: item.id || '',
