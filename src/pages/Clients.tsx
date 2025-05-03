@@ -12,12 +12,10 @@ import { useClientPolling } from '@/hooks/useClientPolling';
 import EditClientModal from '@/components/EditClientModal';
 import DeleteClientDialog from '@/components/clients/DeleteClientDialog';
 import { useClientDeletion } from '@/hooks/useClientDeletion';
+import { useClientModification } from '@/hooks/useClientModification';
 
 const Clients = () => {
   const [searchQuery, setSearchQuery] = useState('');
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [selectedClientId, setSelectedClientId] = useState<string | null>(null);
   const { clients, isLoading, error, refetch } = useClients();
   
   // Client deletion logic
@@ -28,6 +26,18 @@ const Clients = () => {
     handleDeletePrompt,
     handleDeleteClient
   } = useClientDeletion({ refetch });
+  
+  // Client modification logic (add/edit)
+  const {
+    isModalOpen,
+    handleOpenAddModal,
+    handleCloseAddModal,
+    handleAddClient,
+    isEditModalOpen,
+    selectedClientId,
+    handleEditClient,
+    handleCloseEditModal
+  } = useClientModification({ refetch });
   
   // Function to update client status
   const updateClientStatus = useCallback(async (clientId: string, status: 'ready' | 'in_progress') => {
@@ -61,28 +71,6 @@ const Clients = () => {
     }
   }, [error]);
 
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleAddClient = () => {
-    refetch();
-  };
-
-  const handleEditClient = (id: string) => {
-    setSelectedClientId(id);
-    setIsEditModalOpen(true);
-  };
-
-  const handleCloseEditModal = () => {
-    setIsEditModalOpen(false);
-    setSelectedClientId(null);
-  };
-
   return (
     <MainLayout>
       <div className="space-y-6">
@@ -94,7 +82,7 @@ const Clients = () => {
         <ClientsToolbar
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}
-          onAddClient={handleOpenModal}
+          onAddClient={handleOpenAddModal}
         />
         
         <ClientsContent 
@@ -110,7 +98,7 @@ const Clients = () => {
       
       <NewClientModal 
         isOpen={isModalOpen} 
-        onClose={handleCloseModal} 
+        onClose={handleCloseAddModal} 
         onSubmit={handleAddClient}
       />
 
