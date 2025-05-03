@@ -19,14 +19,22 @@ interface ScoreItem {
 
 interface ScoreChartProps {
   data: ScoreItem[];
+  onBarClick: (platform: string, rationale: string) => void;
 }
 
-export const ScoreChart: React.FC<ScoreChartProps> = ({ data }) => {
+export const ScoreChart: React.FC<ScoreChartProps> = ({ data, onBarClick }) => {
   // Sort data by score (highest to lowest)
   const sortedData = [...data].sort((a, b) => b.score - a.score);
   
   // Colors for bars
   const barColor = '#9b87f5';
+
+  const handleBarClick = (data: any) => {
+    const { name, rationale } = data;
+    if (rationale && name) {
+      onBarClick(name, rationale);
+    }
+  };
   
   return (
     <div className="w-full h-[400px] bg-white rounded-md">
@@ -56,6 +64,8 @@ export const ScoreChart: React.FC<ScoreChartProps> = ({ data }) => {
             dataKey="score"
             radius={[0, 4, 4, 0]}
             label={{ position: 'right', formatter: (value: number) => `${value}`, fill: '#333' }}
+            onClick={handleBarClick}
+            cursor="pointer"
           >
             {sortedData.map((entry, index) => (
               <Cell key={`cell-${index}`} fill={barColor} />
