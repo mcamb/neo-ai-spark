@@ -5,6 +5,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Eye, Pencil, Trash2 } from 'lucide-react';
 import ClientStatusBadge from './ClientStatusBadge';
 import { Link } from 'react-router-dom';
+import { Badge } from '@/components/ui/badge';
 
 interface Client {
   id: string;
@@ -23,16 +24,18 @@ interface ClientCardProps {
 
 const ClientCard: React.FC<ClientCardProps> = ({ client, countryName, onDelete }) => {
   return (
-    <Card className="overflow-hidden border border-gray-200">
+    <Card className="overflow-hidden border border-gray-200 bg-custom-background rounded-lg">
       <CardContent className="p-6">
         <div className="flex flex-col space-y-4">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 flex items-center justify-center rounded-full bg-gray-100 text-gray-700 font-medium text-xl">
+            <div className="w-12 h-12 flex items-center justify-center rounded-md bg-white border border-white text-gray-700 font-medium text-xl">
               {client.name.charAt(0)}
             </div>
             <div>
               <h3 className="font-medium text-lg">{client.name}</h3>
-              <p className="text-sm text-gray-600">{countryName}</p>
+              <Badge variant="outline" className="text-xs w-fit mt-1 bg-gray-100 text-gray-700 border-0">
+                {countryName}
+              </Badge>
             </div>
           </div>
           

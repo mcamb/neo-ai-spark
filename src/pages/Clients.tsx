@@ -103,7 +103,7 @@ const ClientsPage = () => {
           </Button>
         </div>
         
-        <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+        <div className="bg-white rounded-lg shadow-sm p-1">
           <ClientsList 
             clients={clients} 
             searchQuery={searchQuery} 

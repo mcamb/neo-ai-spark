@@ -5,6 +5,7 @@ import ClientStatusBadge from './ClientStatusBadge';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Link } from 'react-router-dom';
+import { Badge } from '@/components/ui/badge';
 
 interface Client {
   id: string;
@@ -46,14 +47,14 @@ const ClientsList: React.FC<ClientsListProps> = ({
   }
   
   return (
-    <div className="divide-y divide-gray-100">
-      {filteredClients.map((client, index) => (
+    <div className="space-y-4 py-4 px-2">
+      {filteredClients.map((client) => (
         <div 
           key={client.id}
-          className={`flex items-center justify-between py-3 px-4 transition-colors ${index % 2 === 0 ? 'bg-white' : 'bg-custom-background'}`}
+          className="flex items-center justify-between py-4 px-5 rounded-lg transition-colors bg-custom-background shadow-sm"
         >
           <div className="flex items-center gap-4">
-            <Avatar className="h-10 w-10 bg-gray-100">
+            <Avatar className="h-12 w-12 bg-white border border-white rounded-md">
               <AvatarFallback className="text-gray-700">
                 {client.name.charAt(0)}
               </AvatarFallback>
@@ -61,7 +62,9 @@ const ClientsList: React.FC<ClientsListProps> = ({
             
             <div className="flex flex-col min-w-[180px]">
               <span className="font-medium">{client.name}</span>
-              <span className="text-sm text-gray-600">{countryNames[client.country]}</span>
+              <Badge variant="outline" className="text-xs w-fit mt-1 bg-gray-100 text-gray-700 border-0">
+                {countryNames[client.country]}
+              </Badge>
             </div>
             
             <ClientStatusBadge status={client.agent_status} />
