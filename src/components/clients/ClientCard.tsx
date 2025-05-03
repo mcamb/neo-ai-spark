@@ -21,9 +21,10 @@ interface ClientCardProps {
   client: Client;
   countryName: string;
   onDelete: (id: string) => void;
+  onEdit: (id: string) => void;
 }
 
-const ClientCard: React.FC<ClientCardProps> = ({ client, countryName, onDelete }) => {
+const ClientCard: React.FC<ClientCardProps> = ({ client, countryName, onDelete, onEdit }) => {
   return (
     <Card className="overflow-hidden border border-[#E8E5DE] bg-white rounded-lg shadow-[0_2px_8px_rgba(0,0,0,0.05)] transition-shadow hover:shadow-[0_4px_12px_rgba(0,0,0,0.1)]">
       <CardContent className="p-4">
@@ -54,7 +55,12 @@ const ClientCard: React.FC<ClientCardProps> = ({ client, countryName, onDelete }
                   <Eye className="h-4 w-4" />
                 </Button>
               </Link>
-              <Button variant="ghost" size="icon" className="hover:bg-gray-100">
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="hover:bg-gray-100"
+                onClick={() => onEdit(client.id)}
+              >
                 <Pencil className="h-4 w-4" />
               </Button>
               <Button 

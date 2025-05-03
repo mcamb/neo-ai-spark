@@ -15,10 +15,10 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
       <main className="flex-1">
         <header className="border-b border-gray-100 p-4 flex justify-end">
           <div className="flex items-center gap-3">
-            <span className="text-sm font-medium">John Doe</span>
+            <span className="text-sm font-medium">Marcus Ambrus</span>
             <Avatar className="h-8 w-8">
-              <AvatarImage src="" alt="User" />
-              <AvatarFallback>JD</AvatarFallback>
+              <AvatarImage src="" alt="Marcus Ambrus" />
+              <AvatarFallback>MA</AvatarFallback>
             </Avatar>
           </div>
         </header>

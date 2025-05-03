@@ -9,10 +9,24 @@ import NewClientModal from '@/components/NewClientModal';
 import { toast } from "sonner";
 import { supabase } from '@/integrations/supabase/client';
 import { useClientPolling } from '@/hooks/useClientPolling';
+import EditClientModal from '@/components/EditClientModal';
+import { 
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 const Clients = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [selectedClientId, setSelectedClientId] = useState<string | null>(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const { clients, isLoading, error, refetch } = useClients();
   
   console.log("Clients page - Current clients state:", clients);
@@ -65,17 +79,29 @@ const Clients = () => {
     refetch();
   };
 
-  const handleRefresh = () => {
-    toast.info("Refreshing client data...");
-    refetch();
+  const handleEditClient = (id: string) => {
+    setSelectedClientId(id);
+    setIsEditModalOpen(true);
   };
 
-  const handleDeleteClient = async (id: string) => {
+  const handleCloseEditModal = () => {
+    setIsEditModalOpen(false);
+    setSelectedClientId(null);
+  };
+
+  const handleDeletePrompt = (id: string) => {
+    setSelectedClientId(id);
+    setDeleteDialogOpen(true);
+  };
+
+  const handleDeleteClient = async () => {
+    if (!selectedClientId) return;
+    
     try {
       const { error } = await supabase
         .from('clients')
         .delete()
-        .eq('id', id);
+        .eq('id', selectedClientId);
       
       if (error) {
         throw error;
@@ -86,6 +112,9 @@ const Clients = () => {
     } catch (error) {
       console.error("Error deleting client:", error);
       toast.error("Failed to delete client: " + (error instanceof Error ? error.message : String(error)));
+    } finally {
+      setDeleteDialogOpen(false);
+      setSelectedClientId(null);
     }
   };
 
@@ -103,19 +132,13 @@ const Clients = () => {
           onAddClient={handleOpenModal}
         />
         
-        <button 
-          onClick={handleRefresh} 
-          className="text-sm text-neo-red hover:underline flex items-center"
-        >
-          Manual Refresh
-        </button>
-        
         <ClientsContent 
           clients={clients} 
           isLoading={isLoading} 
           error={error} 
           searchQuery={searchQuery}
-          onDeleteClient={handleDeleteClient} 
+          onDeleteClient={handleDeletePrompt}
+          onEditClient={handleEditClient}
           refetch={refetch}
         />
       </div>
@@ -125,6 +148,32 @@ const Clients = () => {
         onClose={handleCloseModal} 
         onSubmit={handleAddClient}
       />
+
+      {selectedClientId && (
+        <EditClientModal
+          isOpen={isEditModalOpen}
+          onClose={handleCloseEditModal}
+          clientId={selectedClientId}
+          onSubmit={refetch}
+        />
+      )}
+
+      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete the client and remove all associated data.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDeleteClient} className="bg-red-500 hover:bg-red-600">
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </MainLayout>
   );
 };

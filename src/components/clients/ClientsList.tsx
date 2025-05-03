@@ -1,4 +1,3 @@
-
 import React from 'react';
 import ClientCard from './ClientCard';
 import { Client } from '@/hooks/useClients';
@@ -9,13 +8,15 @@ interface ClientsListProps {
   searchQuery: string;
   countryNames: Record<string, string>;
   onDeleteClient: (id: string) => void;
+  onEditClient: (id: string) => void;
 }
 
 const ClientsList: React.FC<ClientsListProps> = ({ 
   clients, 
   searchQuery, 
   countryNames, 
-  onDeleteClient 
+  onDeleteClient,
+  onEditClient
 }) => {
   console.log("ClientsList received clients:", clients);
 
@@ -28,7 +29,17 @@ const ClientsList: React.FC<ClientsListProps> = ({
         client.domain?.toLowerCase().includes(searchQuery.toLowerCase())
       );
   
-  console.log("Filtered clients:", filteredClients);
+  // Sort clients by created_at time (newer first)
+  const sortedClients = [...filteredClients].sort((a, b) => {
+    // If created_at exists, use it for sorting
+    if (a.created_at && b.created_at) {
+      return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+    }
+    // Otherwise use the id as a fallback
+    return a.id < b.id ? 1 : -1;
+  });
+  
+  console.log("Filtered and sorted clients:", sortedClients);
 
   if (!clients || clients.length === 0) {
     return (
@@ -40,7 +51,7 @@ const ClientsList: React.FC<ClientsListProps> = ({
     );
   }
 
-  if (filteredClients.length === 0) {
+  if (sortedClients.length === 0) {
     return (
       <div className="flex items-center justify-center p-10 border border-dashed rounded-lg bg-gray-50">
         <div className="text-center">
@@ -53,7 +64,7 @@ const ClientsList: React.FC<ClientsListProps> = ({
   
   return (
     <div className="space-y-4 p-2">
-      {filteredClients.map((client) => {
+      {sortedClients.map((client) => {
         const countryName = getCountryName(client.country);
         return (
           <ClientCard 
@@ -61,6 +72,7 @@ const ClientsList: React.FC<ClientsListProps> = ({
             client={client}
             countryName={countryName}
             onDelete={onDeleteClient}
+            onEdit={onEditClient}
           />
         );
       })}

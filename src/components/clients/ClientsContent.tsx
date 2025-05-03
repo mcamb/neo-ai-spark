@@ -12,6 +12,7 @@ interface ClientsContentProps {
   error: Error | null;
   searchQuery: string;
   onDeleteClient: (id: string) => void;
+  onEditClient: (id: string) => void;
   refetch: () => void;
 }
 
@@ -21,6 +22,7 @@ const ClientsContent: React.FC<ClientsContentProps> = ({
   error,
   searchQuery,
   onDeleteClient,
+  onEditClient,
   refetch
 }) => {
   console.log("ClientsContent received clients:", clients);
@@ -78,8 +80,9 @@ const ClientsContent: React.FC<ClientsContentProps> = ({
       <ClientsList 
         clients={clients} 
         searchQuery={searchQuery} 
-        countryNames={countryNames} 
-        onDeleteClient={onDeleteClient} 
+        countryNames={countryNames}
+        onDeleteClient={onDeleteClient}
+        onEditClient={onEditClient}
       />
     </div>
   );

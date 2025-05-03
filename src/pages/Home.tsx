@@ -1,9 +1,11 @@
+
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { UserPlus, Rocket, FlaskConical } from 'lucide-react';
 import MainLayout from '@/components/MainLayout';
 import LogoIcon from '@/components/LogoIcon';
 import { useNavigate } from 'react-router-dom';
+
 const CTACard = ({
   title,
   description,
@@ -25,29 +27,36 @@ const CTACard = ({
       </CardContent>
     </Card>;
 };
-const cta_items = [{
-  title: "Clients",
-  description: "Start by creating clients and discover valuable insights.",
-  icon: UserPlus,
-  path: "/clients"
-}, {
-  title: "Campaigns",
-  description: "Create campaigns and receive valuable recommendations.",
-  icon: Rocket,
-  path: "/campaigns"
-}, {
-  title: "Lab",
-  description: "Analyze your campaigns or generate content.",
-  icon: FlaskConical,
-  path: "/lab"
-}];
+
+const cta_items = [
+  {
+    title: "Clients",
+    description: "Start by creating clients and discover valuable insights.",
+    icon: UserPlus,
+    path: "/clients"
+  }, 
+  {
+    title: "Campaigns",
+    description: "Create campaigns and receive valuable recommendations.",
+    icon: Rocket,
+    path: "/campaigns"
+  }, 
+  {
+    title: "Lab",
+    description: "Analyze your campaigns or generate content.",
+    icon: FlaskConical,
+    path: "/lab"
+  }
+];
+
 const Home = () => {
   const navigate = useNavigate();
+  
   return <MainLayout>
       <div className="max-w-5xl mx-auto">
         <div className="flex flex-col md:flex-row items-center justify-between mb-12">
           <div>
-            <h1 className="text-3xl font-bold mb-2">Hi John!</h1>
+            <h1 className="text-3xl font-bold mb-2">Hi Marcus!</h1>
             <p className="text-custom-text">
               Welcome to NEO AI - our very own AI platform.
             </p>
@@ -63,4 +72,5 @@ const Home = () => {
       </div>
     </MainLayout>;
 };
+
 export default Home;
