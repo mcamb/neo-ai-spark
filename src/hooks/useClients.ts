@@ -14,6 +14,7 @@ export interface Client {
 }
 
 const fetchClients = async () => {
+  console.log("Fetching clients...");
   const { data, error } = await supabase
     .from('clients')
     .select(`
@@ -21,6 +22,7 @@ const fetchClients = async () => {
       domain,
       name,
       agent_status,
+      logo,
       country:countries(id, country)
     `);
 
@@ -40,6 +42,7 @@ const fetchClients = async () => {
       country: item.country?.country?.toLowerCase().substring(0, 2) || 'us', // Convert to country code format
       country_id: item.country?.id,
       agent_status: item.agent_status, // Now using the actual agent_status from the database
+      logo: item.logo,
     };
     
     console.log("Transformed client:", clientData);
@@ -59,6 +62,8 @@ export const useClients = () => {
     queryKey: ['clients'],
     queryFn: fetchClients
   });
+
+  console.log("useClients hook - clients:", clients);
 
   const addClientMutation = useMutation({
     mutationFn: async (newClient: { name: string; country: string; domain: string; country_id: string }) => {
@@ -121,6 +126,7 @@ export const useClients = () => {
 
   const updateClientStatus = async (clientId: string, status: 'ready' | 'in_progress') => {
     try {
+      console.log(`Updating client ${clientId} status to ${status}`);
       await supabase
         .from('clients')
         .update({ agent_status: status })

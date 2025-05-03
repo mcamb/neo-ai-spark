@@ -32,6 +32,7 @@ const ClientsPage = () => {
     country: string;
     domain: string;
     country_id: string;
+    logo?: string;
   }) => {
     addClient(newClient);
   };

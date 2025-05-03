@@ -6,6 +6,7 @@ import { Eye, Pencil, Trash2 } from 'lucide-react';
 import ClientStatusBadge from './ClientStatusBadge';
 import { Link } from 'react-router-dom';
 import { Badge } from '@/components/ui/badge';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 interface Client {
   id: string;
@@ -28,9 +29,15 @@ const ClientCard: React.FC<ClientCardProps> = ({ client, countryName, onDelete }
       <CardContent className="p-4">
         <div className="flex items-center">
           <div className="flex items-center flex-1">
-            <div className="w-10 h-10 flex items-center justify-center rounded-md bg-white border border-white text-gray-700 font-medium text-lg">
-              {client.name.charAt(0).toUpperCase()}
-            </div>
+            <Avatar className="w-10 h-10 rounded-md border border-white bg-white text-gray-700 font-medium text-lg">
+              {client.logo ? (
+                <AvatarImage src={client.logo} alt={client.name} />
+              ) : (
+                <AvatarFallback>
+                  {client.name.charAt(0).toUpperCase()}
+                </AvatarFallback>
+              )}
+            </Avatar>
             <div className="ml-4">
               <h3 className="font-medium text-lg">{client.name}</h3>
               <Badge variant="outline" className="text-xs w-fit mt-1 bg-white text-gray-700 border border-gray-200">

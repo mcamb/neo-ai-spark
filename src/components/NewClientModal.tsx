@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { 
   Sheet,
   SheetContent, 
@@ -42,7 +42,7 @@ const fetchCountries = async (): Promise<CountryOption[]> => {
 interface NewClientModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (client: { name: string; country: string; domain: string; country_id: string }) => void;
+  onSubmit: (client: { name: string; country: string; domain: string; country_id: string; logo?: string }) => void;
 }
 
 const NewClientModal: React.FC<NewClientModalProps> = ({ isOpen, onClose, onSubmit }) => {
@@ -50,6 +50,7 @@ const NewClientModal: React.FC<NewClientModalProps> = ({ isOpen, onClose, onSubm
   const [name, setName] = useState('');
   const [countryId, setCountryId] = useState('');
   const [domain, setDomain] = useState('');
+  const [logo, setLogo] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { data: countries = [], isLoading: isLoadingCountries } = useQuery({
@@ -62,7 +63,7 @@ const NewClientModal: React.FC<NewClientModalProps> = ({ isOpen, onClose, onSubm
     if (!name || !countryId || !domain) {
       toast({
         title: "Error",
-        description: "Please fill in all fields",
+        description: "Please fill in all required fields",
         variant: "destructive"
       });
       return;
@@ -80,13 +81,15 @@ const NewClientModal: React.FC<NewClientModalProps> = ({ isOpen, onClose, onSubm
       name, 
       country: countryCode,
       domain, 
-      country_id: countryId
+      country_id: countryId,
+      logo: logo || undefined // Only include if provided
     });
     
     // Reset form
     setName('');
     setCountryId('');
     setDomain('');
+    setLogo('');
     setIsSubmitting(false);
     onClose();
   };
@@ -103,7 +106,7 @@ const NewClientModal: React.FC<NewClientModalProps> = ({ isOpen, onClose, onSubm
         
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-2">
-            <Label htmlFor="name">Client Name</Label>
+            <Label htmlFor="name">Client Name *</Label>
             <Input 
               id="name"
               value={name} 
@@ -114,7 +117,7 @@ const NewClientModal: React.FC<NewClientModalProps> = ({ isOpen, onClose, onSubm
           </div>
           
           <div className="space-y-2">
-            <Label htmlFor="country">Country</Label>
+            <Label htmlFor="country">Country *</Label>
             <Select value={countryId} onValueChange={setCountryId} required>
               <SelectTrigger id="country">
                 <SelectValue placeholder="Select a country" />
@@ -134,13 +137,23 @@ const NewClientModal: React.FC<NewClientModalProps> = ({ isOpen, onClose, onSubm
           </div>
           
           <div className="space-y-2">
-            <Label htmlFor="domain">Domain</Label>
+            <Label htmlFor="domain">Domain *</Label>
             <Input 
               id="domain"
               value={domain} 
               onChange={(e) => setDomain(e.target.value)} 
               placeholder="example.com"
               required
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="logo">Logo URL (Optional)</Label>
+            <Input 
+              id="logo"
+              value={logo} 
+              onChange={(e) => setLogo(e.target.value)} 
+              placeholder="https://example.com/logo.png"
             />
           </div>
           
