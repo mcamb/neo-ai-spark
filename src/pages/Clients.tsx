@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useCallback } from 'react';
 import MainLayout from '@/components/MainLayout';
 import ClientsHeader from '@/components/clients/ClientsHeader';
@@ -89,7 +90,7 @@ const Clients = () => {
     setDeleteDialogOpen(true);
   };
 
-  // Completely rewritten delete function with simplified logic
+  // Fixed delete function that doesn't use aggregate functions
   const handleDeleteClient = async () => {
     if (!selectedClientId) return;
     
@@ -99,12 +100,11 @@ const Clients = () => {
       // Close the dialog first for better UX
       setDeleteDialogOpen(false);
       
-      // Execute the delete operation
-      const { error, count } = await supabase
+      // Execute the delete operation without using count which is an aggregate function
+      const { error } = await supabase
         .from('clients')
         .delete()
-        .eq('id', selectedClientId)
-        .select('count');
+        .eq('id', selectedClientId);
       
       if (error) {
         console.error("Delete operation failed with error:", error);
@@ -112,7 +112,7 @@ const Clients = () => {
         return;
       }
       
-      console.log("Delete operation completed, deleted count:", count);
+      console.log("Delete operation completed successfully");
       
       // Show success message
       toast.success("Client deleted successfully");
@@ -120,7 +120,7 @@ const Clients = () => {
       // Reset state
       setSelectedClientId(null);
       
-      // Refetch data after successful deletion
+      // Refetch data after successful deletion with a small delay
       setTimeout(() => {
         console.log("Triggering refetch after deletion");
         refetch();
