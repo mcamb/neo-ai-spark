@@ -29,7 +29,7 @@ const ClientCard: React.FC<ClientCardProps> = ({ client, countryName, onDelete }
         <div className="flex items-center">
           <div className="flex items-center flex-1">
             <div className="w-10 h-10 flex items-center justify-center rounded-md bg-white border border-white text-gray-700 font-medium text-lg">
-              {client.name.charAt(0)}
+              {client.name.charAt(0).toUpperCase()}
             </div>
             <div className="ml-4">
               <h3 className="font-medium text-lg">{client.name}</h3>

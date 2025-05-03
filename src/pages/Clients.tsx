@@ -13,7 +13,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 interface Client {
   id: string;
-  name?: string;
+  name: string;
   country: string;
   domain: string;
   logo?: string;
@@ -32,6 +32,7 @@ const fetchClients = async () => {
     .select(`
       id,
       domain,
+      name,
       agent_status,
       country:countries(id, country)
     `);
@@ -44,10 +45,10 @@ const fetchClients = async () => {
   return data.map(item => ({
     id: item.id,
     domain: item.domain,
+    name: item.name || item.domain.split('.')[0], // Use name from DB or fallback to domain
     country: item.country?.country?.toLowerCase().substring(0, 2) || 'us', // Convert to country code format
     country_id: item.country?.id,
     agent_status: item.agent_status, // Now using the actual agent_status from the database
-    name: item.domain.split('.')[0] // Use domain name as client name for now
   }));
 };
 
@@ -71,6 +72,7 @@ const ClientsPage = () => {
         .insert([
           { 
             domain: newClient.domain,
+            name: newClient.name,
             country_id: newClient.country_id
             // agent_status will use the default value from the database ('in_progress')
           }
@@ -157,7 +159,7 @@ const ClientsPage = () => {
               description: `${randomClient.name} is now ready!`
             });
           })
-          .catch(error => console.error("Error updating client status:", error));
+          .catch((error: Error) => console.error("Error updating client status:", error));
       }
     }, 10000); // Poll every 10 seconds
 
