@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import MainLayout from '@/components/MainLayout';
 import ClientsHeader from '@/components/clients/ClientsHeader';
 import ClientsToolbar from '@/components/clients/ClientsToolbar';
@@ -7,6 +7,8 @@ import ClientsContent from '@/components/clients/ClientsContent';
 import { useClients } from '@/hooks/useClients';
 import NewClientModal from '@/components/NewClientModal';
 import { toast } from "sonner";
+import { supabase } from '@/integrations/supabase/client';
+import { useClientPolling } from '@/hooks/useClientPolling';
 
 const Clients = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -16,6 +18,28 @@ const Clients = () => {
   console.log("Clients page - Current clients state:", clients);
   console.log("Clients page - isLoading:", isLoading);
   console.log("Clients page - error:", error);
+
+  // Function to update client status
+  const updateClientStatus = useCallback(async (clientId: string, status: 'ready' | 'in_progress') => {
+    const { error } = await supabase
+      .from('clients')
+      .update({ agent_status: status })
+      .eq('id', clientId);
+    
+    if (error) {
+      console.error("Error updating client status:", error);
+      throw error;
+    }
+    
+    // Refetch clients to get the latest data
+    refetch();
+  }, [refetch]);
+
+  // Initialize client polling
+  useClientPolling({
+    clients,
+    updateClientStatus
+  });
 
   useEffect(() => {
     // When component mounts, force a data refresh
@@ -46,9 +70,23 @@ const Clients = () => {
     refetch();
   };
 
-  const handleDeleteClient = (id: string) => {
-    // Currently this does nothing but is required by the interface
-    console.log("Delete client requested for ID:", id);
+  const handleDeleteClient = async (id: string) => {
+    try {
+      const { error } = await supabase
+        .from('clients')
+        .delete()
+        .eq('id', id);
+      
+      if (error) {
+        throw error;
+      }
+      
+      toast.success("Client deleted successfully");
+      refetch();
+    } catch (error) {
+      console.error("Error deleting client:", error);
+      toast.error("Failed to delete client: " + (error instanceof Error ? error.message : String(error)));
+    }
   };
 
   return (

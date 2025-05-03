@@ -11,34 +11,31 @@ export type Database = {
     Tables: {
       clients: {
         Row: {
-          agent_status: Database["public"]["Enums"]["agent_status_enum"]
-          country_id: string
-          created_at: string | null
+          agent_status: string
+          country: string
+          country_id: string | null
           domain: string
           id: string
           logo: string | null
-          name: string | null
-          updated_at: string | null
+          name: string
         }
         Insert: {
-          agent_status?: Database["public"]["Enums"]["agent_status_enum"]
-          country_id: string
-          created_at?: string | null
+          agent_status?: string
+          country: string
+          country_id?: string | null
           domain: string
           id?: string
           logo?: string | null
-          name?: string | null
-          updated_at?: string | null
+          name: string
         }
         Update: {
-          agent_status?: Database["public"]["Enums"]["agent_status_enum"]
-          country_id?: string
-          created_at?: string | null
+          agent_status?: string
+          country?: string
+          country_id?: string | null
           domain?: string
           id?: string
           logo?: string | null
-          name?: string | null
-          updated_at?: string | null
+          name?: string
         }
         Relationships: [
           {
@@ -48,29 +45,22 @@ export type Database = {
             referencedRelation: "countries"
             referencedColumns: ["id"]
           },
-          {
-            foreignKeyName: "clients_country_id_fkey1"
-            columns: ["country_id"]
-            isOneToOne: false
-            referencedRelation: "countries"
-            referencedColumns: ["id"]
-          },
         ]
       }
       countries: {
         Row: {
+          code: string
           country: string
-          created_at: string | null
           id: string
         }
         Insert: {
+          code: string
           country: string
-          created_at?: string | null
           id?: string
         }
         Update: {
+          code?: string
           country?: string
-          created_at?: string | null
           id?: string
         }
         Relationships: []

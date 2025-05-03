@@ -12,47 +12,20 @@ export interface Client {
   country_id?: string;
 }
 
-// Sample mock data to display the UI design
-const mockClients: Client[] = [
-  {
-    id: '1',
-    name: 'Acme Corp',
-    country: 'us',
-    domain: 'acme.com',
-    agent_status: 'ready',
-    logo: 'https://cdn.brandfetch.io/adidas.com/w/400/h/400?c=1id5tlxKu3FAVFnlrfL'
-  },
-  {
-    id: '2',
-    name: 'TechFuture',
-    country: 'ca',
-    domain: 'techfuture.ca',
-    agent_status: 'in_progress',
-    logo: 'https://cdn.brandfetch.io/adidas.com/w/400/h/400?c=1id5tlxKu3FAVFnlrfL'
-  },
-  {
-    id: '3',
-    name: 'Globex Industries',
-    country: 'uk',
-    domain: 'globex.co.uk',
-    agent_status: 'ready',
-    logo: 'https://cdn.brandfetch.io/adidas.com/w/400/h/400?c=1id5tlxKu3FAVFnlrfL'
-  },
-  {
-    id: '4',
-    name: 'Venture Capital',
-    country: 'de',
-    domain: 'venturecap.de',
-    agent_status: 'ready',
-    logo: 'https://cdn.brandfetch.io/adidas.com/w/400/h/400?c=1id5tlxKu3FAVFnlrfL'
-  }
-];
-
 const fetchClients = async (): Promise<Client[]> => {
-  console.log("Using mock data instead of fetching from Supabase");
+  console.log("Fetching clients from Supabase");
   
-  // Return mock data
-  return Promise.resolve(mockClients);
+  const { data, error } = await supabase
+    .from('clients')
+    .select('*');
+  
+  if (error) {
+    console.error("Error fetching clients from Supabase:", error);
+    throw error;
+  }
+  
+  console.log("Fetched clients:", data);
+  return data as Client[];
 };
 
 export const useClients = () => {
