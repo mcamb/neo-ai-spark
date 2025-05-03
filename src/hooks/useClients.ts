@@ -15,17 +15,14 @@ export interface Client {
 
 const fetchClients = async () => {
   console.log("Fetching clients...");
+  const { data: countries } = await supabase
+    .from('countries')
+    .select('*');
+  console.log("Available countries:", countries);
+  
   const { data, error } = await supabase
     .from('clients')
-    .select(`
-      id,
-      domain,
-      name,
-      agent_status,
-      logo,
-      country_id,
-      countries(id, country)
-    `);
+    .select('*');
 
   if (error) {
     console.error("Error fetching clients:", error);
@@ -34,15 +31,24 @@ const fetchClients = async () => {
 
   console.log("Raw client data from DB:", data);
   
+  if (!data || data.length === 0) {
+    console.log("No clients found in database");
+    return [];
+  }
+  
   // Transform the data to match our Client interface
   return data.map(item => {
+    const countryCode = item.country_id ? 
+      (countries?.find(c => c.id === item.country_id)?.country?.toLowerCase().substring(0, 2) || 'us') : 
+      'us';
+    
     const clientData = {
       id: item.id,
-      domain: item.domain,
-      name: item.name || item.domain.split('.')[0], // Use name from DB or fallback to domain
-      country: item.countries?.country?.toLowerCase().substring(0, 2) || 'us', // Convert to country code format
+      domain: item.domain || '',
+      name: item.name || (item.domain ? item.domain.split('.')[0] : 'Unnamed Client'),
+      country: countryCode,
       country_id: item.country_id,
-      agent_status: item.agent_status, // Now using the actual agent_status from the database
+      agent_status: item.agent_status || 'in_progress',
       logo: item.logo,
     };
     

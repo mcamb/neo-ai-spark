@@ -4,6 +4,7 @@ import ClientsList from './ClientsList';
 import { Client } from '@/hooks/useClients';
 import { countryNames } from '@/utils/clientDataUtils';
 import { Loader } from 'lucide-react';
+import { Skeleton } from '@/components/ui/skeleton';
 
 interface ClientsContentProps {
   clients: Client[];
@@ -37,15 +38,16 @@ const ClientsContent: React.FC<ClientsContentProps> = ({
   if (error) {
     return (
       <div className="text-center py-10 text-red-500">
-        Error loading clients: {error.message}
+        <p>Error loading clients: {error.message}</p>
+        <p className="text-sm mt-2">Please check your database connection and try again.</p>
       </div>
     );
   }
 
-  if (clients.length === 0) {
+  if (!clients || clients.length === 0) {
     return (
       <div className="text-center py-10 bg-white rounded-lg shadow-sm border border-dashed">
-        <p className="text-gray-500">No clients found.</p>
+        <p className="text-gray-500">No clients found in the database.</p>
         <p className="text-sm text-gray-400 mt-1">Add a new client by clicking the "Add client" button.</p>
       </div>
     );
