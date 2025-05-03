@@ -36,18 +36,18 @@ const CTACard = ({
 const cta_items = [
   {
     title: "Clients",
-    description: "Start by creating your clients. Then dive into their profiles - you'll be amazed by the insights that NEO AI generates automatically.",
+    description: "Start by creating your clients and discover valuable client insights.",
     icon: UserPlus,
     path: "/clients"
   },
   {
-    title: "Create a Campaign",
-    description: "Launch powerful social media campaigns with AI-driven insights.",
+    title: "Campaigns",
+    description: "Create campaigns and receive valuable recommendations.",
     icon: Rocket,
     path: "/campaigns"
   },
   {
-    title: "Create a Lab",
+    title: "Lab",
     description: "Experiment with new content strategies and AI-powered tools.",
     icon: FlaskConical,
     path: "/lab"
