@@ -1,23 +1,13 @@
 import React, { useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import MainLayout from '@/components/MainLayout';
-import { Button } from '@/components/ui/button';
-import { ArrowLeft, Globe, Pencil, Save } from 'lucide-react';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Progress } from '@/components/ui/progress';
-import { countryNames } from '@/utils/clientDataUtils';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Card, CardContent } from '@/components/ui/card';
-import {
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent
-} from '@/components/ui/chart';
-import { Bar, BarChart, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { Separator } from '@/components/ui/separator';
-import { cn } from '@/lib/utils';
-import { Textarea } from "@/components/ui/textarea";
+import { ClientHeader } from '@/components/client-details/ClientHeader';
+import { BrandSection } from '@/components/client-details/BrandSection';
+import { AudienceSection } from '@/components/client-details/AudienceSection';
+import { ScoreChart } from '@/components/client-details/ScoreChart';
+import { RationaleAccordion } from '@/components/client-details/RationaleAccordion';
+import { NotFoundMessage } from '@/components/client-details/NotFoundMessage';
 
 interface SocialMediaScore {
   platform: string;
@@ -195,38 +185,8 @@ const mockClientDetails: Record<string, ClientDetails> = {
   }
 };
 
-// Editable markdown content box component
-const MarkdownBox = ({ 
-  children, 
-  isEditing = false, 
-  onEdit, 
-  value 
-}: { 
-  children: React.ReactNode, 
-  isEditing?: boolean, 
-  onEdit?: (value: string) => void,
-  value?: string 
-}) => {
-  if (isEditing && onEdit) {
-    return (
-      <Textarea 
-        className="min-h-[120px] w-full border border-gray-300 rounded-lg focus:border-neo-red" 
-        value={value} 
-        onChange={(e) => onEdit(e.target.value)}
-      />
-    );
-  }
-
-  return (
-    <div className="p-4 bg-white border border-gray-200 rounded-lg prose prose-slate max-w-none text-black">
-      {children}
-    </div>
-  );
-};
-
 const ClientDetailsPage = () => {
   const { clientId } = useParams();
-  const navigate = useNavigate();
   const [audienceType, setAudienceType] = useState<'b2c' | 'b2b'>('b2c');
   
   // State for editing mode and content
@@ -263,9 +223,7 @@ const ClientDetailsPage = () => {
 
   const saveBrandEdits = () => {
     // In a real app, you would save these changes to your backend
-    // For now, we'll just toggle the editing mode off
     setIsEditingBrand(false);
-    // Here you would typically make an API call to update the data
   };
 
   const startEditingAudience = () => {
@@ -284,28 +242,23 @@ const ClientDetailsPage = () => {
 
   const saveAudienceEdits = () => {
     // In a real app, you would save these changes to your backend
-    // For now, we'll just toggle the editing mode off
     setIsEditingAudience(false);
-    // Here you would typically make an API call to update the data
+  };
+
+  const handleEditTargetAudience = (audienceType: 'b2c' | 'b2b', field: 'primary' | 'secondary', value: string) => {
+    setEditedTargetAudience(prev => ({
+      ...prev,
+      [audienceType]: {
+        ...prev[audienceType],
+        [field]: value
+      }
+    }));
   };
 
   if (!clientDetails) {
     return (
       <MainLayout>
-        <div className="space-y-6">
-          <div className="flex items-center gap-2">
-            <Button variant="ghost" onClick={() => navigate('/clients')}>
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Back to Clients
-            </Button>
-          </div>
-          <div className="flex items-center justify-center p-10 border border-dashed rounded-lg">
-            <div className="text-center">
-              <p className="text-gray-500">Client not found.</p>
-              <p className="text-sm text-gray-400 mt-1">The requested client could not be found.</p>
-            </div>
-          </div>
-        </div>
+        <NotFoundMessage />
       </MainLayout>
     );
   }
@@ -313,258 +266,41 @@ const ClientDetailsPage = () => {
   return (
     <MainLayout>
       <div className="space-y-8">
-        {/* Navigation */}
-        <div className="flex items-center gap-2 mb-6">
-          <Button variant="ghost" onClick={() => navigate('/clients')}>
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Clients
-          </Button>
-        </div>
-        
-        {/* Header Section - Redesigned with logo on left */}
-        <div className="flex flex-col md:flex-row gap-6 pb-6">
-          <div className="flex items-start gap-4">
-            {/* Logo moved to left */}
-            <Avatar className="h-16 w-16 bg-gray-100">
-              {clientDetails.logo ? (
-                <AvatarImage src={clientDetails.logo} alt={clientDetails.name} />
-              ) : (
-                <AvatarFallback className="text-gray-700 text-xl">
-                  {clientDetails.name.charAt(0)}
-                </AvatarFallback>
-              )}
-            </Avatar>
-            
-            <div className="space-y-2">
-              {/* Client name and country */}
-              <div className="flex items-center gap-2">
-                <h1 className="text-3xl font-bold text-black">{clientDetails.name}</h1>
-                <span className="text-sm px-2 py-1 bg-gray-100 rounded-md text-black">{countryNames[clientDetails.country]}</span>
-              </div>
-              
-              {/* Domain to the left */}
-              <div className="flex items-center gap-1">
-                <Globe className="h-3.5 w-3.5 text-neo-red" />
-                <a 
-                  href={`https://${clientDetails.domain}`} 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  className="text-neo-red hover:underline"
-                >
-                  {clientDetails.domain}
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        {/* Description - Now separate section */}
-        <div className="pb-6">
-          <p className="text-black">{clientDetails.description}</p>
-        </div>
+        <ClientHeader
+          name={clientDetails.name}
+          country={clientDetails.country}
+          domain={clientDetails.domain}
+          logo={clientDetails.logo}
+          description={clientDetails.description}
+        />
         <Separator />
         
-        {/* Brand Intelligence Section - With Notion-like boxes */}
-        <div className="space-y-6 p-6 rounded-lg">
-          <div className="flex items-center justify-between mb-2">
-            <h2 className="text-xl font-semibold text-black">Brand</h2>
-            <Button variant="ghost" size="sm" onClick={isEditingBrand ? saveBrandEdits : startEditingBrand}>
-              {isEditingBrand ? (
-                <>
-                  <Save className="h-3.5 w-3.5 mr-2" />
-                  Save
-                </>
-              ) : (
-                <>
-                  <Pencil className="h-3.5 w-3.5 mr-2" />
-                  Edit
-                </>
-              )}
-            </Button>
-          </div>
-          
-          <div className="space-y-6">
-            <div className="space-y-2">
-              <h3 className="font-medium text-black">Brand Promise</h3>
-              <MarkdownBox 
-                isEditing={isEditingBrand}
-                onEdit={setEditedBrandPromise}
-                value={editedBrandPromise}
-              >
-                {isEditingBrand ? editedBrandPromise : clientDetails.brandPromise}
-              </MarkdownBox>
-            </div>
-            
-            <div className="space-y-2">
-              <h3 className="font-medium text-black">Brand Challenge</h3>
-              <MarkdownBox
-                isEditing={isEditingBrand}
-                onEdit={setEditedBrandChallenge}
-                value={editedBrandChallenge}
-              >
-                {isEditingBrand ? editedBrandChallenge : clientDetails.brandChallenge}
-              </MarkdownBox>
-            </div>
-          </div>
-        </div>
+        <BrandSection
+          isEditing={isEditingBrand}
+          brandPromise={clientDetails.brandPromise}
+          brandChallenge={clientDetails.brandChallenge}
+          editedBrandPromise={editedBrandPromise}
+          editedBrandChallenge={editedBrandChallenge}
+          onStartEditing={startEditingBrand}
+          onSaveEdits={saveBrandEdits}
+          onEditBrandPromise={setEditedBrandPromise}
+          onEditBrandChallenge={setEditedBrandChallenge}
+        />
         
-        {/* Target Audience Section - With toggle and Notion-like boxes */}
-        <div className="space-y-6 p-6 rounded-lg">
-          <div className="flex items-center justify-between mb-2">
-            <h2 className="text-xl font-semibold text-black">Target Audience</h2>
-            <Button variant="ghost" size="sm" onClick={isEditingAudience ? saveAudienceEdits : startEditingAudience}>
-              {isEditingAudience ? (
-                <>
-                  <Save className="h-3.5 w-3.5 mr-2" />
-                  Save
-                </>
-              ) : (
-                <>
-                  <Pencil className="h-3.5 w-3.5 mr-2" />
-                  Edit
-                </>
-              )}
-            </Button>
-          </div>
-          
-          <div className="space-y-6">
-            {/* Toggle between B2C and B2B - Simplified labels */}
-            <RadioGroup 
-              value={audienceType} 
-              onValueChange={(value) => setAudienceType(value as 'b2c' | 'b2b')}
-              className="flex space-x-4 mb-4"
-            >
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="b2c" id="b2c" />
-                <label htmlFor="b2c" className="cursor-pointer font-medium text-black">B2C</label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="b2b" id="b2b" />
-                <label htmlFor="b2b" className="cursor-pointer font-medium text-black">B2B</label>
-              </div>
-            </RadioGroup>
-            
-            {/* Show selected audience type */}
-            <div className="grid md:grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <h4 className="text-sm font-medium text-black">Primary</h4>
-                <MarkdownBox
-                  isEditing={isEditingAudience}
-                  onEdit={(value) => setEditedTargetAudience(prev => ({
-                    ...prev,
-                    [audienceType]: {
-                      ...prev[audienceType],
-                      primary: value
-                    }
-                  }))}
-                  value={editedTargetAudience[audienceType].primary}
-                >
-                  {isEditingAudience 
-                    ? editedTargetAudience[audienceType].primary 
-                    : clientDetails.targetAudience[audienceType].primary}
-                </MarkdownBox>
-              </div>
-              
-              <div className="space-y-2">
-                <h4 className="text-sm font-medium text-black">Secondary</h4>
-                <MarkdownBox
-                  isEditing={isEditingAudience}
-                  onEdit={(value) => setEditedTargetAudience(prev => ({
-                    ...prev,
-                    [audienceType]: {
-                      ...prev[audienceType],
-                      secondary: value
-                    }
-                  }))}
-                  value={editedTargetAudience[audienceType].secondary}
-                >
-                  {isEditingAudience 
-                    ? editedTargetAudience[audienceType].secondary 
-                    : clientDetails.targetAudience[audienceType].secondary}
-                </MarkdownBox>
-              </div>
-            </div>
-          </div>
-        </div>
+        <AudienceSection
+          isEditing={isEditingAudience}
+          audienceType={audienceType}
+          targetAudience={clientDetails.targetAudience}
+          editedTargetAudience={editedTargetAudience}
+          onSetAudienceType={setAudienceType}
+          onStartEditing={startEditingAudience}
+          onSaveEdits={saveAudienceEdits}
+          onEditTargetAudience={handleEditTargetAudience}
+        />
         
-        {/* Social Media Relevance Scores with Bar Chart */}
-        <div className="space-y-6 p-6 rounded-lg">
-          <div className="flex items-center justify-between mb-2">
-            <h2 className="text-xl font-semibold text-black">Relevance Score</h2>
-          </div>
-          
-          {/* Horizontal Bar Chart - Modified to remove grid lines and axis */}
-          <div className="h-72 bg-white p-4 rounded-md mb-6">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart
-                data={chartData.sort((a, b) => b.score - a.score)}
-                layout="horizontal"
-                margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
-              >
-                <XAxis dataKey="name" hide={true} />
-                <YAxis hide={true} />
-                <Tooltip 
-                  formatter={(value) => [`${value}/100`, 'Score']} 
-                  cursor={{ fill: 'rgba(0, 0, 0, 0.05)' }}
-                />
-                <Bar 
-                  dataKey="score" 
-                  fill="#ea384c" 
-                  radius={[4, 4, 0, 0]}
-                  label={(props) => {
-                    const { x, y, width, height, value, name } = props;
-                    return (
-                      <g>
-                        <text 
-                          x={x + width + 5} 
-                          y={y + height / 2} 
-                          fill="#000000" 
-                          textAnchor="start" 
-                          dominantBaseline="central"
-                          fontSize={12}
-                        >
-                          {value}
-                        </text>
-                        <text 
-                          x={x - 5} 
-                          y={y + height / 2} 
-                          fill="#000000" 
-                          textAnchor="end" 
-                          dominantBaseline="central"
-                          fontSize={12}
-                        >
-                          {name}
-                        </text>
-                      </g>
-                    );
-                  }}
-                />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
+        <ScoreChart data={chartData} />
         
-        {/* Rationale Section with First Accordion Open and Markdown boxes */}
-        <div className="space-y-6 p-6 rounded-lg">
-          <div className="flex items-center justify-between mb-2">
-            <h2 className="text-xl font-semibold text-black">Relevance Score Rationale</h2>
-          </div>
-          
-          <Accordion type="single" defaultValue="item-0" collapsible className="w-full">
-            {clientDetails.socialMediaScores.sort((a, b) => b.score - a.score).map((item, index) => (
-              <AccordionItem key={item.platform} value={`item-${index}`} className="border-b border-gray-200">
-                <AccordionTrigger className="hover:no-underline text-black">
-                  <span className="font-medium">{item.platform} ({item.score})</span>
-                </AccordionTrigger>
-                <AccordionContent>
-                  <MarkdownBox>
-                    {item.rationale}
-                  </MarkdownBox>
-                </AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
-        </div>
+        <RationaleAccordion socialMediaScores={clientDetails.socialMediaScores} />
       </div>
     </MainLayout>
   );
