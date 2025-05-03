@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useCallback } from 'react';
 import MainLayout from '@/components/MainLayout';
 import ClientsHeader from '@/components/clients/ClientsHeader';
@@ -96,7 +95,10 @@ const Clients = () => {
     try {
       console.log("Deleting client with ID:", selectedClientId);
       
-      // Execute the delete operation with await to ensure it completes
+      // First close the dialog to improve UI feedback
+      setDeleteDialogOpen(false);
+      
+      // Execute the delete operation
       const { error } = await supabase
         .from('clients')
         .delete()
@@ -107,9 +109,6 @@ const Clients = () => {
         throw error;
       }
       
-      // Close the dialog
-      setDeleteDialogOpen(false);
-      
       // Show success message
       toast.success("Client deleted successfully");
       
@@ -117,13 +116,12 @@ const Clients = () => {
       setSelectedClientId(null);
       
       // Force an immediate refetch to update the UI
-      await refetch();
+      refetch();
       
       console.log("Client deleted and data refreshed");
     } catch (error) {
       console.error("Error deleting client:", error);
       toast.error("Failed to delete client: " + (error instanceof Error ? error.message : String(error)));
-      setDeleteDialogOpen(false);
       setSelectedClientId(null);
     }
   };
