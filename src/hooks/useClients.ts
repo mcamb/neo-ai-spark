@@ -66,14 +66,15 @@ export const useClients = () => {
   console.log("useClients hook - clients:", clients);
 
   const addClientMutation = useMutation({
-    mutationFn: async (newClient: { name: string; country: string; domain: string; country_id: string }) => {
+    mutationFn: async (newClient: { name: string; country: string; domain: string; country_id: string; logo?: string }) => {
       const { data, error } = await supabase
         .from('clients')
         .insert([
           { 
             domain: newClient.domain,
             name: newClient.name,
-            country_id: newClient.country_id
+            country_id: newClient.country_id,
+            logo: newClient.logo
             // agent_status will use the default value from the database ('in_progress')
           }
         ])
@@ -150,7 +151,7 @@ export const useClients = () => {
     clients,
     isLoading,
     error,
-    addClient: (newClient: { name: string; country: string; domain: string; country_id: string }) => 
+    addClient: (newClient: { name: string; country: string; domain: string; country_id: string; logo?: string }) => 
       addClientMutation.mutate(newClient),
     deleteClient: (id: string) => deleteClientMutation.mutate(id),
     updateClientStatus
