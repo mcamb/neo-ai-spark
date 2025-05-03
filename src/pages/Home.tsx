@@ -35,8 +35,8 @@ const CTACard = ({
 
 const cta_items = [
   {
-    title: "Create a Client",
-    description: "Add new clients and manage their social media presence.",
+    title: "Clients",
+    description: "Start by creating your clients. Then dive into their profiles - you'll be amazed by the insights that NEO AI generates automatically.",
     icon: UserPlus,
     path: "/clients"
   },
