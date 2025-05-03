@@ -48,7 +48,7 @@ const cta_items = [
   },
   {
     title: "Lab",
-    description: "Experiment with new content strategies and AI-powered tools.",
+    description: "Analyze your campaigns or generate content.",
     icon: FlaskConical,
     path: "/lab"
   }
@@ -62,9 +62,9 @@ const Home = () => {
       <div className="max-w-5xl mx-auto">
         <div className="flex flex-col md:flex-row items-center justify-between mb-12">
           <div>
-            <h1 className="text-3xl font-bold mb-2">Welcome back, John!</h1>
+            <h1 className="text-3xl font-bold mb-2">Hi John!</h1>
             <p className="text-gray-600">
-              Ready to supercharge your social media automation with NEO AI?
+              Welcome to NEO AI - our very own AI platform.
             </p>
           </div>
           <div className="mt-6 md:mt-0">
