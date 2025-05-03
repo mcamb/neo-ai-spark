@@ -1,3 +1,4 @@
+
 import React from 'react';
 import ClientCard from './ClientCard';
 import { Client } from '@/hooks/useClients';
@@ -29,13 +30,19 @@ const ClientsList: React.FC<ClientsListProps> = ({
         client.domain?.toLowerCase().includes(searchQuery.toLowerCase())
       );
   
-  // Sort clients by created_at time (newer first)
+  // Sort clients by status first (in_progress at the top), then by created_at (newer first)
   const sortedClients = [...filteredClients].sort((a, b) => {
-    // If created_at exists, use it for sorting
+    // First sort by status - in_progress comes first
+    if (a.agent_status !== b.agent_status) {
+      return a.agent_status === 'in_progress' ? -1 : 1;
+    }
+    
+    // Then sort by creation date (newer first)
     if (a.created_at && b.created_at) {
       return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
     }
-    // Otherwise use the id as a fallback
+    
+    // Fallback to id
     return a.id.localeCompare(b.id);
   });
   
