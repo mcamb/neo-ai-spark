@@ -27,7 +27,7 @@ const CTACard = ({
 };
 const cta_items = [{
   title: "Clients",
-  description: "Start by creating your clients and discover valuable client insights.",
+  description: "Start by creating clients and discover valuable insights.",
   icon: UserPlus,
   path: "/clients"
 }, {
