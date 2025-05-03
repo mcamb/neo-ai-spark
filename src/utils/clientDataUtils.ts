@@ -26,5 +26,12 @@ export const countryNames: Record<string, string> = {
   'fi': 'Finland',
   'be': 'Belgium',
   'gr': 'Greece',
-  'tu': 'Turkey'
+  'tu': 'Turkey',
+  // Additional common two-letter codes
+  'nz': 'New Zealand',
+  'sg': 'Singapore',
+  'kr': 'South Korea',
+  'za': 'South Africa',
+  // Generic fallback
+  'unkn': 'Unknown Country'
 };

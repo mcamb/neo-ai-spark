@@ -10,11 +10,11 @@ import NewClientModal from '@/components/NewClientModal';
 const Clients = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { clients, isLoading, error, addClient, deleteClient, refetch } = useClients();
+  const { clients, isLoading, error, refetch } = useClients();
   
-  console.log("Current clients state:", clients);
-  console.log("isLoading:", isLoading);
-  console.log("error:", error);
+  console.log("Clients page - Current clients state:", clients);
+  console.log("Clients page - isLoading:", isLoading);
+  console.log("Clients page - error:", error);
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -24,9 +24,10 @@ const Clients = () => {
     setIsModalOpen(false);
   };
 
-  const handleAddClient = (clientData: any) => {
-    addClient(clientData);
+  // This is a dummy function since we're not implementing client creation
+  const handleAddClient = () => {
     handleCloseModal();
+    refetch(); // Just refetch to see if there's new data
   };
 
   return (
@@ -34,7 +35,7 @@ const Clients = () => {
       <div className="space-y-6">
         <ClientsHeader 
           title="Clients" 
-          description="View and manage your client accounts."
+          description="View your client accounts."
         />
         
         <ClientsToolbar
@@ -48,7 +49,7 @@ const Clients = () => {
           isLoading={isLoading} 
           error={error} 
           searchQuery={searchQuery}
-          onDeleteClient={deleteClient}
+          onDeleteClient={() => {}} // Empty function as we're not implementing deletion
           refetch={refetch}
         />
       </div>
