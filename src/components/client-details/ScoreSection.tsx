@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from 'react';
 import { ScoreBar } from './ScoreBar';
 import { MarkdownBox } from './MarkdownBox';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface SocialMediaScore {
   platform: string;
@@ -50,46 +49,21 @@ export const ScoreSection: React.FC<ScoreSectionProps> = ({ socialMediaScores })
           <span className="absolute bottom-0 left-0 w-16 h-1 bg-[#FF4B4F]"></span>
         </h2>
         
-        <Tabs defaultValue="score" className="w-full">
-          <TabsList className="mb-4">
-            <TabsTrigger value="score" className="text-[#000000]">Score Overview</TabsTrigger>
-            <TabsTrigger value="details" className="text-[#000000]">All Platforms</TabsTrigger>
-          </TabsList>
-          
-          <TabsContent value="score" className="mt-0">
-            <div className="grid md:grid-cols-2 gap-6">
-              <div>
-                <ScoreBar data={sortedData} onBarClick={handleBarClick} />
+        <div className="grid md:grid-cols-2 gap-6">
+          <div>
+            <ScoreBar data={sortedData} onBarClick={handleBarClick} />
+          </div>
+          <div className="h-full">
+            {selectedRationale && (
+              <div className="h-full">
+                <h3 className="text-base font-medium text-black mb-2">{selectedPlatform} Rationale</h3>
+                <MarkdownBox style={{ backgroundColor: "#E8E5DE", height: "100%", minHeight: "300px" }}>
+                  {selectedRationale}
+                </MarkdownBox>
               </div>
-              <div>
-                {selectedRationale && (
-                  <div>
-                    <h3 className="text-lg font-medium text-black mb-2">{selectedPlatform} Rationale</h3>
-                    <MarkdownBox style={{ backgroundColor: "#E8E5DE", minHeight: "300px" }}>
-                      {selectedRationale}
-                    </MarkdownBox>
-                  </div>
-                )}
-              </div>
-            </div>
-          </TabsContent>
-          
-          <TabsContent value="details">
-            <div className="space-y-4">
-              {sortedData.map((platform) => (
-                <div key={platform.name} className="p-3 border rounded bg-[#E8E5DE] cursor-pointer hover:bg-opacity-80" 
-                     onClick={() => handleBarClick(platform.name, platform.rationale || '')}>
-                  <div className="flex justify-between items-center">
-                    <span className="font-medium text-black">{platform.name}</span>
-                    <span className={`px-3 py-1 rounded text-white ${platform.score > 70 ? 'bg-[#94C29D]' : platform.score > 50 ? 'bg-[#FF4B4F]' : 'bg-gray-400'}`}>
-                      {platform.score}
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </TabsContent>
-        </Tabs>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );

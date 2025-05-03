@@ -15,9 +15,8 @@ interface ScoreBarProps {
 export const ScoreBar: React.FC<ScoreBarProps> = ({ data, onBarClick }) => {
   // Bar colors based on score
   const getBarColor = (score: number) => {
-    if (score >= 70) return '#94C29D'; // Status color for high scores
-    if (score >= 50) return '#FF4B4F'; // Accent color for medium scores
-    return 'gray';                     // Grey for low scores
+    if (score > 50) return '#94C29D'; // Green for scores above 50
+    return '#ea384c';                 // Red for scores 50 and below
   };
   
   return (
