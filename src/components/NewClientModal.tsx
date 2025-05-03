@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { 
   Sheet,
@@ -19,7 +20,7 @@ import {
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { useQuery } from '@tanstack/react-query';
-import { Loader } from 'lucide-react';
+import { Loader, AlertTriangle } from 'lucide-react';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { useForm } from 'react-hook-form';
@@ -54,6 +55,9 @@ const createCountry = async (countryName: string): Promise<CountryOption> => {
 
   if (error) {
     console.error("Error creating country:", error);
+    if (error.message.includes('row-level security policy')) {
+      throw new Error("Permission denied: Unable to create country due to database security rules. Please contact your administrator.");
+    }
     throw new Error(error.message);
   }
 
@@ -148,8 +152,13 @@ const NewClientModal: React.FC<NewClientModalProps> = ({ isOpen, onClose, onSubm
   useEffect(() => {
     if (countriesError) {
       console.error("Error in countries query:", countriesError);
+      toast({
+        title: "Error loading countries",
+        description: `${countriesError instanceof Error ? countriesError.message : 'Unknown error'}. This may be due to database permissions.`,
+        variant: "destructive"
+      });
     }
-  }, [countriesError]);
+  }, [countriesError, toast]);
 
   // Log countries when they change
   useEffect(() => {
@@ -214,6 +223,14 @@ const NewClientModal: React.FC<NewClientModalProps> = ({ isOpen, onClose, onSubm
     }
   };
   
+  const handleSelectChange = (value: string) => {
+    if (value === 'add-new') {
+      setIsAddingCountry(true);
+    } else {
+      setCountryId(value);
+    }
+  };
+
   return (
     <>
       <Sheet open={isOpen} onOpenChange={onClose}>
@@ -244,8 +261,22 @@ const NewClientModal: React.FC<NewClientModalProps> = ({ isOpen, onClose, onSubm
                   <Loader className="h-4 w-4 animate-spin" />
                   <span className="text-sm text-gray-500">Loading countries...</span>
                 </div>
+              ) : countriesError ? (
+                <div className="flex flex-col gap-2">
+                  <div className="flex items-center gap-2 text-red-500">
+                    <AlertTriangle className="h-4 w-4" />
+                    <span className="text-sm">Error loading countries</span>
+                  </div>
+                  <Button 
+                    type="button" 
+                    onClick={() => setIsAddingCountry(true)}
+                    className="w-full"
+                  >
+                    Add a country manually
+                  </Button>
+                </div>
               ) : countries.length > 0 ? (
-                <Select value={countryId} onValueChange={setCountryId} required>
+                <Select value={countryId} onValueChange={handleSelectChange} required>
                   <SelectTrigger id="country">
                     <SelectValue placeholder="Select a country" />
                   </SelectTrigger>
