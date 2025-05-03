@@ -9,7 +9,56 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      clients: {
+        Row: {
+          country_id: string
+          created_at: string | null
+          domain: string
+          id: string
+          updated_at: string | null
+        }
+        Insert: {
+          country_id: string
+          created_at?: string | null
+          domain: string
+          id?: string
+          updated_at?: string | null
+        }
+        Update: {
+          country_id?: string
+          created_at?: string | null
+          domain?: string
+          id?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "clients_country_id_fkey"
+            columns: ["country_id"]
+            isOneToOne: false
+            referencedRelation: "countries"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      countries: {
+        Row: {
+          country: string
+          created_at: string | null
+          id: string
+        }
+        Insert: {
+          country: string
+          created_at?: string | null
+          id?: string
+        }
+        Update: {
+          country?: string
+          created_at?: string | null
+          id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
