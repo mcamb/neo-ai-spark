@@ -7,5 +7,6 @@ export const countryNames: Record<string, string> = {
   'de': 'Germany',
   'fr': 'France',
   'jp': 'Japan',
-  'ge': 'Germany'
+  'ge': 'Germany',
+  'un': 'United States' // Fallback mapping
 };

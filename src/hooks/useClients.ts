@@ -14,33 +14,51 @@ export interface Client {
 }
 
 const fetchClients = async () => {
-  console.log("Fetching clients...");
-  const { data: countries } = await supabase
+  console.log("Fetching clients from Supabase...");
+  
+  // First, get all countries for reference
+  const { data: countries, error: countryError } = await supabase
     .from('countries')
     .select('*');
-  console.log("Available countries:", countries);
+    
+  if (countryError) {
+    console.error("Error fetching countries:", countryError);
+  }
   
+  console.log("Available countries:", countries || []);
+  
+  // Get all clients
   const { data, error } = await supabase
     .from('clients')
     .select('*');
 
   if (error) {
     console.error("Error fetching clients:", error);
-    throw new Error(error.message);
+    throw new Error(`Failed to fetch clients: ${error.message}`);
   }
 
-  console.log("Raw client data from DB:", data);
+  console.log("Raw client data from DB:", data || []);
   
   if (!data || data.length === 0) {
-    console.log("No clients found in database");
+    console.log("No clients found in database - returning empty array");
     return [];
   }
   
   // Transform the data to match our Client interface
-  return data.map(item => {
-    const countryCode = item.country_id ? 
-      (countries?.find(c => c.id === item.country_id)?.country?.toLowerCase().substring(0, 2) || 'us') : 
-      'us';
+  const transformedClients = data.map(item => {
+    // Default to 'us' if we can't determine country
+    let countryCode = 'us';
+    
+    if (item.country_id && countries) {
+      const country = countries.find(c => c.id === item.country_id);
+      if (country) {
+        // Take first two letters of country name as code
+        countryCode = country.country.toLowerCase().substring(0, 2);
+        console.log(`Mapped country ID ${item.country_id} to code ${countryCode} from name ${country.country}`);
+      } else {
+        console.log(`Could not find country with ID ${item.country_id}`);
+      }
+    }
     
     const clientData = {
       id: item.id,
@@ -55,6 +73,64 @@ const fetchClients = async () => {
     console.log("Transformed client:", clientData);
     return clientData;
   });
+  
+  console.log(`Returning ${transformedClients.length} clients`);
+  return transformedClients;
+};
+
+// Function to add a test client directly (for debugging)
+export const addTestClient = async () => {
+  console.log("Adding test client to database...");
+  
+  // First, check if we have any countries
+  const { data: countries } = await supabase
+    .from('countries')
+    .select('*');
+    
+  console.log("Available countries for test client:", countries || []);
+  
+  let countryId;
+  
+  // If no countries exist, create one
+  if (!countries || countries.length === 0) {
+    console.log("No countries found, creating a test country...");
+    const { data: newCountry, error: countryError } = await supabase
+      .from('countries')
+      .insert({ country: 'United States' })
+      .select();
+      
+    if (countryError) {
+      console.error("Error creating test country:", countryError);
+      throw new Error(`Failed to create test country: ${countryError.message}`);
+    }
+    
+    countryId = newCountry?.[0]?.id;
+    console.log("Created new country with ID:", countryId);
+  } else {
+    countryId = countries[0].id;
+    console.log("Using existing country with ID:", countryId);
+  }
+  
+  // Now create a test client
+  const testClient = {
+    name: "Test Client",
+    domain: "testclient.com",
+    country_id: countryId,
+    agent_status: 'ready'
+  };
+  
+  const { data, error } = await supabase
+    .from('clients')
+    .insert([testClient])
+    .select();
+    
+  if (error) {
+    console.error("Error adding test client:", error);
+    throw new Error(`Failed to add test client: ${error.message}`);
+  }
+  
+  console.log("Successfully added test client:", data);
+  return data;
 };
 
 export const useClients = () => {
@@ -64,7 +140,8 @@ export const useClients = () => {
   const { 
     data: clients = [], 
     isLoading, 
-    error 
+    error,
+    refetch 
   } = useQuery({
     queryKey: ['clients'],
     queryFn: fetchClients
@@ -74,6 +151,7 @@ export const useClients = () => {
 
   const addClientMutation = useMutation({
     mutationFn: async (newClient: { name: string; country: string; domain: string; country_id: string; logo?: string }) => {
+      console.log("Adding new client:", newClient);
       const { data, error } = await supabase
         .from('clients')
         .insert([
@@ -87,7 +165,11 @@ export const useClients = () => {
         ])
         .select();
 
-      if (error) throw new Error(error.message);
+      if (error) {
+        console.error("Error in addClientMutation:", error);
+        throw new Error(error.message);
+      }
+      console.log("Client added successfully:", data);
       return data;
     },
     onSuccess: () => {
@@ -158,6 +240,8 @@ export const useClients = () => {
     clients,
     isLoading,
     error,
+    refetch,
+    addTestClient,
     addClient: (newClient: { name: string; country: string; domain: string; country_id: string; logo?: string }) => 
       addClientMutation.mutate(newClient),
     deleteClient: (id: string) => deleteClientMutation.mutate(id),
