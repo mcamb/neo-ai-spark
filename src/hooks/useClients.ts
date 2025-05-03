@@ -111,12 +111,12 @@ export const addTestClient = async () => {
     console.log("Using existing country with ID:", countryId);
   }
   
-  // Now create a test client
+  // Now create a test client with properly typed agent_status
   const testClient = {
     name: "Test Client",
     domain: "testclient.com",
     country_id: countryId,
-    agent_status: 'ready'
+    agent_status: 'ready' as const // Fixed: Explicitly type as 'ready' | 'in_progress'
   };
   
   const { data, error } = await supabase
