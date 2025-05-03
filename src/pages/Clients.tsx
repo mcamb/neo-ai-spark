@@ -2,10 +2,11 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Card, CardContent } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import MainLayout from '@/components/MainLayout';
 import NewClientModal from '@/components/NewClientModal';
-import { Search, Eye, Pencil, Trash2, ArrowUp, ArrowDown } from 'lucide-react';
+import { Search, Eye, Pencil, Trash2, Check, Loader } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 interface Client {
@@ -117,54 +118,51 @@ const ClientsPage = () => {
           </Button>
         </div>
         
-        <div className="rounded-lg border border-gray-100 overflow-hidden">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Logo</TableHead>
-                <TableHead>Client Name</TableHead>
-                <TableHead>Country</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredClients.length === 0 ? (
-                <TableRow>
-                  <TableCell colSpan={5} className="text-center py-10 text-gray-500">
-                    No clients found. Add a new client to get started.
-                  </TableCell>
-                </TableRow>
-              ) : (
-                filteredClients.map((client) => (
-                  <TableRow key={client.id}>
-                    <TableCell>
-                      <div className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 text-gray-700 font-medium">
+        {filteredClients.length === 0 ? (
+          <div className="flex items-center justify-center p-10 border border-dashed rounded-lg">
+            <div className="text-center">
+              <p className="text-gray-500">No clients found.</p>
+              <p className="text-sm text-gray-400 mt-1">Add a new client to get started.</p>
+            </div>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredClients.map((client) => (
+              <Card key={client.id} className="overflow-hidden border border-gray-200">
+                <CardContent className="p-6">
+                  <div className="flex flex-col space-y-4">
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 flex items-center justify-center rounded-full bg-gray-100 text-gray-700 font-medium text-xl">
                         {client.name.charAt(0)}
                       </div>
-                    </TableCell>
-                    <TableCell className="font-medium">{client.name}</TableCell>
-                    <TableCell>{countryNames[client.country]}</TableCell>
-                    <TableCell>
-                      <div className="flex items-center gap-2">
-                        <div 
-                          className={`w-24 h-6 rounded-full flex items-center justify-center text-xs font-medium ${
-                            client.agent_status === 'ready' 
-                              ? 'bg-green-100 text-green-700' 
-                              : 'bg-yellow-100 text-yellow-700'
-                          }`}
+                      <div>
+                        <h3 className="font-medium text-lg">{client.name}</h3>
+                        <p className="text-sm text-gray-600">{countryNames[client.country]}</p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <Badge 
+                          variant={client.agent_status === 'ready' ? 'default' : 'outline'}
+                          className={`flex items-center gap-1 px-2 py-1 ${
+                            client.agent_status === 'ready' ? 'bg-green-100 text-green-700 hover:bg-green-100' : 'bg-yellow-100 text-yellow-700 hover:bg-yellow-100'
+                          } border-0`}
                         >
                           {client.agent_status === 'ready' ? (
-                            <ArrowUp className="w-3 h-3 mr-1" />
+                            <>
+                              <Check className="w-3 h-3" />
+                              <span>Ready</span>
+                            </>
                           ) : (
-                            <ArrowDown className="w-3 h-3 mr-1" />
+                            <>
+                              <Loader className="w-3 h-3 animate-spin" />
+                              <span>In Progress</span>
+                            </>
                           )}
-                          {client.agent_status === 'ready' ? 'Ready' : 'In Progress'}
-                        </div>
+                        </Badge>
                       </div>
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <div className="flex justify-end gap-2">
+                      <div className="flex gap-2">
                         <Button 
                           variant="ghost" 
                           size="icon"
@@ -184,13 +182,13 @@ const ClientsPage = () => {
                           <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>
-                    </TableCell>
-                  </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
-        </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        )}
       </div>
       
       <NewClientModal 
