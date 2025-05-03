@@ -10,12 +10,13 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Card, CardContent } from '@/components/ui/card';
 import {
-  Chart as ChartComponent,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent
 } from '@/components/ui/chart';
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
+import { Separator } from '@/components/ui/separator';
+import { cn } from '@/lib/utils';
 
 interface SocialMediaScore {
   platform: string;
@@ -92,7 +93,7 @@ const mockClientDetails: Record<string, ClientDetails> = {
     }, {
       platform: 'Snapchat',
       score: 30,
-      rationale: "Minimal presence and engagement. Demographics don't strongly align with our primary target audience. Limited ROI for current marketing efforts."
+      rationale: 'Minimal presence and engagement. Demographics don\'t strongly align with our primary target audience. Limited ROI for current marketing efforts.'
     }]
   },
   '2': {
@@ -193,6 +194,15 @@ const mockClientDetails: Record<string, ClientDetails> = {
   }
 };
 
+// Markdown content box component
+const MarkdownBox = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <div className="p-4 bg-white border border-gray-200 rounded-lg prose prose-slate max-w-none">
+      {children}
+    </div>
+  );
+};
+
 const ClientDetailsPage = () => {
   const { clientId } = useParams();
   const navigate = useNavigate();
@@ -239,8 +249,8 @@ const ClientDetailsPage = () => {
           </Button>
         </div>
         
-        {/* Header Section - Redesigned */}
-        <div className="flex flex-col md:flex-row gap-6 pb-6 border-b">
+        {/* Header Section - Redesigned with logo on left */}
+        <div className="flex flex-col md:flex-row gap-6 pb-6">
           <div className="flex items-start gap-4">
             {/* Logo moved to left */}
             <Avatar className="h-16 w-16 bg-gray-100">
@@ -277,170 +287,144 @@ const ClientDetailsPage = () => {
         </div>
         
         {/* Description - Now separate section */}
-        <div className="pb-6 border-b">
+        <div className="pb-6">
           <p className="text-gray-600">{clientDetails.description}</p>
         </div>
+        <Separator />
         
-        {/* Brand Intelligence Section - Reorganized */}
-        <Card className="border-none shadow-sm bg-gray-50">
-          <CardContent className="p-6 space-y-6">
-            <div className="flex items-center justify-between mb-2">
-              <h2 className="text-xl font-semibold">Brand</h2>
-              <Button variant="ghost" size="sm">
-                <Pencil className="h-3.5 w-3.5 mr-2" />
-                Edit
-              </Button>
+        {/* Brand Intelligence Section - With Notion-like boxes */}
+        <div className="space-y-6 bg-gray-50 p-6 rounded-lg">
+          <div className="flex items-center justify-between mb-2">
+            <h2 className="text-xl font-semibold">Brand</h2>
+            <Button variant="ghost" size="sm">
+              <Pencil className="h-3.5 w-3.5 mr-2" />
+              Edit
+            </Button>
+          </div>
+          
+          <div className="space-y-6">
+            <div className="space-y-2">
+              <h3 className="font-medium text-gray-700">Brand Promise</h3>
+              <MarkdownBox>
+                {clientDetails.brandPromise}
+              </MarkdownBox>
             </div>
             
-            <div className="space-y-6">
+            <div className="space-y-2">
+              <h3 className="font-medium text-gray-700">Brand Challenge</h3>
+              <MarkdownBox>
+                {clientDetails.brandChallenge}
+              </MarkdownBox>
+            </div>
+          </div>
+        </div>
+        
+        {/* Target Audience Section - With toggle and Notion-like boxes */}
+        <div className="space-y-6 bg-gray-50 p-6 rounded-lg">
+          <div className="flex items-center justify-between mb-2">
+            <h2 className="text-xl font-semibold">Target Audience</h2>
+            <Button variant="ghost" size="sm">
+              <Pencil className="h-3.5 w-3.5 mr-2" />
+              Edit
+            </Button>
+          </div>
+          
+          <div className="space-y-6">
+            {/* Toggle between B2C and B2B - Simplified labels */}
+            <RadioGroup 
+              value={audienceType} 
+              onValueChange={(value) => setAudienceType(value as 'b2c' | 'b2b')}
+              className="flex space-x-4 mb-4"
+            >
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="b2c" id="b2c" />
+                <label htmlFor="b2c" className="cursor-pointer font-medium">B2C</label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="b2b" id="b2b" />
+                <label htmlFor="b2b" className="cursor-pointer font-medium">B2B</label>
+              </div>
+            </RadioGroup>
+            
+            {/* Show selected audience type */}
+            <div className="grid md:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <h3 className="font-medium text-gray-700">Brand Promise</h3>
-                <p className="text-gray-600 bg-white p-4 rounded-md">{clientDetails.brandPromise}</p>
+                <h4 className="text-sm font-medium text-gray-700">Primary</h4>
+                <MarkdownBox>
+                  {clientDetails.targetAudience[audienceType].primary}
+                </MarkdownBox>
               </div>
               
               <div className="space-y-2">
-                <h3 className="font-medium text-gray-700">Brand Challenge</h3>
-                <p className="text-gray-600 bg-white p-4 rounded-md">{clientDetails.brandChallenge}</p>
+                <h4 className="text-sm font-medium text-gray-700">Secondary</h4>
+                <MarkdownBox>
+                  {clientDetails.targetAudience[audienceType].secondary}
+                </MarkdownBox>
               </div>
             </div>
-          </CardContent>
-        </Card>
-        
-        {/* Target Audience Section - With toggle */}
-        <Card className="border-none shadow-sm bg-gray-50">
-          <CardContent className="p-6 space-y-6">
-            <div className="flex items-center justify-between mb-2">
-              <h2 className="text-xl font-semibold">Target Audience</h2>
-              <Button variant="ghost" size="sm">
-                <Pencil className="h-3.5 w-3.5 mr-2" />
-                Edit
-              </Button>
-            </div>
-            
-            <div className="space-y-6">
-              {/* Toggle between B2C and B2B */}
-              <RadioGroup 
-                value={audienceType} 
-                onValueChange={(value) => setAudienceType(value as 'b2c' | 'b2b')}
-                className="flex space-x-4 mb-4"
-              >
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="b2c" id="b2c" />
-                  <label htmlFor="b2c" className="cursor-pointer font-medium">B2C Audience</label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="b2b" id="b2b" />
-                  <label htmlFor="b2b" className="cursor-pointer font-medium">B2B Audience</label>
-                </div>
-              </RadioGroup>
-              
-              {/* Show selected audience type */}
-              <div className="grid md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <h4 className="text-sm font-medium text-gray-700">Primary</h4>
-                  <div className="bg-white p-4 rounded-md">
-                    <p className="text-gray-600 text-sm">{clientDetails.targetAudience[audienceType].primary}</p>
-                  </div>
-                </div>
-                
-                <div className="space-y-2">
-                  <h4 className="text-sm font-medium text-gray-700">Secondary</h4>
-                  <div className="bg-white p-4 rounded-md">
-                    <p className="text-gray-600 text-sm">{clientDetails.targetAudience[audienceType].secondary}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
         
         {/* Social Media Relevance Scores with Bar Chart */}
-        <Card className="border-none shadow-sm bg-gray-50">
-          <CardContent className="p-6 space-y-6">
-            <div className="flex items-center justify-between mb-2">
-              <h2 className="text-xl font-semibold">Relevance Score</h2>
-              <Button variant="ghost" size="sm">
-                <Pencil className="h-3.5 w-3.5 mr-2" />
-                Edit
-              </Button>
-            </div>
-            
-            {/* Bar Chart */}
-            <div className="h-72 bg-white p-4 rounded-md">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart
-                  data={chartData.sort((a, b) => b.score - a.score)}
-                  layout="vertical"
-                  margin={{ top: 5, right: 30, left: 80, bottom: 5 }}
-                >
-                  <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={false} />
-                  <XAxis type="number" domain={[0, 100]} />
-                  <YAxis 
-                    dataKey="name" 
-                    type="category" 
-                    width={80} 
-                    tick={{ fontSize: 12 }} 
-                  />
-                  <Tooltip 
-                    formatter={(value) => [`${value}/100`, 'Score']} 
-                    cursor={{ fill: 'rgba(0, 0, 0, 0.05)' }}
-                  />
-                  <Bar 
-                    dataKey="score" 
-                    fill="#ea384c" 
-                    radius={[0, 4, 4, 0]}
-                  />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-            
-            {/* Progress Bars - keeping as alternative view */}
-            <div className="space-y-4 bg-white p-4 rounded-md">
-              {clientDetails.socialMediaScores.sort((a, b) => b.score - a.score).map(item => (
-                <div key={item.platform} className="space-y-1">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium">{item.platform}</span>
-                    <span className="text-sm font-mono">{item.score}/100</span>
-                  </div>
-                  <Progress 
-                    value={item.score} 
-                    className="h-2" 
-                    style={{
-                      ['--tw-bg-opacity' as any]: '0.15',
-                      backgroundColor: 'rgba(234, 56, 76, var(--tw-bg-opacity))'
-                    }} 
-                  />
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
+        <div className="space-y-6 bg-gray-50 p-6 rounded-lg">
+          <div className="flex items-center justify-between mb-2">
+            <h2 className="text-xl font-semibold">Relevance Score</h2>
+            <Button variant="ghost" size="sm">
+              <Pencil className="h-3.5 w-3.5 mr-2" />
+              Edit
+            </Button>
+          </div>
+          
+          {/* Horizontal Bar Chart */}
+          <div className="h-72 bg-white p-4 rounded-md mb-6">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart
+                data={chartData.sort((a, b) => b.score - a.score)}
+                layout="horizontal"
+                margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis domain={[0, 100]} />
+                <Tooltip 
+                  formatter={(value) => [`${value}/100`, 'Score']} 
+                  cursor={{ fill: 'rgba(0, 0, 0, 0.05)' }}
+                />
+                <Bar 
+                  dataKey="score" 
+                  fill="#ea384c" 
+                  radius={[4, 4, 0, 0]}
+                />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
         
-        {/* Rationale Section with First Accordion Open */}
-        <Card className="border-none shadow-sm bg-gray-50">
-          <CardContent className="p-6 space-y-6">
-            <div className="flex items-center justify-between mb-2">
-              <h2 className="text-xl font-semibold">Relevance Score Rationale</h2>
-              <Button variant="ghost" size="sm">
-                <Pencil className="h-3.5 w-3.5 mr-2" />
-                Edit
-              </Button>
-            </div>
-            
-            <Accordion type="single" defaultValue="item-0" collapsible className="w-full">
-              {clientDetails.socialMediaScores.sort((a, b) => b.score - a.score).map((item, index) => (
-                <AccordionItem key={item.platform} value={`item-${index}`}>
-                  <AccordionTrigger className="hover:no-underline">
-                    <span className="font-medium">{item.platform} ({item.score})</span>
-                  </AccordionTrigger>
-                  <AccordionContent>
-                    <p className="text-gray-600">{item.rationale}</p>
-                  </AccordionContent>
-                </AccordionItem>
-              ))}
-            </Accordion>
-          </CardContent>
-        </Card>
+        {/* Rationale Section with First Accordion Open and Markdown boxes */}
+        <div className="space-y-6 bg-gray-50 p-6 rounded-lg">
+          <div className="flex items-center justify-between mb-2">
+            <h2 className="text-xl font-semibold">Relevance Score Rationale</h2>
+            <Button variant="ghost" size="sm">
+              <Pencil className="h-3.5 w-3.5 mr-2" />
+              Edit
+            </Button>
+          </div>
+          
+          <Accordion type="single" defaultValue="item-0" collapsible className="w-full">
+            {clientDetails.socialMediaScores.sort((a, b) => b.score - a.score).map((item, index) => (
+              <AccordionItem key={item.platform} value={`item-${index}`} className="border-b border-gray-200">
+                <AccordionTrigger className="hover:no-underline">
+                  <span className="font-medium">{item.platform} ({item.score})</span>
+                </AccordionTrigger>
+                <AccordionContent>
+                  <MarkdownBox>
+                    {item.rationale}
+                  </MarkdownBox>
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
+        </div>
       </div>
     </MainLayout>
   );
