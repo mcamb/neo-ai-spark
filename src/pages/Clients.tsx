@@ -90,21 +90,30 @@ const Clients = () => {
     setDeleteDialogOpen(true);
   };
 
-  // Fixed delete function that doesn't use aggregate functions
   const handleDeleteClient = async () => {
-    if (!selectedClientId) return;
+    if (!selectedClientId) {
+      console.log("No client selected for deletion");
+      return;
+    }
     
     try {
-      console.log("Starting deletion for client ID:", selectedClientId);
+      console.log("Starting deletion process for client ID:", selectedClientId);
       
-      // Close the dialog first for better UX
+      // Close the dialog immediately for better UX
       setDeleteDialogOpen(false);
       
-      // Execute the delete operation without using count which is an aggregate function
-      const { error } = await supabase
+      // Show pending toast
+      const pendingToast = toast.loading("Deleting client...");
+      
+      // Execute the delete operation
+      const { error, data } = await supabase
         .from('clients')
         .delete()
-        .eq('id', selectedClientId);
+        .eq('id', selectedClientId)
+        .select();
+      
+      // Dismiss the pending toast
+      toast.dismiss(pendingToast);
       
       if (error) {
         console.error("Delete operation failed with error:", error);
@@ -112,22 +121,23 @@ const Clients = () => {
         return;
       }
       
-      console.log("Delete operation completed successfully");
+      console.log("Delete operation completed successfully, response data:", data);
       
       // Show success message
       toast.success("Client deleted successfully");
       
-      // Reset state
+      // Reset selected client ID
       setSelectedClientId(null);
       
-      // Refetch data after successful deletion with a small delay
+      // Refetch data after successful deletion
+      // Delay refetch slightly to ensure database has completed the operation
       setTimeout(() => {
         console.log("Triggering refetch after deletion");
         refetch();
-      }, 100);
-    } catch (error) {
-      console.error("Exception during client deletion:", error);
-      toast.error("Error deleting client: " + (error instanceof Error ? error.message : String(error)));
+      }, 250);
+    } catch (e) {
+      console.error("Exception during client deletion:", e);
+      toast.error("Error deleting client: " + (e instanceof Error ? e.message : String(e)));
       setSelectedClientId(null);
     }
   };
