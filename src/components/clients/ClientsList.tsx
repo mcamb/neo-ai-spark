@@ -26,10 +26,11 @@ const ClientsList: React.FC<ClientsListProps> = ({
 }) => {
   console.log("ClientsList received clients:", clients);
   console.log("ClientsList searchQuery:", searchQuery);
+  console.log("ClientsList countryNames:", countryNames);
 
   const filteredClients = clients.filter(client => 
     client.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    countryNames[client.country]?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    (client.country && countryNames[client.country]?.toLowerCase().includes(searchQuery.toLowerCase())) ||
     client.domain?.toLowerCase().includes(searchQuery.toLowerCase())
   );
   
@@ -52,7 +53,7 @@ const ClientsList: React.FC<ClientsListProps> = ({
         <ClientCard 
           key={client.id}
           client={client}
-          countryName={countryNames[client.country] || 'Unknown'}
+          countryName={client.country && countryNames[client.country] ? countryNames[client.country] : 'Unknown'}
           onDelete={onDeleteClient}
         />
       ))}

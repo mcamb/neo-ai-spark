@@ -49,7 +49,7 @@ const fetchClients = async () => {
     // Default to 'us' if we can't determine country
     let countryCode = 'us';
     
-    if (item.country_id && countries) {
+    if (item.country_id && countries && countries.length > 0) {
       const country = countries.find(c => c.id === item.country_id);
       if (country) {
         // Take first two letters of country name as code
@@ -96,7 +96,7 @@ export const addTestClient = async () => {
     console.log("No countries found, creating a test country...");
     const { data: newCountry, error: countryError } = await supabase
       .from('countries')
-      .insert([{ country: 'United States' }])
+      .insert({ country: 'United States' })
       .select();
       
     if (countryError) {
@@ -121,7 +121,7 @@ export const addTestClient = async () => {
   
   const { data, error } = await supabase
     .from('clients')
-    .insert([testClient])
+    .insert(testClient)
     .select();
     
   if (error) {
@@ -248,4 +248,3 @@ export const useClients = () => {
     updateClientStatus
   };
 };
-

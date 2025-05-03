@@ -14,5 +14,17 @@ export const countryNames: Record<string, string> = {
   'br': 'Brazil',
   'mx': 'Mexico',
   'ch': 'China',
-  'in': 'India'
+  'in': 'India',
+  'ru': 'Russia',
+  'so': 'South Africa',
+  'ar': 'Argentina',
+  'sw': 'Switzerland',
+  'ne': 'Netherlands',
+  'po': 'Poland',
+  'se': 'Sweden',
+  'no': 'Norway',
+  'fi': 'Finland',
+  'be': 'Belgium',
+  'gr': 'Greece',
+  'tu': 'Turkey'
 };

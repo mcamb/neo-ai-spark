@@ -1,5 +1,4 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Sheet,
   SheetContent, 
@@ -41,6 +40,7 @@ const fetchCountries = async (): Promise<CountryOption[]> => {
     throw new Error(error.message);
   }
 
+  console.log("fetchCountries result:", data || []);
   return data || [];
 };
 
@@ -50,16 +50,19 @@ const createCountry = async (countryName: string): Promise<CountryOption> => {
   const { data, error } = await supabase
     .from('countries')
     .insert({ country: countryName })
-    .select()
-    .single();
+    .select();
 
   if (error) {
     console.error("Error creating country:", error);
     throw new Error(error.message);
   }
 
-  console.log("Created new country:", data);
-  return data;
+  if (!data || data.length === 0) {
+    throw new Error("No country data returned after creation");
+  }
+
+  console.log("Created new country:", data[0]);
+  return data[0];
 };
 
 interface NewCountryFormProps {
@@ -134,11 +137,24 @@ const NewClientModal: React.FC<NewClientModalProps> = ({ isOpen, onClose, onSubm
   const { 
     data: countries = [], 
     isLoading: isLoadingCountries,
-    refetch: refetchCountries
+    refetch: refetchCountries,
+    error: countriesError
   } = useQuery({
     queryKey: ['countries'],
     queryFn: fetchCountries
   });
+
+  // Log any errors with fetching countries
+  useEffect(() => {
+    if (countriesError) {
+      console.error("Error in countries query:", countriesError);
+    }
+  }, [countriesError]);
+
+  // Log countries when they change
+  useEffect(() => {
+    console.log("Countries in modal:", countries);
+  }, [countries]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
