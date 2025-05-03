@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { MessageCircle } from 'lucide-react';
 
 export const LogoIcon = ({ className = "" }: { className?: string }) => {
   return (
@@ -11,24 +12,38 @@ export const LogoIcon = ({ className = "" }: { className?: string }) => {
       xmlns="http://www.w3.org/2000/svg" 
       className={className}
     >
-      {/* Main background */}
+      {/* Background */}
       <rect width="40" height="40" rx="8" fill="#EA384C" />
       
-      {/* Robot head - rounded and cute */}
-      <rect x="8" y="8" width="24" height="20" rx="10" fill="white" />
+      {/* Speech bubble */}
+      <path 
+        d="M32 16C32 9.373 26.627 4 20 4C13.373 4 8 9.373 8 16C8 19.98 10.158 23.445 13.5 25.377V30.623C13.5 31.1753 14.1247 31.4778 14.5556 31.1556L20 27.5H20C26.627 27.5 32 22.127 32 15.5V16Z" 
+        fill="white" 
+      />
       
-      {/* Eyes - simple and expressive */}
-      <circle cx="15" cy="17" r="3" fill="#EA384C" />
-      <circle cx="25" cy="17" r="3" fill="#EA384C" />
+      {/* Robot head */}
+      <rect x="14" y="11" width="12" height="10" rx="5" fill="#EA384C" />
       
-      {/* Cute smile */}
-      <path d="M15 23C17 26 23 26 25 23" stroke="#EA384C" strokeWidth="2" strokeLinecap="round" />
+      {/* Robot antenna */}
+      <circle cx="20" cy="8" r="1" fill="#EA384C" />
+      <rect x="19.5" y="8" width="1" height="3" fill="#EA384C" />
       
-      {/* Simple body */}
-      <rect x="14" y="28" width="12" height="8" rx="6" fill="white" />
+      {/* Eyes */}
+      <circle cx="16.5" cy="15" r="1" fill="white" />
+      <circle cx="23.5" cy="15" r="1" fill="white" />
       
-      {/* Neck connector */}
-      <rect x="18" y="26" width="4" height="3" fill="white" />
+      {/* Smile */}
+      <path d="M18 17.5H22C22 18.5 21.5 19 20 19C18.5 19 18 18.5 18 17.5Z" fill="white" />
+      
+      {/* Robot body */}
+      <rect x="17" y="21" width="6" height="5" rx="1" fill="#EA384C" />
+      
+      {/* Robot neck */}
+      <rect x="19" y="20" width="2" height="1" fill="#EA384C" />
+      
+      {/* Robot ears */}
+      <rect x="12" y="14" width="2" height="4" rx="1" fill="#EA384C" />
+      <rect x="26" y="14" width="2" height="4" rx="1" fill="#EA384C" />
     </svg>
   );
 };
