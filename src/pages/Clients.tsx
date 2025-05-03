@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useCallback } from 'react';
 import MainLayout from '@/components/MainLayout';
 import ClientsHeader from '@/components/clients/ClientsHeader';
@@ -8,7 +7,6 @@ import { useClients } from '@/hooks/useClients';
 import NewClientModal from '@/components/NewClientModal';
 import { toast } from "sonner";
 import { supabase } from '@/integrations/supabase/client';
-import { useClientPolling } from '@/hooks/useClientPolling';
 import EditClientModal from '@/components/EditClientModal';
 import DeleteClientDialog from '@/components/clients/DeleteClientDialog';
 import { useClientDeletion } from '@/hooks/useClientDeletion';
@@ -39,7 +37,7 @@ const Clients = () => {
     handleCloseEditModal
   } = useClientModification({ refetch });
   
-  // Function to update client status
+  // Function to update client status - keeping this in case needed later
   const updateClientStatus = useCallback(async (clientId: string, status: 'ready' | 'in_progress') => {
     const { error } = await supabase
       .from('clients')
@@ -53,12 +51,6 @@ const Clients = () => {
     
     refetch();
   }, [refetch]);
-
-  // Initialize client polling
-  useClientPolling({
-    clients,
-    updateClientStatus
-  });
 
   useEffect(() => {
     // When component mounts, force a data refresh
