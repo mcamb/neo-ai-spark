@@ -4,6 +4,7 @@ import { ChevronRight, Eye, Pencil, Trash2 } from 'lucide-react';
 import ClientStatusBadge from './ClientStatusBadge';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Link } from 'react-router-dom';
 
 interface Client {
   id: string;
@@ -67,14 +68,16 @@ const ClientsList: React.FC<ClientsListProps> = ({
           </div>
           
           <div className="flex items-center gap-1">
-            <Button 
-              variant="ghost" 
-              size="icon"
-              disabled={client.agent_status !== 'ready'}
-              className={`${client.agent_status !== 'ready' ? 'opacity-50 cursor-not-allowed' : ''}`}
-            >
-              <Eye className="h-4 w-4" />
-            </Button>
+            <Link to={client.agent_status === 'ready' ? `/clients/${client.id}` : '#'}>
+              <Button 
+                variant="ghost" 
+                size="icon"
+                disabled={client.agent_status !== 'ready'}
+                className={`${client.agent_status !== 'ready' ? 'opacity-50 cursor-not-allowed' : ''}`}
+              >
+                <Eye className="h-4 w-4" />
+              </Button>
+            </Link>
             <Button variant="ghost" size="icon">
               <Pencil className="h-4 w-4" />
             </Button>
