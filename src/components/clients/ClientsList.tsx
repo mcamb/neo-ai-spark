@@ -1,11 +1,5 @@
 
 import React from 'react';
-import { ChevronRight, Eye, Pencil, Trash2 } from 'lucide-react';
-import ClientStatusBadge from './ClientStatusBadge';
-import { Button } from '@/components/ui/button';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Link } from 'react-router-dom';
-import { Badge } from '@/components/ui/badge';
 import ClientCard from './ClientCard';
 
 interface Client {
@@ -30,12 +24,17 @@ const ClientsList: React.FC<ClientsListProps> = ({
   countryNames, 
   onDeleteClient 
 }) => {
+  console.log("ClientsList received clients:", clients);
+  console.log("ClientsList searchQuery:", searchQuery);
+
   const filteredClients = clients.filter(client => 
-    client.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    client.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
     countryNames[client.country]?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    client.domain.toLowerCase().includes(searchQuery.toLowerCase())
+    client.domain?.toLowerCase().includes(searchQuery.toLowerCase())
   );
   
+  console.log("Filtered clients:", filteredClients);
+
   if (filteredClients.length === 0) {
     return (
       <div className="flex items-center justify-center p-10 border border-dashed rounded-lg bg-custom-background">
@@ -53,7 +52,7 @@ const ClientsList: React.FC<ClientsListProps> = ({
         <ClientCard 
           key={client.id}
           client={client}
-          countryName={countryNames[client.country]}
+          countryName={countryNames[client.country] || 'Unknown'}
           onDelete={onDeleteClient}
         />
       ))}

@@ -38,18 +38,26 @@ const fetchClients = async () => {
     `);
 
   if (error) {
+    console.error("Error fetching clients:", error);
     throw new Error(error.message);
   }
 
+  console.log("Raw client data from DB:", data);
+  
   // Transform the data to match our Client interface
-  return data.map(item => ({
-    id: item.id,
-    domain: item.domain,
-    name: item.name || item.domain.split('.')[0], // Use name from DB or fallback to domain
-    country: item.country?.country?.toLowerCase().substring(0, 2) || 'us', // Convert to country code format
-    country_id: item.country?.id,
-    agent_status: item.agent_status, // Now using the actual agent_status from the database
-  }));
+  return data.map(item => {
+    const clientData = {
+      id: item.id,
+      domain: item.domain,
+      name: item.name || item.domain.split('.')[0], // Use name from DB or fallback to domain
+      country: item.country?.country?.toLowerCase().substring(0, 2) || 'us', // Convert to country code format
+      country_id: item.country?.id,
+      agent_status: item.agent_status, // Now using the actual agent_status from the database
+    };
+    
+    console.log("Transformed client:", clientData);
+    return clientData;
+  });
 };
 
 const ClientsPage = () => {
@@ -171,6 +179,10 @@ const ClientsPage = () => {
     return () => clearInterval(pollingInterval);
   }, [clients, toast, queryClient]);
 
+  console.log("Current clients state:", clients);
+  console.log("isLoading:", isLoading);
+  console.log("error:", error);
+
   return (
     <MainLayout>
       <div className="space-y-6">
@@ -203,6 +215,11 @@ const ClientsPage = () => {
         ) : error ? (
           <div className="text-center py-10 text-red-500">
             Error loading clients: {(error as Error).message}
+          </div>
+        ) : clients.length === 0 ? (
+          <div className="text-center py-10 bg-white rounded-lg shadow-sm border border-dashed">
+            <p className="text-gray-500">No clients found.</p>
+            <p className="text-sm text-gray-400 mt-1">Add a new client by clicking the "Add client" button.</p>
           </div>
         ) : (
           <div className="bg-white rounded-lg shadow-sm p-1">
