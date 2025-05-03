@@ -25,23 +25,21 @@ interface ClientCardProps {
 const ClientCard: React.FC<ClientCardProps> = ({ client, countryName, onDelete }) => {
   return (
     <Card className="overflow-hidden border border-gray-200 bg-custom-background rounded-lg">
-      <CardContent className="p-6">
-        <div className="flex flex-col space-y-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className="w-16 h-16 flex items-center justify-center rounded-md bg-white border border-white text-gray-700 font-medium text-xl">
-                {client.name.charAt(0)}
-              </div>
-              <div>
-                <h3 className="font-medium text-lg">{client.name}</h3>
-                <Badge variant="outline" className="text-xs w-fit mt-1 bg-white text-gray-700 border border-gray-200">
-                  {countryName}
-                </Badge>
-              </div>
+      <CardContent className="p-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 flex items-center justify-center rounded-md bg-white border border-white text-gray-700 font-medium text-lg">
+              {client.name.charAt(0)}
+            </div>
+            <div>
+              <h3 className="font-medium text-lg">{client.name}</h3>
+              <Badge variant="outline" className="text-xs w-fit mt-1 bg-white text-gray-700 border border-gray-200">
+                {countryName}
+              </Badge>
             </div>
           </div>
           
-          <div className="flex items-center justify-end gap-2">
+          <div className="flex items-center gap-2">
             <ClientStatusBadge status={client.agent_status} />
             <Link to={client.agent_status === 'ready' ? `/clients/${client.id}` : '#'}>
               <Button variant="outline" size="icon" className="border-gray-200 bg-white">
