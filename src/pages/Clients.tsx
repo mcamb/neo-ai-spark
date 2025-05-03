@@ -80,8 +80,9 @@ const ClientsPage = () => {
     <MainLayout>
       <div className="space-y-6">
         <div>
-          <h1 className="text-3xl font-bold">Clients</h1>
-          <p className="text-gray-600 mt-1">This is about selecting or creating clients.</p>
+          <h1 className="text-3xl font-bold relative pb-2">Clients</h1>
+          <span className="absolute bottom-0 left-0 w-16 h-1 bg-neo-red"></span>
+          <p className="text-gray-600 mt-3">This is about selecting or creating clients.</p>
         </div>
         
         <div className="flex flex-col sm:flex-row justify-between gap-4">
@@ -89,7 +90,7 @@ const ClientsPage = () => {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
             <Input
               placeholder="Search clients..."
-              className="pl-10"
+              className="pl-10 border-gray-300 focus:border-neo-red focus:ring-neo-red"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
@@ -102,12 +103,14 @@ const ClientsPage = () => {
           </Button>
         </div>
         
-        <ClientsList 
-          clients={clients} 
-          searchQuery={searchQuery} 
-          countryNames={countryNames} 
-          onDeleteClient={handleDeleteClient}
-        />
+        <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+          <ClientsList 
+            clients={clients} 
+            searchQuery={searchQuery} 
+            countryNames={countryNames} 
+            onDeleteClient={handleDeleteClient}
+          />
+        </div>
       </div>
       
       <NewClientModal 

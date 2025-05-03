@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Eye, Pencil, Trash2 } from 'lucide-react';
 import ClientStatusBadge from './ClientStatusBadge';
+import { Link } from 'react-router-dom';
 
 interface Client {
   id: string;
@@ -40,14 +41,16 @@ const ClientCard: React.FC<ClientCardProps> = ({ client, countryName, onDelete }
               <ClientStatusBadge status={client.agent_status} />
             </div>
             <div className="flex gap-2">
-              <Button 
-                variant="ghost" 
-                size="icon"
-                disabled={client.agent_status !== 'ready'}
-                className={`${client.agent_status !== 'ready' ? 'opacity-50 cursor-not-allowed' : ''}`}
-              >
-                <Eye className="h-4 w-4" />
-              </Button>
+              <Link to={client.agent_status === 'ready' ? `/clients/${client.id}` : '#'}>
+                <Button 
+                  variant="ghost" 
+                  size="icon"
+                  disabled={client.agent_status !== 'ready'}
+                  className={`${client.agent_status !== 'ready' ? 'opacity-50 cursor-not-allowed' : ''}`}
+                >
+                  <Eye className="h-4 w-4" />
+                </Button>
+              </Link>
               <Button variant="ghost" size="icon">
                 <Pencil className="h-4 w-4" />
               </Button>

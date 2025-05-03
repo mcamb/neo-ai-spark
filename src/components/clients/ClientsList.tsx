@@ -36,7 +36,7 @@ const ClientsList: React.FC<ClientsListProps> = ({
   
   if (filteredClients.length === 0) {
     return (
-      <div className="flex items-center justify-center p-10 border border-dashed rounded-lg">
+      <div className="flex items-center justify-center p-10 border border-dashed rounded-lg bg-custom-background">
         <div className="text-center">
           <p className="text-gray-500">No clients found.</p>
           <p className="text-sm text-gray-400 mt-1">Add a new client to get started.</p>
@@ -46,11 +46,11 @@ const ClientsList: React.FC<ClientsListProps> = ({
   }
   
   return (
-    <div className="space-y-2">
-      {filteredClients.map((client) => (
+    <div className="divide-y divide-gray-100">
+      {filteredClients.map((client, index) => (
         <div 
           key={client.id}
-          className="flex items-center justify-between py-3 px-4 hover:bg-gray-50 rounded-md transition-colors"
+          className={`flex items-center justify-between py-3 px-4 transition-colors ${index % 2 === 0 ? 'bg-white' : 'bg-custom-background'}`}
         >
           <div className="flex items-center gap-4">
             <Avatar className="h-10 w-10 bg-gray-100">
