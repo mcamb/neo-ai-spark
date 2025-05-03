@@ -39,36 +39,26 @@ const ClientCard: React.FC<ClientCardProps> = ({ client, countryName, onDelete }
                 </Badge>
               </div>
             </div>
-            <ClientStatusBadge status={client.agent_status} />
           </div>
           
-          <div className="flex items-center justify-between">
-            <div>
-              <Link to={client.agent_status === 'ready' ? `/clients/${client.id}` : '#'}>
-                <Button 
-                  variant="default" 
-                  className="bg-custom-accent text-white hover:bg-custom-accent/90"
-                >
-                  Open
-                </Button>
-              </Link>
-            </div>
-            <div className="flex gap-2">
+          <div className="flex items-center justify-end gap-2">
+            <ClientStatusBadge status={client.agent_status} />
+            <Link to={client.agent_status === 'ready' ? `/clients/${client.id}` : '#'}>
               <Button variant="outline" size="icon" className="border-gray-200 bg-white">
                 <Eye className="h-4 w-4" />
               </Button>
-              <Button variant="outline" size="icon" className="border-gray-200 bg-white">
-                <Pencil className="h-4 w-4" />
-              </Button>
-              <Button 
-                variant="outline" 
-                size="icon" 
-                className="border-gray-200 bg-white"
-                onClick={() => onDelete(client.id)}
-              >
-                <Trash2 className="h-4 w-4" />
-              </Button>
-            </div>
+            </Link>
+            <Button variant="outline" size="icon" className="border-gray-200 bg-white">
+              <Pencil className="h-4 w-4" />
+            </Button>
+            <Button 
+              variant="outline" 
+              size="icon" 
+              className="border-gray-200 bg-white"
+              onClick={() => onDelete(client.id)}
+            >
+              <Trash2 className="h-4 w-4" />
+            </Button>
           </div>
         </div>
       </CardContent>
