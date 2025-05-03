@@ -32,6 +32,7 @@ const fetchClients = async () => {
     .select(`
       id,
       domain,
+      agent_status,
       country:countries(id, country)
     `);
 
@@ -45,7 +46,7 @@ const fetchClients = async () => {
     domain: item.domain,
     country: item.country?.country?.toLowerCase().substring(0, 2) || 'us', // Convert to country code format
     country_id: item.country?.id,
-    agent_status: 'ready' as const, // Default to ready for now
+    agent_status: item.agent_status, // Now using the actual agent_status from the database
     name: item.domain.split('.')[0] // Use domain name as client name for now
   }));
 };
@@ -71,6 +72,7 @@ const ClientsPage = () => {
           { 
             domain: newClient.domain,
             country_id: newClient.country_id
+            // agent_status will use the default value from the database ('in_progress')
           }
         ])
         .select();
@@ -141,18 +143,21 @@ const ClientsPage = () => {
       if (inProgressClients.length > 0 && Math.random() > 0.7) {
         const randomClient = inProgressClients[Math.floor(Math.random() * inProgressClients.length)];
         
-        // This is just for the demo effect - in a real app this would come from the database
-        queryClient.setQueryData(['clients'], (oldClients: Client[] | undefined) => 
-          (oldClients || []).map(client => client.id === randomClient.id ? {
-            ...client,
-            agent_status: 'ready' as const
-          } : client)
-        );
-        
-        toast({
-          title: "Client Ready",
-          description: `${randomClient.name} is now ready!`
-        });
+        // Update a random client's status to 'ready'
+        supabase
+          .from('clients')
+          .update({ agent_status: 'ready' })
+          .eq('id', randomClient.id)
+          .then(() => {
+            // Instead of directly modifying the state, invalidate the query to get fresh data
+            queryClient.invalidateQueries({ queryKey: ['clients'] });
+            
+            toast({
+              title: "Client Ready",
+              description: `${randomClient.name} is now ready!`
+            });
+          })
+          .catch(error => console.error("Error updating client status:", error));
       }
     }, 10000); // Poll every 10 seconds
 

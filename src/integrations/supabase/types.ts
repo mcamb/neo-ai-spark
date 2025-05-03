@@ -11,6 +11,7 @@ export type Database = {
     Tables: {
       clients: {
         Row: {
+          agent_status: Database["public"]["Enums"]["agent_status_enum"]
           country_id: string
           created_at: string | null
           domain: string
@@ -18,6 +19,7 @@ export type Database = {
           updated_at: string | null
         }
         Insert: {
+          agent_status?: Database["public"]["Enums"]["agent_status_enum"]
           country_id: string
           created_at?: string | null
           domain: string
@@ -25,6 +27,7 @@ export type Database = {
           updated_at?: string | null
         }
         Update: {
+          agent_status?: Database["public"]["Enums"]["agent_status_enum"]
           country_id?: string
           created_at?: string | null
           domain?: string
@@ -67,7 +70,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      agent_status_enum: "ready" | "in_progress"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -182,6 +185,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      agent_status_enum: ["ready", "in_progress"],
+    },
   },
 } as const
