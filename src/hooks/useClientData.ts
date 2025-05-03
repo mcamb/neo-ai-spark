@@ -52,11 +52,16 @@ export const useClientData = (clientId: string | undefined) => {
 
         if (data) {
           console.log("Client data from Supabase:", data);
-          // We found data in Supabase, but we still need to map it to our ClientDetails model
-          // For now, we'll use mock data for the fields not stored in the database
-          if (mockClientDetails[clientId]) {
+          
+          // Check if we have mock data for this client (by domain or id)
+          const mockDataByID = mockClientDetails[clientId];
+          const mockDataByDomain = Object.values(mockClientDetails).find(
+            client => client.domain === data.domain
+          );
+          const mockData = mockDataByID || mockDataByDomain;
+
+          if (mockData) {
             // Use real data from Supabase for basic fields, and mock data for the rest
-            const mockData = mockClientDetails[clientId];
             setClientDetails({
               ...mockData,
               id: data.id,
@@ -80,7 +85,28 @@ export const useClientData = (clientId: string | undefined) => {
                 b2c: { primary: "No B2C primary audience defined.", secondary: "No B2C secondary audience defined." },
                 b2b: { primary: "No B2B primary audience defined.", secondary: "No B2B secondary audience defined." }
               },
-              socialMediaScores: []
+              socialMediaScores: [
+                {
+                  platform: "LinkedIn",
+                  score: 80,
+                  rationale: "Professional platform matches well with business focus."
+                },
+                {
+                  platform: "Instagram",
+                  score: 60,
+                  rationale: "Visual platform provides good engagement opportunities."
+                },
+                {
+                  platform: "Facebook",
+                  score: 55,
+                  rationale: "Wide audience reach but declining organic engagement."
+                },
+                {
+                  platform: "Twitter",
+                  score: 45,
+                  rationale: "Good for quick updates but limited engagement depth."
+                }
+              ]
             });
           }
         } else {
