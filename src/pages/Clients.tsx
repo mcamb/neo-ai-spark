@@ -146,20 +146,25 @@ const ClientsPage = () => {
         const randomClient = inProgressClients[Math.floor(Math.random() * inProgressClients.length)];
         
         // Update a random client's status to 'ready'
-        supabase
-          .from('clients')
-          .update({ agent_status: 'ready' })
-          .eq('id', randomClient.id)
-          .then(() => {
-            // Instead of directly modifying the state, invalidate the query to get fresh data
+        // Fix: Use async/await pattern instead of .catch() directly on the PromiseLike<void>
+        (async () => {
+          try {
+            await supabase
+              .from('clients')
+              .update({ agent_status: 'ready' })
+              .eq('id', randomClient.id);
+            
+            // Invalidate the query to get fresh data
             queryClient.invalidateQueries({ queryKey: ['clients'] });
             
             toast({
               title: "Client Ready",
               description: `${randomClient.name} is now ready!`
             });
-          })
-          .catch((error: Error) => console.error("Error updating client status:", error));
+          } catch (error) {
+            console.error("Error updating client status:", error);
+          }
+        })();
       }
     }, 10000); // Poll every 10 seconds
 
