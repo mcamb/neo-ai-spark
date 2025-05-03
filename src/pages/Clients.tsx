@@ -18,8 +18,13 @@ const Clients = () => {
   console.log("Clients page - error:", error);
 
   useEffect(() => {
+    // When component mounts, force a data refresh
+    refetch();
+  }, [refetch]);
+
+  useEffect(() => {
     if (error) {
-      toast.error("Error loading clients: " + error.message);
+      toast.error("Error loading clients: " + (error instanceof Error ? error.message : String(error)));
     }
   }, [error]);
 
@@ -39,6 +44,11 @@ const Clients = () => {
   const handleRefresh = () => {
     toast.info("Refreshing client data...");
     refetch();
+  };
+
+  const handleDeleteClient = (id: string) => {
+    // Currently this does nothing but is required by the interface
+    console.log("Delete client requested for ID:", id);
   };
 
   return (
@@ -67,7 +77,7 @@ const Clients = () => {
           isLoading={isLoading} 
           error={error} 
           searchQuery={searchQuery}
-          onDeleteClient={() => {}} 
+          onDeleteClient={handleDeleteClient} 
           refetch={refetch}
         />
       </div>

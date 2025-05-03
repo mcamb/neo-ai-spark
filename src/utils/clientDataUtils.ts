@@ -35,5 +35,14 @@ export const countryNames: Record<string, string> = {
   // Generic fallback
   'unkn': 'Unknown Country',
   // Ensure we have a fallback for any missing country codes
-  'undefined': 'Unknown'
+  'undefined': 'Unknown',
+  '': 'Unknown'
+};
+
+// Helper function to get country name safely
+export const getCountryName = (countryCode?: string): string => {
+  if (!countryCode) return 'Unknown';
+  
+  const code = countryCode.toLowerCase();
+  return countryNames[code] || 'Unknown';
 };

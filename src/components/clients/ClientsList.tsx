@@ -2,7 +2,7 @@
 import React from 'react';
 import ClientCard from './ClientCard';
 import { Client } from '@/hooks/useClients';
-import { countryNames } from '@/utils/clientDataUtils';
+import { countryNames, getCountryName } from '@/utils/clientDataUtils';
 
 interface ClientsListProps {
   clients: Client[];
@@ -53,14 +53,17 @@ const ClientsList: React.FC<ClientsListProps> = ({
   
   return (
     <div className="space-y-4 p-2">
-      {filteredClients.map((client) => (
-        <ClientCard 
-          key={client.id}
-          client={client}
-          countryName={client.country && countryNames[client.country] ? countryNames[client.country] : 'Unknown'}
-          onDelete={onDeleteClient}
-        />
-      ))}
+      {filteredClients.map((client) => {
+        const countryName = getCountryName(client.country);
+        return (
+          <ClientCard 
+            key={client.id}
+            client={client}
+            countryName={countryName}
+            onDelete={onDeleteClient}
+          />
+        );
+      })}
     </div>
   );
 };

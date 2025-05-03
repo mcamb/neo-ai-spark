@@ -3,7 +3,7 @@ import React from 'react';
 import ClientsList from './ClientsList';
 import { Client } from '@/hooks/useClients';
 import { countryNames } from '@/utils/clientDataUtils';
-import { Loader, AlertTriangle, RefreshCw } from 'lucide-react';
+import { Loader, AlertTriangle, RefreshCw, Database } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface ClientsContentProps {
@@ -54,6 +54,25 @@ const ClientsContent: React.FC<ClientsContentProps> = ({
     );
   }
 
+  // Show an empty state when there are no clients
+  if (!clients || clients.length === 0) {
+    return (
+      <div className="text-center py-10 bg-white rounded-lg shadow-sm p-6">
+        <Database className="h-12 w-12 mx-auto mb-4 text-gray-400" />
+        <h3 className="text-lg font-medium text-gray-900">No clients found</h3>
+        <p className="mt-2 text-sm text-gray-500">
+          There are no clients in the database yet or there may be an issue accessing them.
+        </p>
+        <Button 
+          onClick={refetch}
+          className="mt-4 bg-neo-red hover:bg-red-600 text-white"
+        >
+          <RefreshCw className="mr-2 h-4 w-4" /> Refresh Data
+        </Button>
+      </div>
+    );
+  }
+
   return (
     <div className="bg-white rounded-lg shadow-sm p-1">
       <ClientsList 
@@ -62,16 +81,6 @@ const ClientsContent: React.FC<ClientsContentProps> = ({
         countryNames={countryNames} 
         onDeleteClient={onDeleteClient} 
       />
-      {clients && clients.length === 0 && (
-        <div className="text-center py-6">
-          <Button 
-            onClick={refetch}
-            className="mt-2 bg-neo-red hover:bg-red-600 text-white"
-          >
-            <RefreshCw className="mr-2 h-4 w-4" /> Refresh Data
-          </Button>
-        </div>
-      )}
     </div>
   );
 };
