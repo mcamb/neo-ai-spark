@@ -9,33 +9,66 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      channels: {
+        Row: {
+          channel: string
+          id: string
+        }
+        Insert: {
+          channel: string
+          id?: string
+        }
+        Update: {
+          channel?: string
+          id?: string
+        }
+        Relationships: []
+      }
       clients: {
         Row: {
           agent_status: string
+          brand_challenge: string | null
+          brand_promise: string | null
           country: string
           country_id: string | null
           domain: string
           id: string
           logo: string | null
           name: string
+          primary_audience_b2b: string | null
+          primary_audience_b2c: string | null
+          secondary_audience_b2b: string | null
+          secondary_audience_b2c: string | null
         }
         Insert: {
           agent_status?: string
+          brand_challenge?: string | null
+          brand_promise?: string | null
           country: string
           country_id?: string | null
           domain: string
           id?: string
           logo?: string | null
           name: string
+          primary_audience_b2b?: string | null
+          primary_audience_b2c?: string | null
+          secondary_audience_b2b?: string | null
+          secondary_audience_b2c?: string | null
         }
         Update: {
           agent_status?: string
+          brand_challenge?: string | null
+          brand_promise?: string | null
           country?: string
           country_id?: string | null
           domain?: string
           id?: string
           logo?: string | null
           name?: string
+          primary_audience_b2b?: string | null
+          primary_audience_b2c?: string | null
+          secondary_audience_b2b?: string | null
+          secondary_audience_b2c?: string | null
         }
         Relationships: [
           {
@@ -64,6 +97,45 @@ export type Database = {
           id?: string
         }
         Relationships: []
+      }
+      relevance_scores: {
+        Row: {
+          channel_id: string
+          client_id: string
+          id: string
+          rationale: string | null
+          score: number
+        }
+        Insert: {
+          channel_id: string
+          client_id: string
+          id?: string
+          rationale?: string | null
+          score: number
+        }
+        Update: {
+          channel_id?: string
+          client_id?: string
+          id?: string
+          rationale?: string | null
+          score?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "relevance_scores_channel_id_fkey"
+            columns: ["channel_id"]
+            isOneToOne: false
+            referencedRelation: "channels"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "relevance_scores_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {

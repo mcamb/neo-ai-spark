@@ -39,85 +39,102 @@ export const useClientData = (clientId: string | undefined) => {
       setIsLoading(true);
       
       try {
-        // Try to fetch from Supabase first
-        const { data, error } = await supabase
+        // Fetch basic client info
+        const { data: clientData, error: clientError } = await supabase
           .from('clients')
           .select('*')
           .eq('id', clientId)
           .single();
           
-        if (error) {
-          throw error;
-        }
-
-        if (data) {
-          console.log("Client data from Supabase:", data);
-          
-          // Check if we have mock data for this client (by domain or id)
-          const mockDataByID = mockClientDetails[clientId];
-          const mockDataByDomain = Object.values(mockClientDetails).find(
-            client => client.domain === data.domain
-          );
-          const mockData = mockDataByID || mockDataByDomain;
-
-          if (mockData) {
-            // Use real data from Supabase for basic fields, and mock data for the rest
-            setClientDetails({
-              ...mockData,
-              id: data.id,
-              name: data.name,
-              country: data.country,
-              domain: data.domain,
-              logo: data.logo || mockData.logo,
-            });
-          } else {
-            // If no matching mock data, create a default ClientDetails with real basic data
-            setClientDetails({
-              id: data.id,
-              name: data.name,
-              country: data.country,
-              domain: data.domain,
-              logo: data.logo,
-              description: "No detailed description available.",
-              brandPromise: "Brand promise not available.",
-              brandChallenge: "Brand challenge not available.",
-              targetAudience: {
-                b2c: { primary: "No B2C primary audience defined.", secondary: "No B2C secondary audience defined." },
-                b2b: { primary: "No B2B primary audience defined.", secondary: "No B2B secondary audience defined." }
-              },
-              socialMediaScores: [
-                {
-                  platform: "LinkedIn",
-                  score: 80,
-                  rationale: "Professional platform matches well with business focus."
-                },
-                {
-                  platform: "Instagram",
-                  score: 60,
-                  rationale: "Visual platform provides good engagement opportunities."
-                },
-                {
-                  platform: "Facebook",
-                  score: 55,
-                  rationale: "Wide audience reach but declining organic engagement."
-                },
-                {
-                  platform: "Twitter",
-                  score: 45,
-                  rationale: "Good for quick updates but limited engagement depth."
-                }
-              ]
-            });
-          }
-        } else {
-          // If not found in Supabase, fall back to mock data
-          const mockData = mockClientDetails[clientId];
-          if (mockData) {
-            setClientDetails(mockData);
+        if (clientError) throw clientError;
+        
+        if (!clientData) {
+          // If no client found in database, check mock data as fallback
+          if (mockClientDetails[clientId]) {
+            setClientDetails(mockClientDetails[clientId]);
           } else {
             setClientDetails(undefined);
           }
+          setIsLoading(false);
+          return;
         }
+        
+        console.log("Client data from Supabase:", clientData);
+        
+        // Fetch relevance scores for this client
+        const { data: scoresData, error: scoresError } = await supabase
+          .from('relevance_scores')
+          .select(`
+            id,
+            score,
+            rationale,
+            channels (
+              id,
+              channel
+            )
+          `)
+          .eq('client_id', clientId);
+        
+        if (scoresError) {
+          console.error("Error fetching scores:", scoresError);
+          // Continue despite error - we'll just show the client without scores
+        }
+        
+        // Transform the scores data into the format our frontend expects
+        const socialMediaScores = scoresData?.map(score => ({
+          platform: score.channels.channel,
+          score: score.score,
+          rationale: score.rationale || ''
+        })) || [];
+        
+        console.log("Transformed social media scores:", socialMediaScores);
+        
+        // Build the client details object from the database data
+        const clientDetails: ClientDetails = {
+          id: clientData.id,
+          name: clientData.name,
+          country: clientData.country,
+          domain: clientData.domain,
+          logo: clientData.logo,
+          description: "Client details from database", // This could be added as a field to the clients table in future
+          brandPromise: clientData.brand_promise || "Brand promise not available.",
+          brandChallenge: clientData.brand_challenge || "Brand challenge not available.",
+          targetAudience: {
+            b2c: {
+              primary: clientData.primary_audience_b2c || "No B2C primary audience defined.",
+              secondary: clientData.secondary_audience_b2c || "No B2C secondary audience defined."
+            },
+            b2b: {
+              primary: clientData.primary_audience_b2b || "No B2B primary audience defined.",
+              secondary: clientData.secondary_audience_b2b || "No B2B secondary audience defined."
+            }
+          },
+          socialMediaScores: socialMediaScores.length > 0 ? socialMediaScores : [
+            // Fallback scores if none found in database
+            {
+              platform: "LinkedIn",
+              score: 80,
+              rationale: "Professional platform matches well with business focus."
+            },
+            {
+              platform: "Instagram",
+              score: 60,
+              rationale: "Visual platform provides good engagement opportunities."
+            },
+            {
+              platform: "Facebook",
+              score: 55,
+              rationale: "Wide audience reach but declining organic engagement."
+            },
+            {
+              platform: "Twitter",
+              score: 45,
+              rationale: "Good for quick updates but limited engagement depth."
+            }
+          ]
+        };
+        
+        setClientDetails(clientDetails);
       } catch (error) {
         console.error("Error fetching client details:", error);
         toast({
@@ -146,8 +163,40 @@ export const useClientData = (clientId: string | undefined) => {
     setIsEditingBrand(true);
   };
 
-  const saveBrandEdits = () => {
-    // In a real app, you would save these changes to your backend
+  const saveBrandEdits = async () => {
+    if (!clientId || !clientDetails) return;
+    
+    try {
+      const { error } = await supabase
+        .from('clients')
+        .update({
+          brand_promise: editedBrandPromise,
+          brand_challenge: editedBrandChallenge
+        })
+        .eq('id', clientId);
+        
+      if (error) throw error;
+      
+      // Update local state with new values
+      setClientDetails({
+        ...clientDetails,
+        brandPromise: editedBrandPromise,
+        brandChallenge: editedBrandChallenge
+      });
+      
+      toast({
+        title: "Success",
+        description: "Brand information updated successfully.",
+      });
+    } catch (error) {
+      console.error("Error saving brand edits:", error);
+      toast({
+        title: "Error",
+        description: "Failed to update brand information.",
+        variant: "destructive"
+      });
+    }
+    
     setIsEditingBrand(false);
   };
 
@@ -166,8 +215,50 @@ export const useClientData = (clientId: string | undefined) => {
     setIsEditingAudience(true);
   };
 
-  const saveAudienceEdits = () => {
-    // In a real app, you would save these changes to your backend
+  const saveAudienceEdits = async () => {
+    if (!clientId || !clientDetails) return;
+    
+    try {
+      const { error } = await supabase
+        .from('clients')
+        .update({
+          primary_audience_b2c: editedTargetAudience.b2c.primary,
+          secondary_audience_b2c: editedTargetAudience.b2c.secondary,
+          primary_audience_b2b: editedTargetAudience.b2b.primary,
+          secondary_audience_b2b: editedTargetAudience.b2b.secondary
+        })
+        .eq('id', clientId);
+        
+      if (error) throw error;
+      
+      // Update local state with new values
+      setClientDetails({
+        ...clientDetails,
+        targetAudience: {
+          b2c: {
+            primary: editedTargetAudience.b2c.primary,
+            secondary: editedTargetAudience.b2c.secondary
+          },
+          b2b: {
+            primary: editedTargetAudience.b2b.primary,
+            secondary: editedTargetAudience.b2b.secondary
+          }
+        }
+      });
+      
+      toast({
+        title: "Success",
+        description: "Target audience information updated successfully.",
+      });
+    } catch (error) {
+      console.error("Error saving audience edits:", error);
+      toast({
+        title: "Error",
+        description: "Failed to update target audience information.",
+        variant: "destructive"
+      });
+    }
+    
     setIsEditingAudience(false);
   };
 

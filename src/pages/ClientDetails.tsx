@@ -96,7 +96,10 @@ const ClientDetailsPage = () => {
         />
         
         {clientDetails.socialMediaScores && clientDetails.socialMediaScores.length > 0 ? (
-          <ScoreSection socialMediaScores={clientDetails.socialMediaScores} />
+          <ScoreSection 
+            socialMediaScores={clientDetails.socialMediaScores} 
+            clientId={clientDetails.id} 
+          />
         ) : null}
       </div>
     </MainLayout>
