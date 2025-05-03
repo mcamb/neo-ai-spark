@@ -89,39 +89,45 @@ const Clients = () => {
     setDeleteDialogOpen(true);
   };
 
+  // Completely rewritten delete function with simplified logic
   const handleDeleteClient = async () => {
     if (!selectedClientId) return;
     
     try {
-      console.log("Deleting client with ID:", selectedClientId);
+      console.log("Starting deletion for client ID:", selectedClientId);
       
-      // First close the dialog to improve UI feedback
+      // Close the dialog first for better UX
       setDeleteDialogOpen(false);
       
       // Execute the delete operation
-      const { error } = await supabase
+      const { error, count } = await supabase
         .from('clients')
         .delete()
-        .eq('id', selectedClientId);
+        .eq('id', selectedClientId)
+        .select('count');
       
       if (error) {
-        console.error("Delete error:", error);
-        throw error;
+        console.error("Delete operation failed with error:", error);
+        toast.error("Failed to delete client: " + error.message);
+        return;
       }
+      
+      console.log("Delete operation completed, deleted count:", count);
       
       // Show success message
       toast.success("Client deleted successfully");
       
-      // Reset selected client
+      // Reset state
       setSelectedClientId(null);
       
-      // Force an immediate refetch to update the UI
-      refetch();
-      
-      console.log("Client deleted and data refreshed");
+      // Refetch data after successful deletion
+      setTimeout(() => {
+        console.log("Triggering refetch after deletion");
+        refetch();
+      }, 100);
     } catch (error) {
-      console.error("Error deleting client:", error);
-      toast.error("Failed to delete client: " + (error instanceof Error ? error.message : String(error)));
+      console.error("Exception during client deletion:", error);
+      toast.error("Error deleting client: " + (error instanceof Error ? error.message : String(error)));
       setSelectedClientId(null);
     }
   };
