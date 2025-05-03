@@ -105,12 +105,11 @@ const Clients = () => {
       // Show pending toast
       const pendingToast = toast.loading("Deleting client...");
       
-      // Execute the delete operation
-      const { error, data } = await supabase
+      // Execute the delete operation - completely removing any select/returning clause
+      const { error } = await supabase
         .from('clients')
         .delete()
-        .eq('id', selectedClientId)
-        .select();
+        .eq('id', selectedClientId);
       
       // Dismiss the pending toast
       toast.dismiss(pendingToast);
@@ -121,7 +120,7 @@ const Clients = () => {
         return;
       }
       
-      console.log("Delete operation completed successfully, response data:", data);
+      console.log("Delete operation completed successfully");
       
       // Show success message
       toast.success("Client deleted successfully");
@@ -134,7 +133,7 @@ const Clients = () => {
       setTimeout(() => {
         console.log("Triggering refetch after deletion");
         refetch();
-      }, 250);
+      }, 500);
     } catch (e) {
       console.error("Exception during client deletion:", e);
       toast.error("Error deleting client: " + (e instanceof Error ? e.message : String(e)));
