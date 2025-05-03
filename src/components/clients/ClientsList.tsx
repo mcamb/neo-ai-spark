@@ -24,7 +24,7 @@ const ClientsList: React.FC<ClientsListProps> = ({
     ? clients
     : clients.filter(client => 
         client.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (client.country && countryNames[client.country]?.toLowerCase().includes(searchQuery.toLowerCase())) ||
+        (client.country && getCountryName(client.country).toLowerCase().includes(searchQuery.toLowerCase())) ||
         client.domain?.toLowerCase().includes(searchQuery.toLowerCase())
       );
   

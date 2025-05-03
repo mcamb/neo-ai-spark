@@ -16,27 +16,53 @@ const fetchClients = async () => {
   console.log("Fetching clients from Supabase...");
   
   try {
-    // Get all clients with explicit SELECT to ensure we get all fields
-    const { data, error } = await supabase
+    // First fetch clients with all necessary fields
+    const { data: clientsData, error: clientsError } = await supabase
       .from('clients')
       .select('id, name, domain, logo, agent_status, country_id');
 
-    if (error) {
-      console.error("Error fetching clients:", error);
-      throw new Error(`Failed to fetch clients: ${error.message}`);
+    if (clientsError) {
+      console.error("Error fetching clients:", clientsError);
+      throw new Error(`Failed to fetch clients: ${clientsError.message}`);
     }
 
-    console.log("Raw client data from DB:", data || []);
+    console.log("Raw client data from DB:", clientsData || []);
     
-    if (!data || data.length === 0) {
+    if (!clientsData || clientsData.length === 0) {
       console.log("No clients found in database - returning empty array");
       return [];
     }
     
-    // Transform the data to match our Client interface
-    const transformedClients = data.map(item => {
-      // Create a default country code if none is provided
-      const countryCode = item.country_id ? 'us' : 'us';
+    // Fetch all countries to map with client.country_id
+    const { data: countriesData, error: countriesError } = await supabase
+      .from('countries')
+      .select('id, country');
+    
+    if (countriesError) {
+      console.error("Error fetching countries:", countriesError);
+      // Continue with clients data even if countries fetch fails
+    }
+    
+    console.log("Countries data:", countriesData || []);
+    
+    // Create a map of country_id to two-letter country code
+    const countryIdToCode = {};
+    if (countriesData && countriesData.length > 0) {
+      countriesData.forEach(country => {
+        // Extract first two letters of country name as a simple code
+        const code = country.country.substring(0, 2).toLowerCase();
+        countryIdToCode[country.id] = code;
+      });
+    }
+    
+    console.log("Country ID to code mapping:", countryIdToCode);
+    
+    // Transform the clients data to match our Client interface
+    const transformedClients = clientsData.map(item => {
+      // Get country code from the mapping, or use a fallback
+      const countryCode = item.country_id 
+        ? (countryIdToCode[item.country_id] || 'us') 
+        : 'us';
       
       const clientData: Client = {
         id: item.id || '',
@@ -70,8 +96,8 @@ export const useClients = () => {
     queryKey: ['clients'],
     queryFn: fetchClients,
     retry: 1,
-    refetchOnWindowFocus: false, // Prevent unnecessary refetches
-    staleTime: 30000, // Data considered fresh for 30 seconds
+    refetchOnWindowFocus: false,
+    staleTime: 30000,
   });
 
   console.log("useClients hook - clients:", clients);

@@ -8,7 +8,6 @@ export const countryNames: Record<string, string> = {
   'fr': 'France',
   'jp': 'Japan',
   'ge': 'Germany',
-  'un': 'United States', // Fallback mapping
   'sp': 'Spain',
   'it': 'Italy',
   'br': 'Brazil',
@@ -27,14 +26,13 @@ export const countryNames: Record<string, string> = {
   'be': 'Belgium',
   'gr': 'Greece',
   'tu': 'Turkey',
-  // Additional common two-letter codes
   'nz': 'New Zealand',
   'sg': 'Singapore',
   'kr': 'South Korea',
   'za': 'South Africa',
-  // Generic fallback
+  'un': 'United States', // Fallback mapping
+  // Generic fallbacks
   'unkn': 'Unknown Country',
-  // Ensure we have a fallback for any missing country codes
   'undefined': 'Unknown',
   '': 'Unknown'
 };
