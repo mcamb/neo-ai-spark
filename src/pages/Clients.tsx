@@ -61,7 +61,7 @@ const Clients = () => {
   };
 
   const handleAddClient = () => {
-    handleCloseModal();
+    // Refetch clients after a new client is added
     refetch();
   };
 

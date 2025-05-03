@@ -17,7 +17,7 @@ import {
   SelectTrigger, 
   SelectValue 
 } from '@/components/ui/select';
-import { useToast } from '@/hooks/use-toast';
+import { useToast } from '@/components/ui/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { useQuery } from '@tanstack/react-query';
 import { Loader, AlertTriangle } from 'lucide-react';
@@ -132,7 +132,7 @@ const NewCountryForm: React.FC<NewCountryFormProps> = ({ onSubmit, onCancel, isS
 interface NewClientModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (client: { name: string; country: string; domain: string; country_id: string; logo?: string }) => void;
+  onSubmit: () => void;
 }
 
 const NewClientModal: React.FC<NewClientModalProps> = ({ isOpen, onClose, onSubmit }) => {
@@ -172,8 +172,9 @@ const NewClientModal: React.FC<NewClientModalProps> = ({ isOpen, onClose, onSubm
     console.log("Countries in modal:", countries);
   }, [countries]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
     if (!name || !countryId || !domain) {
       toast({
         title: "Error",
@@ -185,27 +186,54 @@ const NewClientModal: React.FC<NewClientModalProps> = ({ isOpen, onClose, onSubm
     
     setIsSubmitting(true);
     
-    // Get the country code from the full country name for UI display purposes
-    const selectedCountry = countries.find(c => c.id === countryId);
-    const countryCode = selectedCountry 
-      ? selectedCountry.country.toLowerCase().substring(0, 2)
-      : 'us';
-    
-    onSubmit({ 
-      name, 
-      country: countryCode,
-      domain, 
-      country_id: countryId,
-      logo: logo || undefined // Only include if provided
-    });
-    
-    // Reset form
-    setName('');
-    setCountryId('');
-    setDomain('');
-    setLogo('');
-    setIsSubmitting(false);
-    onClose();
+    try {
+      // Get the country code from the full country name for UI display purposes
+      const selectedCountry = countries.find(c => c.id === countryId);
+      const countryCode = selectedCountry 
+        ? selectedCountry.country.toLowerCase().substring(0, 2)
+        : 'us';
+      
+      // Create the client in the database
+      const { data, error } = await supabase
+        .from('clients')
+        .insert({
+          name,
+          domain,
+          country: countryCode,
+          country_id: countryId,
+          logo: logo || null
+        })
+        .select();
+      
+      if (error) {
+        throw error;
+      }
+      
+      toast({
+        title: "Success",
+        description: "Client added successfully"
+      });
+      
+      // Reset form
+      setName('');
+      setCountryId('');
+      setDomain('');
+      setLogo('');
+      
+      // Notify parent component
+      onSubmit();
+      onClose();
+      
+    } catch (error: any) {
+      console.error("Error creating client:", error);
+      toast({
+        title: "Error",
+        description: `Failed to add client: ${error.message}`,
+        variant: "destructive"
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleAddCountry = async (countryName: string) => {
