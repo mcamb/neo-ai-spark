@@ -92,96 +92,51 @@ const Clients = () => {
   };
 
   const handleDeleteClient = async () => {
-    if (!selectedClientId || isDeleting) {
-      console.log("No client selected for deletion or deletion already in progress");
-      return;
-    }
+    if (!selectedClientId || isDeleting) return;
+    
+    setIsDeleting(true);
+    setDeleteDialogOpen(false);
+    
+    const toastId = toast.loading("Deleting client...");
     
     try {
-      // Set deleting state to prevent multiple deletion attempts
-      setIsDeleting(true);
+      console.log("Deleting client with ID:", selectedClientId);
       
-      // Close the dialog immediately for better UX
-      setDeleteDialogOpen(false);
-      
-      // Show pending toast with ID to track it
-      const pendingToastId = toast.loading(`Deleting client ID: ${selectedClientId}...`);
-      
-      console.log("Starting deletion process for client ID:", selectedClientId);
-      
-      // Step 1: Delete related records in relevance_scores first
-      console.log("Step 1: Deleting related records in relevance_scores for client:", selectedClientId);
-      const { data: relatedData, error: relatedQueryError } = await supabase
+      // First, delete related relevance scores
+      const { error: relScoresError } = await supabase
         .from('relevance_scores')
-        .select('id')
+        .delete()
         .eq('client_id', selectedClientId);
         
-      if (relatedQueryError) {
-        console.error("Error querying related records:", relatedQueryError);
-        toast.error(`Failed to query related records: ${relatedQueryError.message}`);
-        setIsDeleting(false);
-        toast.dismiss(pendingToastId);
-        return;
-      }
-      
-      if (relatedData && relatedData.length > 0) {
-        console.log(`Found ${relatedData.length} related records to delete`);
-        
-        const { error: relatedDeleteError } = await supabase
-          .from('relevance_scores')
-          .delete()
-          .eq('client_id', selectedClientId);
-          
-        if (relatedDeleteError) {
-          console.error("Error deleting related records:", relatedDeleteError);
-          toast.error(`Failed to delete related records: ${relatedDeleteError.message}`);
-          setIsDeleting(false);
-          toast.dismiss(pendingToastId);
-          return;
-        }
-        
-        console.log("Successfully deleted related records");
+      if (relScoresError) {
+        console.error("Error deleting related relevance scores:", relScoresError);
+        // Continue with client deletion attempt even if this fails
       } else {
-        console.log("No related records found to delete");
+        console.log("Successfully deleted related relevance scores");
       }
       
-      // Add a small delay to ensure database consistency
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
-      // Step 2: Now delete the client
-      console.log("Step 2: Deleting client with ID:", selectedClientId);
-      const { error: clientDeleteError } = await supabase
+      // Now delete the client
+      const { error: clientError } = await supabase
         .from('clients')
         .delete()
         .eq('id', selectedClientId);
       
-      if (clientDeleteError) {
-        console.error("Error deleting client:", clientDeleteError);
-        toast.dismiss(pendingToastId);
-        toast.error(`Failed to delete client: ${clientDeleteError.message}`);
-        setIsDeleting(false);
-        return;
+      if (clientError) {
+        console.error("Error deleting client:", clientError);
+        toast.dismiss(toastId);
+        toast.error(`Failed to delete client: ${clientError.message}`);
+      } else {
+        console.log("Client successfully deleted!");
+        toast.dismiss(toastId);
+        toast.success("Client deleted successfully");
+        refetch(); // Refetch data after successful deletion
       }
-      
-      // Successful deletion
-      console.log("Client successfully deleted!");
-      toast.dismiss(pendingToastId);
-      toast.success("Client deleted successfully");
-      
-      // Reset state
-      setSelectedClientId(null);
-      setIsDeleting(false);
-      
-      // Force refetch with significant delay to ensure consistency
-      console.log("Scheduling data refetch...");
-      setTimeout(() => {
-        console.log("Executing refetch after deletion");
-        refetch();
-      }, 2500);
     } catch (e) {
       const errorMessage = e instanceof Error ? e.message : String(e);
-      console.error("Exception during client deletion:", e);
-      toast.error(`Error deleting client: ${errorMessage}`);
+      console.error("Exception during deletion:", e);
+      toast.dismiss(toastId);
+      toast.error(`Error: ${errorMessage}`);
+    } finally {
       setIsDeleting(false);
       setSelectedClientId(null);
     }
