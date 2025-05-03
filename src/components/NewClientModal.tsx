@@ -48,9 +48,16 @@ const fetchCountries = async (): Promise<CountryOption[]> => {
 // Function to create a new country
 const createCountry = async (countryName: string): Promise<CountryOption> => {
   console.log("Creating new country:", countryName);
+  
+  // Generate a 2-letter code from the country name
+  const code = countryName.substring(0, 2).toLowerCase();
+  
   const { data, error } = await supabase
     .from('countries')
-    .insert({ country: countryName })
+    .insert({ 
+      country: countryName,
+      code: code  // Include the required code field
+    })
     .select();
 
   if (error) {
