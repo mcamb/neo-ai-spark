@@ -310,7 +310,7 @@ const ClientDetailsPage = () => {
         {/* Social Media Relevance Scores */}
         <div className="space-y-4 pb-6 border-b">
           <div className="flex items-center justify-between">
-            <h2 className="text-xl font-semibold">Social Media Relevance</h2>
+            <h2 className="text-xl font-semibold">Relevance Score</h2>
             <Button variant="ghost" size="sm">
               <Pencil className="h-3.5 w-3.5 mr-2" />
               Edit
@@ -334,7 +334,7 @@ const ClientDetailsPage = () => {
         {/* Rationale Section */}
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-xl font-semibold">Social Media Rationale</h2>
+            <h2 className="text-xl font-semibold">Relevance Score Rational</h2>
             <Button variant="ghost" size="sm">
               <Pencil className="h-3.5 w-3.5 mr-2" />
               Edit
