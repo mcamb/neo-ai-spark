@@ -24,14 +24,14 @@ interface ClientCardProps {
 
 const ClientCard: React.FC<ClientCardProps> = ({ client, countryName, onDelete }) => {
   return (
-    <Card className="overflow-hidden border border-[#E8E5DE] bg-white rounded-lg shadow-[0_2px_8px_rgba(0,0,0,0.05)]">
+    <Card className="overflow-hidden border border-[#E8E5DE] bg-white rounded-lg shadow-[0_2px_8px_rgba(0,0,0,0.05)] transition-shadow hover:shadow-[0_4px_12px_rgba(0,0,0,0.1)]">
       <CardContent className="p-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 flex items-center justify-center rounded-md bg-white border border-white text-gray-700 font-medium text-lg">
+        <div className="flex items-center">
+          <div className="flex items-center flex-1">
+            <div className="w-10 h-10 flex items-center justify-center rounded-md bg-white border border-white text-gray-700 font-medium text-lg">
               {client.name.charAt(0)}
             </div>
-            <div>
+            <div className="ml-4">
               <h3 className="font-medium text-lg">{client.name}</h3>
               <Badge variant="outline" className="text-xs w-fit mt-1 bg-white text-gray-700 border border-gray-200">
                 {countryName}
@@ -40,22 +40,20 @@ const ClientCard: React.FC<ClientCardProps> = ({ client, countryName, onDelete }
           </div>
           
           <div className="flex items-center">
-            <div className="mr-4">
-              <ClientStatusBadge status={client.agent_status} />
-            </div>
-            <div className="flex items-center gap-2">
+            <ClientStatusBadge status={client.agent_status} />
+            <div className="flex items-center gap-2 ml-4">
               <Link to={client.agent_status === 'ready' ? `/clients/${client.id}` : '#'}>
-                <Button variant="outline" size="icon" className="border-gray-200 bg-white">
+                <Button variant="ghost" size="icon" className="hover:bg-gray-100">
                   <Eye className="h-4 w-4" />
                 </Button>
               </Link>
-              <Button variant="outline" size="icon" className="border-gray-200 bg-white">
+              <Button variant="ghost" size="icon" className="hover:bg-gray-100">
                 <Pencil className="h-4 w-4" />
               </Button>
               <Button 
-                variant="outline" 
-                size="icon" 
-                className="border-gray-200 bg-white"
+                variant="ghost" 
+                size="icon"
+                className="hover:bg-gray-100"
                 onClick={() => onDelete(client.id)}
               >
                 <Trash2 className="h-4 w-4" />
