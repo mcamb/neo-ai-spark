@@ -2,6 +2,7 @@
 import React from 'react';
 import ClientCard from './ClientCard';
 import { Client } from '@/hooks/useClients';
+import { countryNames } from '@/utils/clientDataUtils';
 
 interface ClientsListProps {
   clients: Client[];
@@ -28,6 +29,16 @@ const ClientsList: React.FC<ClientsListProps> = ({
       );
   
   console.log("Filtered clients:", filteredClients);
+
+  if (!clients || clients.length === 0) {
+    return (
+      <div className="flex items-center justify-center p-10 border border-dashed rounded-lg bg-gray-50">
+        <div className="text-center">
+          <p className="text-gray-500">No clients found. Database might be empty.</p>
+        </div>
+      </div>
+    );
+  }
 
   if (filteredClients.length === 0) {
     return (

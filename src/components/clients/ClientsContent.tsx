@@ -3,7 +3,7 @@ import React from 'react';
 import ClientsList from './ClientsList';
 import { Client } from '@/hooks/useClients';
 import { countryNames } from '@/utils/clientDataUtils';
-import { Loader, AlertTriangle } from 'lucide-react';
+import { Loader, AlertTriangle, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface ClientsContentProps {
@@ -25,6 +25,7 @@ const ClientsContent: React.FC<ClientsContentProps> = ({
 }) => {
   console.log("ClientsContent received clients:", clients);
   console.log("ClientsContent isLoading:", isLoading);
+  console.log("ClientsContent error:", error);
 
   if (isLoading) {
     return (
@@ -39,30 +40,15 @@ const ClientsContent: React.FC<ClientsContentProps> = ({
 
   if (error) {
     return (
-      <div className="text-center py-10 text-red-500">
-        <AlertTriangle className="h-8 w-8 mx-auto mb-2" />
-        <p>Error loading clients: {error.message}</p>
-        <div className="mt-4 text-sm text-gray-500">
-          <pre className="bg-gray-100 p-4 rounded overflow-auto max-w-full">
-            {JSON.stringify(error, null, 2)}
-          </pre>
-        </div>
-        <Button onClick={refetch} className="mt-4">
-          Try Again
-        </Button>
-      </div>
-    );
-  }
-
-  if (!clients || clients.length === 0) {
-    return (
-      <div className="text-center py-10 bg-white rounded-lg shadow-sm border border-dashed">
-        <p className="text-gray-500">No clients found in the database.</p>
+      <div className="text-center py-10">
+        <AlertTriangle className="h-8 w-8 mx-auto mb-2 text-red-500" />
+        <p className="text-red-500">Error loading clients: {error.message}</p>
         <Button 
-          onClick={refetch}
-          className="mt-6 bg-neo-red hover:bg-red-600 text-white"
+          onClick={refetch} 
+          className="mt-4 bg-neo-red hover:bg-red-600 text-white"
+          variant="outline"
         >
-          Refresh Data
+          <RefreshCw className="mr-2 h-4 w-4" /> Try Again
         </Button>
       </div>
     );
@@ -76,6 +62,16 @@ const ClientsContent: React.FC<ClientsContentProps> = ({
         countryNames={countryNames} 
         onDeleteClient={onDeleteClient} 
       />
+      {clients && clients.length === 0 && (
+        <div className="text-center py-6">
+          <Button 
+            onClick={refetch}
+            className="mt-2 bg-neo-red hover:bg-red-600 text-white"
+          >
+            <RefreshCw className="mr-2 h-4 w-4" /> Refresh Data
+          </Button>
+        </div>
+      )}
     </div>
   );
 };

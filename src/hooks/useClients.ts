@@ -15,19 +15,7 @@ export interface Client {
 const fetchClients = async () => {
   console.log("Fetching clients from Supabase...");
   
-  // First, get all countries for reference
-  const { data: countries, error: countryError } = await supabase
-    .from('countries')
-    .select('*');
-    
-  if (countryError) {
-    console.error("Error fetching countries:", countryError);
-    // Don't throw here, we can continue without countries
-  }
-  
-  console.log("Available countries:", countries || []);
-  
-  // Get all clients - only select what we need
+  // Get all clients
   const { data, error } = await supabase
     .from('clients')
     .select('*');
@@ -46,27 +34,14 @@ const fetchClients = async () => {
   
   // Transform the data to match our Client interface
   const transformedClients = data.map(item => {
-    // Default to 'us' if we can't determine country
-    let countryCode = 'us';
-    
-    if (item.country_id && countries && countries.length > 0) {
-      const country = countries.find(c => c.id === item.country_id);
-      if (country) {
-        // Take first two letters of country name as code
-        countryCode = country.country.toLowerCase().substring(0, 2);
-        console.log(`Mapped country ID ${item.country_id} to code ${countryCode} from name ${country.country}`);
-      } else {
-        console.log(`Could not find country with ID ${item.country_id}`);
-      }
-    }
-    
-    const clientData = {
+    const clientData: Client = {
       id: item.id,
       domain: item.domain || '',
       name: item.name || (item.domain ? item.domain.split('.')[0] : 'Unnamed Client'),
-      country: countryCode,
+      // Use a default country code if none is provided
+      country: 'us',
       country_id: item.country_id,
-      agent_status: item.agent_status || 'in_progress',
+      agent_status: item.agent_status as 'ready' | 'in_progress',
       logo: item.logo,
     };
     
@@ -86,7 +61,8 @@ export const useClients = () => {
     refetch 
   } = useQuery({
     queryKey: ['clients'],
-    queryFn: fetchClients
+    queryFn: fetchClients,
+    retry: 1
   });
 
   console.log("useClients hook - clients:", clients);

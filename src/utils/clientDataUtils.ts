@@ -33,5 +33,7 @@ export const countryNames: Record<string, string> = {
   'kr': 'South Korea',
   'za': 'South Africa',
   // Generic fallback
-  'unkn': 'Unknown Country'
+  'unkn': 'Unknown Country',
+  // Ensure we have a fallback for any missing country codes
+  'undefined': 'Unknown'
 };

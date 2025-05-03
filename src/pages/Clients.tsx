@@ -1,11 +1,12 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import MainLayout from '@/components/MainLayout';
 import ClientsHeader from '@/components/clients/ClientsHeader';
 import ClientsToolbar from '@/components/clients/ClientsToolbar';
 import ClientsContent from '@/components/clients/ClientsContent';
 import { useClients } from '@/hooks/useClients';
 import NewClientModal from '@/components/NewClientModal';
+import { toast } from "sonner";
 
 const Clients = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -16,6 +17,12 @@ const Clients = () => {
   console.log("Clients page - isLoading:", isLoading);
   console.log("Clients page - error:", error);
 
+  useEffect(() => {
+    if (error) {
+      toast.error("Error loading clients: " + error.message);
+    }
+  }, [error]);
+
   const handleOpenModal = () => {
     setIsModalOpen(true);
   };
@@ -24,10 +31,14 @@ const Clients = () => {
     setIsModalOpen(false);
   };
 
-  // This is a dummy function since we're not implementing client creation
   const handleAddClient = () => {
     handleCloseModal();
-    refetch(); // Just refetch to see if there's new data
+    refetch();
+  };
+
+  const handleRefresh = () => {
+    toast.info("Refreshing client data...");
+    refetch();
   };
 
   return (
@@ -44,12 +55,19 @@ const Clients = () => {
           onAddClient={handleOpenModal}
         />
         
+        <button 
+          onClick={handleRefresh} 
+          className="text-sm text-neo-red hover:underline flex items-center"
+        >
+          Manual Refresh
+        </button>
+        
         <ClientsContent 
           clients={clients} 
           isLoading={isLoading} 
           error={error} 
           searchQuery={searchQuery}
-          onDeleteClient={() => {}} // Empty function as we're not implementing deletion
+          onDeleteClient={() => {}} 
           refetch={refetch}
         />
       </div>
