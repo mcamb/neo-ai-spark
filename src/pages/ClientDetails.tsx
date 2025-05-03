@@ -5,8 +5,7 @@ import { Separator } from '@/components/ui/separator';
 import { ClientHeader } from '@/components/client-details/ClientHeader';
 import { BrandSection } from '@/components/client-details/BrandSection';
 import { AudienceSection } from '@/components/client-details/AudienceSection';
-import { ScoreChart } from '@/components/client-details/ScoreChart';
-import { RationaleAccordion } from '@/components/client-details/RationaleAccordion';
+import { ScoreSection } from '@/components/client-details/ScoreSection';
 import { NotFoundMessage } from '@/components/client-details/NotFoundMessage';
 
 interface SocialMediaScore {
@@ -208,12 +207,6 @@ const ClientDetailsPage = () => {
   // In a real application, you would fetch the client details from an API or database
   const clientDetails = mockClientDetails[clientId as string];
 
-  // Prepare chart data
-  const chartData = clientDetails?.socialMediaScores.map(item => ({
-    name: item.platform,
-    score: item.score,
-  })) || [];
-
   // Start editing functions
   const startEditingBrand = () => {
     setEditedBrandPromise(clientDetails?.brandPromise || '');
@@ -298,9 +291,7 @@ const ClientDetailsPage = () => {
           onEditTargetAudience={handleEditTargetAudience}
         />
         
-        <ScoreChart data={chartData} />
-        
-        <RationaleAccordion socialMediaScores={clientDetails.socialMediaScores} />
+        <ScoreSection socialMediaScores={clientDetails.socialMediaScores} />
       </div>
     </MainLayout>
   );

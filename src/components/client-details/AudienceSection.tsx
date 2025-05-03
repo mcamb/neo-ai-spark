@@ -1,8 +1,8 @@
 
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Pencil, Save } from 'lucide-react';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Switch } from '@/components/ui/switch';
 import { MarkdownBox } from './MarkdownBox';
 
 interface TargetAudience {
@@ -37,6 +37,29 @@ export const AudienceSection: React.FC<AudienceSectionProps> = ({
   onSaveEdits,
   onEditTargetAudience
 }) => {
+  const [equalHeight, setEqualHeight] = useState<number | null>(null);
+  const primaryRef = useRef<HTMLDivElement>(null);
+  const secondaryRef = useRef<HTMLDivElement>(null);
+
+  // Calculate equal heights for Primary and Secondary boxes
+  useEffect(() => {
+    const adjustHeights = () => {
+      if (primaryRef.current && secondaryRef.current) {
+        const primaryHeight = primaryRef.current.scrollHeight;
+        const secondaryHeight = secondaryRef.current.scrollHeight;
+        const maxHeight = Math.max(primaryHeight, secondaryHeight);
+        setEqualHeight(maxHeight);
+      }
+    };
+
+    // Initial calculation
+    adjustHeights();
+    
+    // Recalculate on window resize
+    window.addEventListener('resize', adjustHeights);
+    return () => window.removeEventListener('resize', adjustHeights);
+  }, [audienceType, isEditing, targetAudience]);
+
   return (
     <div className="space-y-6 p-6 rounded-lg">
       <div className="flex items-center justify-between mb-2">
@@ -61,48 +84,48 @@ export const AudienceSection: React.FC<AudienceSectionProps> = ({
       </div>
       
       <div className="space-y-6">
-        {/* Toggle between B2C and B2B */}
-        <RadioGroup 
-          value={audienceType} 
-          onValueChange={(value) => onSetAudienceType(value as 'b2c' | 'b2b')}
-          className="flex space-x-4 mb-4"
-        >
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="b2c" id="b2c" />
-            <label htmlFor="b2c" className="cursor-pointer font-medium text-black">B2C</label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="b2b" id="b2b" />
-            <label htmlFor="b2b" className="cursor-pointer font-medium text-black">B2B</label>
-          </div>
-        </RadioGroup>
+        {/* Toggle between B2C and B2B using Switch */}
+        <div className="flex items-center space-x-2 mb-4">
+          <span className={`font-medium ${audienceType === 'b2c' ? 'text-black' : 'text-gray-400'}`}>B2C</span>
+          <Switch 
+            checked={audienceType === 'b2b'}
+            onCheckedChange={(checked) => onSetAudienceType(checked ? 'b2b' : 'b2c')}
+          />
+          <span className={`font-medium ${audienceType === 'b2b' ? 'text-black' : 'text-gray-400'}`}>B2B</span>
+        </div>
         
         {/* Show selected audience type */}
         <div className="grid md:grid-cols-2 gap-6">
           <div className="space-y-2">
             <h4 className="text-sm font-medium text-black">Primary</h4>
-            <MarkdownBox
-              isEditing={isEditing}
-              onEdit={(value) => onEditTargetAudience(audienceType, 'primary', value)}
-              value={editedTargetAudience[audienceType].primary}
-            >
-              {isEditing 
-                ? editedTargetAudience[audienceType].primary 
-                : targetAudience[audienceType].primary}
-            </MarkdownBox>
+            <div ref={primaryRef}>
+              <MarkdownBox
+                isEditing={isEditing}
+                onEdit={(value) => onEditTargetAudience(audienceType, 'primary', value)}
+                value={editedTargetAudience[audienceType].primary}
+                style={equalHeight && !isEditing ? { minHeight: `${equalHeight}px` } : undefined}
+              >
+                {isEditing 
+                  ? editedTargetAudience[audienceType].primary 
+                  : targetAudience[audienceType].primary}
+              </MarkdownBox>
+            </div>
           </div>
           
           <div className="space-y-2">
             <h4 className="text-sm font-medium text-black">Secondary</h4>
-            <MarkdownBox
-              isEditing={isEditing}
-              onEdit={(value) => onEditTargetAudience(audienceType, 'secondary', value)}
-              value={editedTargetAudience[audienceType].secondary}
-            >
-              {isEditing 
-                ? editedTargetAudience[audienceType].secondary 
-                : targetAudience[audienceType].secondary}
-            </MarkdownBox>
+            <div ref={secondaryRef}>
+              <MarkdownBox
+                isEditing={isEditing}
+                onEdit={(value) => onEditTargetAudience(audienceType, 'secondary', value)}
+                value={editedTargetAudience[audienceType].secondary}
+                style={equalHeight && !isEditing ? { minHeight: `${equalHeight}px` } : undefined}
+              >
+                {isEditing 
+                  ? editedTargetAudience[audienceType].secondary 
+                  : targetAudience[audienceType].secondary}
+              </MarkdownBox>
+            </div>
           </div>
         </div>
       </div>
