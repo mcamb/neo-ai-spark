@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useCallback } from 'react';
 import MainLayout from '@/components/MainLayout';
 import ClientsHeader from '@/components/clients/ClientsHeader';
@@ -26,6 +27,7 @@ const Clients = () => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedClientId, setSelectedClientId] = useState<string | null>(null);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const { clients, isLoading, error, refetch } = useClients();
   
   // Function to update client status
@@ -90,71 +92,97 @@ const Clients = () => {
   };
 
   const handleDeleteClient = async () => {
-    if (!selectedClientId) {
-      console.log("No client selected for deletion");
+    if (!selectedClientId || isDeleting) {
+      console.log("No client selected for deletion or deletion already in progress");
       return;
     }
     
     try {
-      console.log("Starting deletion process for client ID:", selectedClientId);
+      // Set deleting state to prevent multiple deletion attempts
+      setIsDeleting(true);
       
       // Close the dialog immediately for better UX
       setDeleteDialogOpen(false);
       
-      // Show pending toast
-      const pendingToast = toast.loading("Deleting client...");
+      // Show pending toast with ID to track it
+      const pendingToastId = toast.loading(`Deleting client ID: ${selectedClientId}...`);
       
-      console.log("First checking for related records in relevance_scores table");
+      console.log("Starting deletion process for client ID:", selectedClientId);
       
-      // First delete any related scores that might be preventing deletion
-      const { error: relatedError } = await supabase
+      // Step 1: Delete related records in relevance_scores first
+      console.log("Step 1: Deleting related records in relevance_scores for client:", selectedClientId);
+      const { data: relatedData, error: relatedQueryError } = await supabase
         .from('relevance_scores')
-        .delete()
+        .select('id')
         .eq('client_id', selectedClientId);
         
-      if (relatedError) {
-        console.warn("Note: Error while cleaning related records:", relatedError);
-        // Continue with deletion attempt even if this fails
-      } else {
-        console.log("Successfully removed related records or none existed");
+      if (relatedQueryError) {
+        console.error("Error querying related records:", relatedQueryError);
+        toast.error(`Failed to query related records: ${relatedQueryError.message}`);
+        setIsDeleting(false);
+        toast.dismiss(pendingToastId);
+        return;
       }
       
-      // Brief delay to ensure related records deletion completes
-      await new Promise(resolve => setTimeout(resolve, 200));
+      if (relatedData && relatedData.length > 0) {
+        console.log(`Found ${relatedData.length} related records to delete`);
+        
+        const { error: relatedDeleteError } = await supabase
+          .from('relevance_scores')
+          .delete()
+          .eq('client_id', selectedClientId);
+          
+        if (relatedDeleteError) {
+          console.error("Error deleting related records:", relatedDeleteError);
+          toast.error(`Failed to delete related records: ${relatedDeleteError.message}`);
+          setIsDeleting(false);
+          toast.dismiss(pendingToastId);
+          return;
+        }
+        
+        console.log("Successfully deleted related records");
+      } else {
+        console.log("No related records found to delete");
+      }
       
-      // Now attempt to delete the actual client
-      console.log("Now sending DELETE request to Supabase for client ID:", selectedClientId);
-      const { error } = await supabase
+      // Add a small delay to ensure database consistency
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      // Step 2: Now delete the client
+      console.log("Step 2: Deleting client with ID:", selectedClientId);
+      const { error: clientDeleteError } = await supabase
         .from('clients')
         .delete()
         .eq('id', selectedClientId);
       
-      // Dismiss the pending toast
-      toast.dismiss(pendingToast);
-      
-      if (error) {
-        console.error("Delete operation failed with error:", error);
-        toast.error("Failed to delete client: " + error.message);
+      if (clientDeleteError) {
+        console.error("Error deleting client:", clientDeleteError);
+        toast.dismiss(pendingToastId);
+        toast.error(`Failed to delete client: ${clientDeleteError.message}`);
+        setIsDeleting(false);
         return;
       }
       
-      console.log("Delete operation completed successfully");
-      
-      // Show success message
+      // Successful deletion
+      console.log("Client successfully deleted!");
+      toast.dismiss(pendingToastId);
       toast.success("Client deleted successfully");
       
-      // Reset selected client ID
+      // Reset state
       setSelectedClientId(null);
+      setIsDeleting(false);
       
-      // Refetch data after successful deletion
-      // Delay refetch significantly to ensure the database has time to process the deletion
+      // Force refetch with significant delay to ensure consistency
+      console.log("Scheduling data refetch...");
       setTimeout(() => {
-        console.log("Triggering refetch after deletion");
+        console.log("Executing refetch after deletion");
         refetch();
-      }, 2000); // Increased timeout further to ensure the database has time to process the deletion
+      }, 2500);
     } catch (e) {
+      const errorMessage = e instanceof Error ? e.message : String(e);
       console.error("Exception during client deletion:", e);
-      toast.error("Error deleting client: " + (e instanceof Error ? e.message : String(e)));
+      toast.error(`Error deleting client: ${errorMessage}`);
+      setIsDeleting(false);
       setSelectedClientId(null);
     }
   };
@@ -175,7 +203,7 @@ const Clients = () => {
         
         <ClientsContent 
           clients={clients} 
-          isLoading={isLoading} 
+          isLoading={isLoading || isDeleting} 
           error={error} 
           searchQuery={searchQuery}
           onDeleteClient={handleDeletePrompt}
@@ -209,7 +237,11 @@ const Clients = () => {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDeleteClient} className="bg-red-500 hover:bg-red-600">
+            <AlertDialogAction 
+              onClick={handleDeleteClient} 
+              className="bg-red-500 hover:bg-red-600"
+              disabled={isDeleting}
+            >
               Delete
             </AlertDialogAction>
           </AlertDialogFooter>
