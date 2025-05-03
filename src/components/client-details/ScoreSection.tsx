@@ -41,6 +41,7 @@ export const ScoreSection: React.FC<ScoreSectionProps> = ({ socialMediaScores })
     if (clicked) {
       setSelectedScore(clicked);
       setEditedRationale(clicked.rationale);
+      setIsEditing(false); // Close editing mode when selecting a new platform
     }
   };
 
