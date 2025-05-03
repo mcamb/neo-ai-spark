@@ -10,7 +10,13 @@ export interface Client {
   logo?: string;
   agent_status: 'ready' | 'in_progress';
   country_id?: string;
-  created_at?: string;
+  created_at: string;
+  brand_promise?: string;
+  brand_challenge?: string;
+  primary_audience_b2c?: string;
+  secondary_audience_b2c?: string;
+  primary_audience_b2b?: string;
+  secondary_audience_b2b?: string;
 }
 
 const fetchClients = async (): Promise<Client[]> => {

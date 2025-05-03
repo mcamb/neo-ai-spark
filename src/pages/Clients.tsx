@@ -94,8 +94,10 @@ const Clients = () => {
     if (!selectedClientId) return;
     
     try {
+      console.log("Deleting client with ID:", selectedClientId);
+      
       // Execute the delete operation
-      const { error } = await supabase
+      const { error, count } = await supabase
         .from('clients')
         .delete()
         .eq('id', selectedClientId);
@@ -104,17 +106,21 @@ const Clients = () => {
         throw error;
       }
       
+      console.log("Delete response count:", count);
       toast.success("Client deleted successfully");
       
-      // Update the local state by refreshing the client data
-      refetch();
-      
-      // Close the dialog and reset selection
+      // Close the dialog first
       setDeleteDialogOpen(false);
       setSelectedClientId(null);
+      
+      // Then refetch to update the UI
+      await refetch();
     } catch (error) {
       console.error("Error deleting client:", error);
       toast.error("Failed to delete client: " + (error instanceof Error ? error.message : String(error)));
+      // Still close the dialog on error
+      setDeleteDialogOpen(false);
+      setSelectedClientId(null);
     }
   };
 
