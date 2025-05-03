@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -5,12 +6,15 @@ import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import LogoIcon from '@/components/LogoIcon';
 import { useNavigate } from 'react-router-dom';
+
 const Index = () => {
   const navigate = useNavigate();
+  
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     navigate('/home');
   };
+  
   return <div className="flex min-h-screen">
       {/* Left side - Login form */}
       <div className="flex flex-1 items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
@@ -54,13 +58,6 @@ const Index = () => {
               Sign In
             </Button>
           </form>
-          
-          <p className="text-center text-sm text-gray-600">
-            Don't have an account?{' '}
-            <a href="#" className="font-medium text-neo-red hover:underline">
-              Sign up
-            </a>
-          </p>
         </div>
       </div>
       
@@ -79,4 +76,5 @@ const Index = () => {
       </div>
     </div>;
 };
+
 export default Index;
