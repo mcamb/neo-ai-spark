@@ -47,51 +47,41 @@ const ClientsList: React.FC<ClientsListProps> = ({
   }
   
   return (
-    <div className="space-y-4 py-4 px-2">
+    <div className="space-y-4 p-2">
       {filteredClients.map((client) => (
         <div 
           key={client.id}
-          className="flex items-center justify-between py-4 px-5 rounded-lg transition-colors bg-custom-background shadow-sm"
+          className="flex items-center justify-between p-4 rounded-lg bg-custom-background shadow-sm"
         >
           <div className="flex items-center gap-4">
-            <Avatar className="h-12 w-12 bg-white border border-white rounded-md">
-              <AvatarFallback className="text-gray-700">
-                {client.name.charAt(0)}
-              </AvatarFallback>
-            </Avatar>
+            <div className="w-16 h-16 flex items-center justify-center bg-white rounded-md border border-white">
+              <span className="text-xl font-medium">{client.name.charAt(0)}</span>
+            </div>
             
-            <div className="flex flex-col min-w-[180px]">
-              <span className="font-medium">{client.name}</span>
-              <Badge variant="outline" className="text-xs w-fit mt-1 bg-gray-100 text-gray-700 border-0">
+            <div className="flex flex-col">
+              <span className="font-medium text-lg">{client.name}</span>
+              <Badge variant="outline" className="text-xs w-fit mt-1 bg-white text-gray-700 border border-gray-200">
                 {countryNames[client.country]}
               </Badge>
             </div>
-            
-            <ClientStatusBadge status={client.agent_status} />
           </div>
           
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-2">
             <Link to={client.agent_status === 'ready' ? `/clients/${client.id}` : '#'}>
               <Button 
-                variant="ghost" 
-                size="icon"
-                disabled={client.agent_status !== 'ready'}
-                className={`${client.agent_status !== 'ready' ? 'opacity-50 cursor-not-allowed' : ''}`}
+                variant="default" 
+                className="bg-custom-accent text-white hover:bg-custom-accent/90"
               >
-                <Eye className="h-4 w-4" />
+                Open
               </Button>
             </Link>
-            <Button variant="ghost" size="icon">
-              <Pencil className="h-4 w-4" />
+            <Button variant="outline" size="icon" className="border-gray-200 bg-white">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="4" cy="10" r="1.5" fill="#333"/>
+                <circle cx="10" cy="10" r="1.5" fill="#333"/>
+                <circle cx="16" cy="10" r="1.5" fill="#333"/>
+              </svg>
             </Button>
-            <Button 
-              variant="ghost" 
-              size="icon"
-              onClick={() => onDeleteClient(client.id)}
-            >
-              <Trash2 className="h-4 w-4" />
-            </Button>
-            <ChevronRight className="h-4 w-4 text-gray-400 ml-1" />
           </div>
         </div>
       ))}

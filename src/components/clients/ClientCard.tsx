@@ -28,12 +28,12 @@ const ClientCard: React.FC<ClientCardProps> = ({ client, countryName, onDelete }
       <CardContent className="p-6">
         <div className="flex flex-col space-y-4">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 flex items-center justify-center rounded-md bg-white border border-white text-gray-700 font-medium text-xl">
+            <div className="w-16 h-16 flex items-center justify-center rounded-md bg-white border border-white text-gray-700 font-medium text-xl">
               {client.name.charAt(0)}
             </div>
             <div>
               <h3 className="font-medium text-lg">{client.name}</h3>
-              <Badge variant="outline" className="text-xs w-fit mt-1 bg-gray-100 text-gray-700 border-0">
+              <Badge variant="outline" className="text-xs w-fit mt-1 bg-white text-gray-700 border border-gray-200">
                 {countryName}
               </Badge>
             </div>
@@ -41,28 +41,22 @@ const ClientCard: React.FC<ClientCardProps> = ({ client, countryName, onDelete }
           
           <div className="flex items-center justify-between">
             <div>
-              <ClientStatusBadge status={client.agent_status} />
-            </div>
-            <div className="flex gap-2">
               <Link to={client.agent_status === 'ready' ? `/clients/${client.id}` : '#'}>
                 <Button 
-                  variant="ghost" 
-                  size="icon"
-                  disabled={client.agent_status !== 'ready'}
-                  className={`${client.agent_status !== 'ready' ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  variant="default" 
+                  className="bg-custom-accent text-white hover:bg-custom-accent/90"
                 >
-                  <Eye className="h-4 w-4" />
+                  Open
                 </Button>
               </Link>
-              <Button variant="ghost" size="icon">
-                <Pencil className="h-4 w-4" />
-              </Button>
-              <Button 
-                variant="ghost" 
-                size="icon"
-                onClick={() => onDelete(client.id)}
-              >
-                <Trash2 className="h-4 w-4" />
+            </div>
+            <div>
+              <Button variant="outline" size="icon" className="border-gray-200 bg-white">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="4" cy="10" r="1.5" fill="#333"/>
+                  <circle cx="10" cy="10" r="1.5" fill="#333"/>
+                  <circle cx="16" cy="10" r="1.5" fill="#333"/>
+                </svg>
               </Button>
             </div>
           </div>

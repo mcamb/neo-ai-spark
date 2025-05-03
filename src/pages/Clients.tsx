@@ -89,7 +89,7 @@ const ClientsPage = () => {
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
             <Input
-              placeholder="Search clients..."
+              placeholder="Type here to search"
               className="pl-10 border-gray-300 focus:border-neo-red focus:ring-neo-red"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -99,7 +99,7 @@ const ClientsPage = () => {
             onClick={() => setIsModalOpen(true)}
             className="bg-neo-red hover:bg-red-600 text-white"
           >
-            New Client
+            Add client
           </Button>
         </div>
         
