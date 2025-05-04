@@ -29,7 +29,6 @@ export type Database = {
           agent_status: string
           brand_challenge: string | null
           brand_promise: string | null
-          country: string
           country_id: string | null
           domain: string
           id: string
@@ -44,7 +43,6 @@ export type Database = {
           agent_status?: string
           brand_challenge?: string | null
           brand_promise?: string | null
-          country: string
           country_id?: string | null
           domain: string
           id?: string
@@ -59,7 +57,6 @@ export type Database = {
           agent_status?: string
           brand_challenge?: string | null
           brand_promise?: string | null
-          country?: string
           country_id?: string | null
           domain?: string
           id?: string
@@ -142,7 +139,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_country_code_by_client_id: {
+        Args: { client_id: string }
+        Returns: string
+      }
     }
     Enums: {
       agent_status_enum: "ready" | "in_progress"

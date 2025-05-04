@@ -4,7 +4,6 @@ import { Button } from '@/components/ui/button';
 import { ArrowLeft, Globe } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useNavigate } from 'react-router-dom';
-import { countryNames } from '@/utils/clientDataUtils';
 
 interface ClientHeaderProps {
   name: string;
@@ -49,7 +48,7 @@ export const ClientHeader: React.FC<ClientHeaderProps> = ({
           <div className="space-y-2">
             <div className="flex items-center gap-2">
               <h1 className="text-3xl font-bold text-black">{name}</h1>
-              <span className="text-sm px-2 py-1 bg-gray-100 rounded-md text-black">{countryNames[country]}</span>
+              <span className="text-sm px-2 py-1 bg-gray-100 rounded-md text-black">{country}</span>
             </div>
             
             <div className="flex items-center gap-1">

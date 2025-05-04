@@ -1,4 +1,3 @@
-
 export const countryNames: Record<string, string> = {
   'us': 'United States',
   'uk': 'United Kingdom',
@@ -37,10 +36,26 @@ export const countryNames: Record<string, string> = {
   '': 'Unknown'
 };
 
-// Helper function to get country name safely
-export const getCountryName = (countryCode?: string): string => {
-  if (!countryCode) return 'Unknown';
+// Helper function to get country name safely from the countries object
+export const getCountryName = (countryData?: any): string => {
+  if (!countryData) return 'Unknown';
   
-  const code = countryCode.toLowerCase();
-  return countryNames[code] || 'Unknown';
+  if (typeof countryData === 'string') {
+    // Legacy support for old code that might pass a country code
+    const code = countryData.toLowerCase();
+    return countryNames[code] || 'Unknown';
+  }
+  
+  if (countryData.country) {
+    // If we have the full country object from the relationship
+    return countryData.country;
+  }
+  
+  if (countryData.code) {
+    // If we just have the code
+    const code = countryData.code.toLowerCase();
+    return countryNames[code] || 'Unknown';
+  }
+  
+  return 'Unknown';
 };

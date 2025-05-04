@@ -26,10 +26,16 @@ export const useClientData = (clientId: string | undefined) => {
       setIsLoading(true);
       
       try {
-        // Fetch basic client info
+        // Fetch basic client info with country relationship
         const { data: clientData, error: clientError } = await supabase
           .from('clients')
-          .select('*')
+          .select(`
+            *,
+            countries (
+              code,
+              country
+            )
+          `)
           .eq('id', clientId)
           .single();
           

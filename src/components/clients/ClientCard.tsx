@@ -11,10 +11,13 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 interface Client {
   id: string;
   name: string;
-  country: string;
   domain: string;
   logo?: string;
   agent_status: 'ready' | 'in_progress';
+  countries?: {
+    code: string;
+    country: string;
+  };
 }
 
 interface ClientCardProps {

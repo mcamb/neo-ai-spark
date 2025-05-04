@@ -2,7 +2,7 @@
 import React from 'react';
 import ClientCard from './ClientCard';
 import { Client } from '@/hooks/useClients';
-import { countryNames, getCountryName } from '@/utils/clientDataUtils';
+import { countryNames } from '@/utils/clientDataUtils';
 
 interface ClientsListProps {
   clients: Client[];
@@ -24,11 +24,12 @@ const ClientsList: React.FC<ClientsListProps> = ({
   // Show all clients when no search query, filter when there is one
   const filteredClients = searchQuery.trim() === "" 
     ? clients
-    : clients.filter(client => 
-        client.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (client.country && getCountryName(client.country).toLowerCase().includes(searchQuery.toLowerCase())) ||
-        client.domain?.toLowerCase().includes(searchQuery.toLowerCase())
-      );
+    : clients.filter(client => {
+        const countryName = client.countries?.country || '';
+        return client.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          countryName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          client.domain?.toLowerCase().includes(searchQuery.toLowerCase());
+      });
   
   // Sort clients by status first (in_progress at the top), then by created_at (newer first)
   const sortedClients = [...filteredClients].sort((a, b) => {
@@ -72,7 +73,7 @@ const ClientsList: React.FC<ClientsListProps> = ({
   return (
     <div className="space-y-4 p-2">
       {sortedClients.map((client) => {
-        const countryName = getCountryName(client.country);
+        const countryName = client.countries?.country || 'Unknown';
         return (
           <ClientCard 
             key={client.id}

@@ -5,7 +5,6 @@ import { supabase } from '@/integrations/supabase/client';
 export interface Client {
   id: string;
   name: string;
-  country: string;
   domain: string;
   logo?: string;
   agent_status: 'ready' | 'in_progress';
@@ -24,7 +23,7 @@ const fetchClients = async (): Promise<Client[]> => {
   
   const { data, error } = await supabase
     .from('clients')
-    .select('*');
+    .select('*, countries(code, country)');
   
   if (error) {
     console.error("Error fetching clients from Supabase:", error);

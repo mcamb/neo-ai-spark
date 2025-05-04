@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { 
   Sheet,
@@ -187,19 +186,12 @@ const NewClientModal: React.FC<NewClientModalProps> = ({ isOpen, onClose, onSubm
     setIsSubmitting(true);
     
     try {
-      // Get the country code from the full country name for UI display purposes
-      const selectedCountry = countries.find(c => c.id === countryId);
-      const countryCode = selectedCountry 
-        ? selectedCountry.country.toLowerCase().substring(0, 2)
-        : 'us';
-      
       // Create the client in the database
       const { data, error } = await supabase
         .from('clients')
         .insert({
           name,
           domain,
-          country: countryCode,
           country_id: countryId,
           logo: logo || null
         })

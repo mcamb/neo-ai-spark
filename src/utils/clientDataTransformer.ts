@@ -18,11 +18,15 @@ export const transformClientData = (
     rationale: score.rationale || ''
   })) || [];
   
+  // Extract country info from the countries relationship
+  const countryInfo = clientData.countries || {};
+  const country = countryInfo.code || "us"; // Default to "us" if no country code
+  
   // Build the client details object from the database data
   return {
     id: clientData.id,
     name: clientData.name,
-    country: clientData.country,
+    country: country,
     domain: clientData.domain,
     logo: clientData.logo,
     description: "Client details from database",
