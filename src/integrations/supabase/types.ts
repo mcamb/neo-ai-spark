@@ -36,6 +36,7 @@ export type Database = {
           logo: string | null
           primary_audience_b2b: string | null
           primary_audience_b2c: string | null
+          profile: string | null
           secondary_audience_b2b: string | null
           secondary_audience_b2c: string | null
         }
@@ -50,6 +51,7 @@ export type Database = {
           logo?: string | null
           primary_audience_b2b?: string | null
           primary_audience_b2c?: string | null
+          profile?: string | null
           secondary_audience_b2b?: string | null
           secondary_audience_b2c?: string | null
         }
@@ -64,6 +66,7 @@ export type Database = {
           logo?: string | null
           primary_audience_b2b?: string | null
           primary_audience_b2c?: string | null
+          profile?: string | null
           secondary_audience_b2b?: string | null
           secondary_audience_b2c?: string | null
         }

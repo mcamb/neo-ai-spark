@@ -129,7 +129,7 @@
     @apply bg-[#94C29D];
   }
   
-  /* Keep section styling for Client Details page */
+  /* Updated section styling for Client Details page */
   .section-title {
     @apply text-xl font-semibold text-black relative inline-block pb-2;
   }
@@ -137,6 +137,7 @@
   .section-title::after {
     content: '';
     @apply absolute bottom-0 left-0 w-full h-1 bg-[#FF4B4F];
+    width: 100%; /* Ensure the line is exactly as wide as the text */
   }
   
   .section-card {

@@ -20,8 +20,8 @@ export const transformClientData = (
   
   // Extract country info from the countries relationship
   const countryInfo = clientData.countries || {};
-  // Default to "us" if no country info
-  const country = "us"; 
+  // Get country name from the relationship if available, otherwise default to "us"
+  const country = countryInfo.country || "United States"; 
   
   // Build the client details object from the database data
   return {
@@ -30,7 +30,7 @@ export const transformClientData = (
     country: country,
     domain: clientData.domain,
     logo: clientData.logo,
-    description: "Client details from database",
+    description: clientData.profile || "Client details from database",
     brandPromise: clientData.brand_promise || "Brand promise not available.",
     brandChallenge: clientData.brand_challenge || "Brand challenge not available.",
     targetAudience: {
