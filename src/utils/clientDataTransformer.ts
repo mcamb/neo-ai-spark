@@ -20,7 +20,8 @@ export const transformClientData = (
   
   // Extract country info from the countries relationship
   const countryInfo = clientData.countries || {};
-  const country = countryInfo.code || "us"; // Default to "us" if no country code
+  // Default to "us" if no country info
+  const country = "us"; 
   
   // Build the client details object from the database data
   return {

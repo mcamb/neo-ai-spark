@@ -32,7 +32,6 @@ export const useClientData = (clientId: string | undefined) => {
           .select(`
             *,
             countries (
-              code,
               country
             )
           `)
