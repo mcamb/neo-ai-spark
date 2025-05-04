@@ -6,8 +6,11 @@ export const setupRealtimeForClients = async () => {
     // This function attempts to enable REPLICA IDENTITY FULL and add the table to the realtime publication
     // Note: This requires the user to have sufficient database privileges
     
-    // Call the RPC function without specifying generic types, letting TypeScript infer them
-    await supabase.rpc('enable_realtime_for_clients', {});
+    // Define the parameters and return type explicitly
+    type EmptyParams = Record<string, never>;
+    type RPCReturnType = { success: boolean };
+    
+    await supabase.rpc<RPCReturnType, EmptyParams>('enable_realtime_for_clients', {});
     
     console.log('Real-time configuration for clients table has been set up');
     return true;
