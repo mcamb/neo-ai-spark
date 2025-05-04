@@ -27,7 +27,11 @@ const ClientCard: React.FC<ClientCardProps> = ({ client, countryName, onDelete, 
                 <AvatarImage 
                   src={client.logo} 
                   alt={client.brand}
-                  className="object-contain p-0.5" // Add padding to logos that need breathing room
+                  className="object-cover p-1.5"
+                  style={{
+                    objectFit: client.logo.includes('kitkat') ? 'contain' : 'cover',
+                    padding: client.logo.includes('kitkat') ? '1.5px' : '0',
+                  }}
                 />
               ) : (
                 <AvatarFallback>

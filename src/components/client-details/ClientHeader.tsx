@@ -39,8 +39,12 @@ export const ClientHeader: React.FC<ClientHeaderProps> = ({
             {logo ? (
               <AvatarImage 
                 src={logo} 
-                alt={name} 
-                className="object-contain p-1" // Add padding for logos that need breathing room
+                alt={name}
+                className="object-cover"
+                style={{
+                  objectFit: logo.includes('kitkat') ? 'contain' : 'cover',
+                  padding: logo.includes('kitkat') ? '2px' : '0',
+                }}
               />
             ) : (
               <AvatarFallback className="text-gray-700 text-xl">
