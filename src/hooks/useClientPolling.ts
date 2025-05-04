@@ -29,7 +29,7 @@ export const useClientPolling = ({
             
             toast({
               title: "Client Ready",
-              description: `${randomClient.name} is now ready!`
+              description: `${randomClient.brand} is now ready!`
             });
           } catch (error) {
             console.error("Error updating client status:", error);
