@@ -62,27 +62,19 @@ export const useClientModification = ({ refetch }: UseClientModificationProps) =
           if (scoresError) {
             // Log error but don't fail the whole operation
             console.error("Error creating default scores:", scoresError);
-            toast({
-              title: "Warning",
-              description: "Client created but default scores could not be added."
-            });
+            toast("Warning: Client created but default scores could not be added.");
           }
         }
       }
       
-      toast({
-        title: "Success",
-        description: "Client added successfully"
-      });
+      toast("Client added successfully");
       
       refetch();
       setIsModalOpen(false);
     } catch (error: any) {
       console.error("Error in client creation:", error);
-      toast({
-        title: "Error",
-        description: `Failed to add client: ${error.message}`,
-        variant: "destructive"
+      toast(`Failed to add client: ${error.message}`, {
+        style: { backgroundColor: 'red', color: 'white' }
       });
     } finally {
       setIsSubmitting(false);
