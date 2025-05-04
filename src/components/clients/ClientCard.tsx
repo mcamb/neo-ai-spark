@@ -22,9 +22,13 @@ const ClientCard: React.FC<ClientCardProps> = ({ client, countryName, onDelete, 
       <CardContent className="p-4">
         <div className="flex items-center">
           <div className="flex items-center flex-1">
-            <Avatar className="w-10 h-10">
+            <Avatar className="w-10 h-10 flex-shrink-0">
               {client.logo ? (
-                <AvatarImage src={client.logo} alt={client.brand} />
+                <AvatarImage 
+                  src={client.logo} 
+                  alt={client.brand}
+                  className="object-contain p-0.5" // Add padding to logos that need breathing room
+                />
               ) : (
                 <AvatarFallback>
                   {client.brand.charAt(0).toUpperCase()}

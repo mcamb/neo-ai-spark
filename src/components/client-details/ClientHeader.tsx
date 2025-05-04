@@ -35,9 +35,13 @@ export const ClientHeader: React.FC<ClientHeaderProps> = ({
       {/* Header Section */}
       <div className="flex flex-col md:flex-row gap-6 pb-6">
         <div className="flex items-start gap-4">
-          <Avatar className="h-16 w-16">
+          <Avatar className="h-16 w-16 flex-shrink-0">
             {logo ? (
-              <AvatarImage src={logo} alt={name} />
+              <AvatarImage 
+                src={logo} 
+                alt={name} 
+                className="object-contain p-1" // Add padding for logos that need breathing room
+              />
             ) : (
               <AvatarFallback className="text-gray-700 text-xl">
                 {name.charAt(0)}
