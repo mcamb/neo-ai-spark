@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useCallback } from 'react';
 import MainLayout from '@/components/MainLayout';
 import ClientsHeader from '@/components/clients/ClientsHeader';
@@ -12,6 +13,7 @@ import DeleteClientDialog from '@/components/clients/DeleteClientDialog';
 import { useClientDeletion } from '@/hooks/useClientDeletion';
 import { useClientModification } from '@/hooks/useClientModification';
 import { useClientRealtime } from '@/hooks/useClientRealtime';
+import { setupRealtimeForClients } from '@/utils/setupRealtime';
 
 const Clients = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -58,8 +60,11 @@ const Clients = () => {
   }, [refetch]);
 
   useEffect(() => {
-    // When component mounts, force a data refresh
-    refetch();
+    // When component mounts, force a data refresh and ensure realtime is setup
+    (async () => {
+      await setupRealtimeForClients();
+      refetch();
+    })();
   }, [refetch]);
 
   useEffect(() => {

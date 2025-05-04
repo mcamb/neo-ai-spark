@@ -14,7 +14,7 @@ export const setupRealtimeForClients = async () => {
       return false;
     }
     
-    console.log('Real-time configuration for clients table has been set up', data);
+    console.log('Real-time configuration for clients table has been set up successfully:', data);
     return true;
   } catch (error) {
     console.error('Failed to set up real-time for clients table:', error);

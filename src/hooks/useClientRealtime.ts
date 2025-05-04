@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from "sonner";
 import { Client } from './useClients';
+import { setupRealtimeForClients } from '@/utils/setupRealtime';
 
 interface UseClientRealtimeProps {
   refetch: () => void;
@@ -13,27 +14,45 @@ interface UseClientRealtimeProps {
  */
 export const useClientRealtime = ({ refetch }: UseClientRealtimeProps) => {
   useEffect(() => {
+    // Initialize realtime functionality on mount
+    const initializeRealtime = async () => {
+      const success = await setupRealtimeForClients();
+      if (!success) {
+        console.error("Failed to setup realtime for clients table");
+      }
+    };
+    
+    initializeRealtime();
+    
     // Subscribe to changes on the clients table
     const channel = supabase
       .channel('client-status-changes')
       .on(
         'postgres_changes',
         {
-          event: 'UPDATE',
+          event: '*', // Listen to all event types (INSERT, UPDATE, DELETE)
           schema: 'public',
           table: 'clients',
-          filter: 'agent_status=eq.ready'
         },
         (payload) => {
-          const updatedClient = payload.new as Client;
+          const client = payload.new as Client;
           
-          // If the client status is now 'ready', show a notification and refresh the list
-          if (updatedClient.agent_status === 'ready') {
-            toast(`${updatedClient.brand} is now ready!`, {
-              description: "The client status has been updated.",
-            });
+          // Check if this is a client with "ready" status
+          if (client && client.agent_status === 'ready') {
+            // For updates, show a notification
+            if (payload.eventType === 'UPDATE') {
+              toast(`${client.brand} is now ready!`, {
+                description: "The client status has been updated.",
+              });
+            } 
+            // For new clients that are already ready
+            else if (payload.eventType === 'INSERT') {
+              toast(`New client ${client.brand} is ready!`, {
+                description: "A new client has been added with ready status.",
+              });
+            }
             
-            // Refresh client list
+            // Refresh client list for any change involving a ready client
             refetch();
           }
         }
