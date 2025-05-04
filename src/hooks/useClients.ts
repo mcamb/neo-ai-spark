@@ -9,7 +9,7 @@ export interface Client {
   logo?: string;
   agent_status: 'ready' | 'in_progress';
   country_id?: string;
-  created_at: string;
+  created_at?: string; // Make this optional since it might not always be present in the data
   brand_promise?: string;
   brand_challenge?: string;
   primary_audience_b2c?: string;
@@ -17,7 +17,7 @@ export interface Client {
   primary_audience_b2b?: string;
   secondary_audience_b2b?: string;
   countries?: {
-    code: string;
+    code?: string; // Make this optional since the code column was dropped
     country: string;
   };
 }
@@ -27,7 +27,7 @@ const fetchClients = async (): Promise<Client[]> => {
   
   const { data, error } = await supabase
     .from('clients')
-    .select('*, countries(code, country)');
+    .select('*, countries(country)');
   
   if (error) {
     console.error("Error fetching clients from Supabase:", error);
@@ -35,7 +35,7 @@ const fetchClients = async (): Promise<Client[]> => {
   }
   
   console.log("Fetched clients:", data);
-  return data as Client[];
+  return data as Client[]; // Using type assertion here
 };
 
 export const useClients = () => {

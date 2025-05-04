@@ -41,19 +41,19 @@ export const countryNames: Record<string, string> = {
 export const getCountryName = (countryData?: any): string => {
   if (!countryData) return 'Unknown';
   
+  // If it's just a string (old code path), map it to a country name
   if (typeof countryData === 'string') {
-    // Legacy support for old code that might pass a country code
     const code = countryData.toLowerCase();
     return countryNames[code] || 'Unknown';
   }
   
+  // If we have the full country object from the relationship
   if (countryData.country) {
-    // If we have the full country object from the relationship
     return countryData.country;
   }
   
+  // If we have the code from the relationship
   if (countryData.code) {
-    // If we just have the code
     const code = countryData.code.toLowerCase();
     return countryNames[code] || 'Unknown';
   }

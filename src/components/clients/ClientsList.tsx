@@ -38,7 +38,7 @@ const ClientsList: React.FC<ClientsListProps> = ({
       return a.agent_status === 'in_progress' ? -1 : 1;
     }
     
-    // Then sort by creation date (newer first)
+    // Then sort by creation date (newer first) if available
     if (a.created_at && b.created_at) {
       return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
     }
