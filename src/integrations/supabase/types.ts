@@ -79,17 +79,14 @@ export type Database = {
       }
       countries: {
         Row: {
-          code: string
           country: string
           id: string
         }
         Insert: {
-          code: string
           country: string
           id?: string
         }
         Update: {
-          code?: string
           country?: string
           id?: string
         }

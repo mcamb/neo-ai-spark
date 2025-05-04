@@ -7,18 +7,7 @@ import ClientStatusBadge from './ClientStatusBadge';
 import { Link } from 'react-router-dom';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-
-interface Client {
-  id: string;
-  name: string;
-  domain: string;
-  logo?: string;
-  agent_status: 'ready' | 'in_progress';
-  countries?: {
-    code: string;
-    country: string;
-  };
-}
+import { Client } from '@/hooks/useClients';
 
 interface ClientCardProps {
   client: Client;

@@ -2,7 +2,7 @@
 import React from 'react';
 import ClientCard from './ClientCard';
 import { Client } from '@/hooks/useClients';
-import { countryNames } from '@/utils/clientDataUtils';
+import { getCountryName } from '@/utils/clientDataUtils';
 
 interface ClientsListProps {
   clients: Client[];

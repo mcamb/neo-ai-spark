@@ -16,6 +16,10 @@ export interface Client {
   secondary_audience_b2c?: string;
   primary_audience_b2b?: string;
   secondary_audience_b2b?: string;
+  countries?: {
+    code: string;
+    country: string;
+  };
 }
 
 const fetchClients = async (): Promise<Client[]> => {
