@@ -132,16 +132,21 @@ const NewCountryForm: React.FC<NewCountryFormProps> = ({ onSubmit, onCancel, isS
 interface NewClientModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: () => void;
+  onSubmit: (clientData: any) => Promise<void>;
+  isSubmitting?: boolean;
 }
 
-const NewClientModal: React.FC<NewClientModalProps> = ({ isOpen, onClose, onSubmit }) => {
+const NewClientModal: React.FC<NewClientModalProps> = ({ 
+  isOpen, 
+  onClose, 
+  onSubmit,
+  isSubmitting = false 
+}) => {
   const { toast } = useToast();
   const [brand, setBrand] = useState('');
   const [countryId, setCountryId] = useState('');
   const [domain, setDomain] = useState('');
   const [logo, setLogo] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isAddingCountry, setIsAddingCountry] = useState(false);
   const [isCreatingCountry, setIsCreatingCountry] = useState(false);
 
@@ -184,28 +189,17 @@ const NewClientModal: React.FC<NewClientModalProps> = ({ isOpen, onClose, onSubm
       return;
     }
     
-    setIsSubmitting(true);
-    
     try {
-      // Create the client in the database
-      const { data, error } = await supabase
-        .from('clients')
-        .insert({
-          brand,
-          domain,
-          country_id: countryId,
-          logo: logo || null
-        })
-        .select();
+      // Create client data object
+      const clientData = {
+        brand,
+        domain,
+        country_id: countryId,
+        logo: logo || null
+      };
       
-      if (error) {
-        throw error;
-      }
-      
-      toast({
-        title: "Success",
-        description: "Client added successfully"
-      });
+      // Submit to parent component
+      await onSubmit(clientData);
       
       // Reset form
       setBrand('');
@@ -213,19 +207,13 @@ const NewClientModal: React.FC<NewClientModalProps> = ({ isOpen, onClose, onSubm
       setDomain('');
       setLogo('');
       
-      // Notify parent component
-      onSubmit();
-      onClose();
-      
     } catch (error: any) {
-      console.error("Error creating client:", error);
+      console.error("Error handling form submission:", error);
       toast({
         title: "Error",
-        description: `Failed to add client: ${error.message}`,
+        description: `Failed to submit form: ${error.message}`,
         variant: "destructive"
       });
-    } finally {
-      setIsSubmitting(false);
     }
   };
 

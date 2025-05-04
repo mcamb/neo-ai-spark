@@ -99,6 +99,7 @@ export type Database = {
         Row: {
           channel_id: string
           client_id: string
+          created_at: string | null
           id: string
           rationale: string | null
           score: number
@@ -106,6 +107,7 @@ export type Database = {
         Insert: {
           channel_id: string
           client_id: string
+          created_at?: string | null
           id?: string
           rationale?: string | null
           score: number
@@ -113,6 +115,7 @@ export type Database = {
         Update: {
           channel_id?: string
           client_id?: string
+          created_at?: string | null
           id?: string
           rationale?: string | null
           score?: number

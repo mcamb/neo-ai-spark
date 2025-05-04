@@ -32,6 +32,7 @@ const Clients = () => {
     handleOpenAddModal,
     handleCloseAddModal,
     handleAddClient,
+    isSubmitting,
     isEditModalOpen,
     selectedClientId,
     handleEditClient,
@@ -97,6 +98,7 @@ const Clients = () => {
         isOpen={isModalOpen} 
         onClose={handleCloseAddModal} 
         onSubmit={handleAddClient}
+        isSubmitting={isSubmitting}
       />
 
       {selectedClientId && (
