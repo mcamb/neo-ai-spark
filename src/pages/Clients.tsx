@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useCallback } from 'react';
 import MainLayout from '@/components/MainLayout';
 import ClientsHeader from '@/components/clients/ClientsHeader';
@@ -12,6 +11,7 @@ import EditClientModal from '@/components/EditClientModal';
 import DeleteClientDialog from '@/components/clients/DeleteClientDialog';
 import { useClientDeletion } from '@/hooks/useClientDeletion';
 import { useClientModification } from '@/hooks/useClientModification';
+import { useClientRealtime } from '@/hooks/useClientRealtime';
 
 const Clients = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -38,6 +38,9 @@ const Clients = () => {
     handleEditClient,
     handleCloseEditModal
   } = useClientModification({ refetch });
+  
+  // Subscribe to real-time updates for client status changes
+  useClientRealtime({ refetch });
   
   // Function to update client status - keeping this in case needed later
   const updateClientStatus = useCallback(async (clientId: string, status: 'ready' | 'in_progress') => {

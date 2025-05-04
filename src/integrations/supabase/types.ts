@@ -30,6 +30,7 @@ export type Database = {
           brand: string
           brand_challenge: string | null
           brand_promise: string | null
+          country: string | null
           country_id: string | null
           domain: string
           id: string
@@ -45,6 +46,7 @@ export type Database = {
           brand: string
           brand_challenge?: string | null
           brand_promise?: string | null
+          country?: string | null
           country_id?: string | null
           domain: string
           id?: string
@@ -60,6 +62,7 @@ export type Database = {
           brand?: string
           brand_challenge?: string | null
           brand_promise?: string | null
+          country?: string | null
           country_id?: string | null
           domain?: string
           id?: string
@@ -97,28 +100,31 @@ export type Database = {
       }
       relevance_scores: {
         Row: {
+          channel: string | null
           channel_id: string
           client_id: string
           created_at: string | null
           id: string
           rationale: string | null
-          score: number
+          score: number | null
         }
         Insert: {
+          channel?: string | null
           channel_id: string
           client_id: string
           created_at?: string | null
           id?: string
           rationale?: string | null
-          score: number
+          score?: number | null
         }
         Update: {
+          channel?: string | null
           channel_id?: string
           client_id?: string
           created_at?: string | null
           id?: string
           rationale?: string | null
-          score?: number
+          score?: number | null
         }
         Relationships: [
           {
@@ -142,10 +148,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      get_country_code_by_client_id: {
-        Args: { client_id: string }
-        Returns: string
-      }
+      [_ in never]: never
     }
     Enums: {
       agent_status_enum: "ready" | "in_progress"
