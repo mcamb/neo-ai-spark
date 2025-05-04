@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { 
   Sheet,
@@ -136,7 +137,7 @@ interface NewClientModalProps {
 
 const NewClientModal: React.FC<NewClientModalProps> = ({ isOpen, onClose, onSubmit }) => {
   const { toast } = useToast();
-  const [name, setName] = useState('');
+  const [brand, setBrand] = useState('');
   const [countryId, setCountryId] = useState('');
   const [domain, setDomain] = useState('');
   const [logo, setLogo] = useState('');
@@ -174,7 +175,7 @@ const NewClientModal: React.FC<NewClientModalProps> = ({ isOpen, onClose, onSubm
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!name || !countryId || !domain) {
+    if (!brand || !countryId || !domain) {
       toast({
         title: "Error",
         description: "Please fill in all required fields",
@@ -190,7 +191,7 @@ const NewClientModal: React.FC<NewClientModalProps> = ({ isOpen, onClose, onSubm
       const { data, error } = await supabase
         .from('clients')
         .insert({
-          name,
+          brand,
           domain,
           country_id: countryId,
           logo: logo || null
@@ -207,7 +208,7 @@ const NewClientModal: React.FC<NewClientModalProps> = ({ isOpen, onClose, onSubm
       });
       
       // Reset form
-      setName('');
+      setBrand('');
       setCountryId('');
       setDomain('');
       setLogo('');
@@ -271,11 +272,11 @@ const NewClientModal: React.FC<NewClientModalProps> = ({ isOpen, onClose, onSubm
           
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
-              <Label htmlFor="name">Client Name *</Label>
+              <Label htmlFor="brand">Client Brand *</Label>
               <Input 
-                id="name"
-                value={name} 
-                onChange={(e) => setName(e.target.value)} 
+                id="brand"
+                value={brand} 
+                onChange={(e) => setBrand(e.target.value)} 
                 placeholder="Acme Inc."
                 required
               />

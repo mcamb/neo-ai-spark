@@ -4,7 +4,7 @@ import { supabase } from '@/integrations/supabase/client';
 
 export interface Client {
   id: string;
-  name: string;
+  brand: string;
   domain: string;
   logo?: string;
   agent_status: 'ready' | 'in_progress';

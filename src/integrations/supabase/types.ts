@@ -27,13 +27,13 @@ export type Database = {
       clients: {
         Row: {
           agent_status: string
+          brand: string
           brand_challenge: string | null
           brand_promise: string | null
           country_id: string | null
           domain: string
           id: string
           logo: string | null
-          name: string
           primary_audience_b2b: string | null
           primary_audience_b2c: string | null
           secondary_audience_b2b: string | null
@@ -41,13 +41,13 @@ export type Database = {
         }
         Insert: {
           agent_status?: string
+          brand: string
           brand_challenge?: string | null
           brand_promise?: string | null
           country_id?: string | null
           domain: string
           id?: string
           logo?: string | null
-          name: string
           primary_audience_b2b?: string | null
           primary_audience_b2c?: string | null
           secondary_audience_b2b?: string | null
@@ -55,13 +55,13 @@ export type Database = {
         }
         Update: {
           agent_status?: string
+          brand?: string
           brand_challenge?: string | null
           brand_promise?: string | null
           country_id?: string | null
           domain?: string
           id?: string
           logo?: string | null
-          name?: string
           primary_audience_b2b?: string | null
           primary_audience_b2c?: string | null
           secondary_audience_b2b?: string | null

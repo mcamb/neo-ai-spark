@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { 
   Sheet,
@@ -69,7 +70,7 @@ const EditClientModal: React.FC<EditClientModalProps> = ({
   onSubmit 
 }) => {
   const { toast } = useToast();
-  const [name, setName] = useState('');
+  const [brand, setBrand] = useState('');
   const [countryId, setCountryId] = useState('');
   const [domain, setDomain] = useState('');
   const [logo, setLogo] = useState('');
@@ -99,7 +100,7 @@ const EditClientModal: React.FC<EditClientModalProps> = ({
   // Populate form when client data is available
   useEffect(() => {
     if (client) {
-      setName(client.name || '');
+      setBrand(client.brand || '');
       setCountryId(client.country_id || '');
       setDomain(client.domain || '');
       setLogo(client.logo || '');
@@ -128,7 +129,7 @@ const EditClientModal: React.FC<EditClientModalProps> = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!name || !countryId || !domain) {
+    if (!brand || !countryId || !domain) {
       toast({
         title: "Error",
         description: "Please fill in all required fields",
@@ -144,7 +145,7 @@ const EditClientModal: React.FC<EditClientModalProps> = ({
       const { error } = await supabase
         .from('clients')
         .update({
-          name,
+          brand,
           domain,
           country_id: countryId,
           logo: logo || null
@@ -198,11 +199,11 @@ const EditClientModal: React.FC<EditClientModalProps> = ({
         ) : (
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
-              <Label htmlFor="name">Client Name *</Label>
+              <Label htmlFor="brand">Client Brand *</Label>
               <Input 
-                id="name"
-                value={name} 
-                onChange={(e) => setName(e.target.value)} 
+                id="brand"
+                value={brand} 
+                onChange={(e) => setBrand(e.target.value)} 
                 placeholder="Acme Inc."
                 required
               />

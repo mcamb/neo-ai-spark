@@ -25,7 +25,7 @@ export const transformClientData = (
   // Build the client details object from the database data
   return {
     id: clientData.id,
-    name: clientData.name,
+    name: clientData.brand,
     country: country,
     domain: clientData.domain,
     logo: clientData.logo,
