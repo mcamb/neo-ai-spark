@@ -7,6 +7,7 @@ import CampaignStatusBadge from './CampaignStatusBadge';
 import { Link } from 'react-router-dom';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import ClientStatusBadge from '../clients/ClientStatusBadge';
 
 export interface Campaign {
   id: string;
@@ -15,6 +16,7 @@ export interface Campaign {
   country: string;
   status: 'active' | 'draft' | 'completed';
   logo?: string;
+  agent_status?: string;
 }
 
 interface CampaignCardProps {
@@ -48,20 +50,20 @@ const CampaignCard: React.FC<CampaignCardProps> = ({ campaign, onDelete, onEdit 
             </Avatar>
             <div className="ml-4">
               <h3 className="font-medium text-lg">{campaign.title}</h3>
-              <div className="flex gap-2 mt-1">
-                <Badge variant="outline" className="text-xs w-fit bg-white text-gray-700 border border-gray-200">
-                  {campaign.clientName}
-                </Badge>
-                <Badge variant="outline" className="text-xs w-fit bg-white text-gray-700 border border-gray-200">
-                  {campaign.country}
-                </Badge>
+              <div className="mt-1 text-sm text-gray-600">
+                {campaign.clientName} - {campaign.country}
               </div>
             </div>
           </div>
           
-          <div className="flex items-center">
+          <div className="flex items-center gap-4">
             <CampaignStatusBadge status={campaign.status} />
-            <div className="flex items-center gap-2 ml-4">
+            
+            {campaign.agent_status && (
+              <ClientStatusBadge status={campaign.agent_status as 'ready' | 'in_progress'} />
+            )}
+            
+            <div className="flex items-center gap-2">
               <Link to={`/campaigns/${campaign.id}`}>
                 <Button variant="ghost" size="icon" className="hover:bg-gray-100">
                   <Eye className="h-4 w-4" />

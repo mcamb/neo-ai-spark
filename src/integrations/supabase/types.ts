@@ -9,6 +9,61 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      campaigns: {
+        Row: {
+          agent_status: string
+          channel_id: string | null
+          client_id: string | null
+          id: string
+          objective_id: string | null
+          status: string
+          target_audience: string | null
+          titel: string
+        }
+        Insert: {
+          agent_status?: string
+          channel_id?: string | null
+          client_id?: string | null
+          id?: string
+          objective_id?: string | null
+          status?: string
+          target_audience?: string | null
+          titel: string
+        }
+        Update: {
+          agent_status?: string
+          channel_id?: string | null
+          client_id?: string | null
+          id?: string
+          objective_id?: string | null
+          status?: string
+          target_audience?: string | null
+          titel?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "campaigns_channel_id_fkey"
+            columns: ["channel_id"]
+            isOneToOne: false
+            referencedRelation: "channels"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "campaigns_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "campaigns_objective_id_fkey"
+            columns: ["objective_id"]
+            isOneToOne: false
+            referencedRelation: "objectives"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       channels: {
         Row: {
           channel: string
@@ -95,6 +150,24 @@ export type Database = {
         Update: {
           country?: string
           id?: string
+        }
+        Relationships: []
+      }
+      objectives: {
+        Row: {
+          description: string | null
+          id: string
+          name: string
+        }
+        Insert: {
+          description?: string | null
+          id?: string
+          name: string
+        }
+        Update: {
+          description?: string | null
+          id?: string
+          name?: string
         }
         Relationships: []
       }
