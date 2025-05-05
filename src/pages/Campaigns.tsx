@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import MainLayout from '@/components/MainLayout';
 import CampaignsHeader from '@/components/campaigns/CampaignsHeader';
 import CampaignsToolbar from '@/components/campaigns/CampaignsToolbar';
@@ -10,6 +10,8 @@ import NewCampaignModal from '@/components/campaigns/NewCampaignModal';
 import EditCampaignModal from '@/components/campaigns/EditCampaignModal';
 import DeleteCampaignDialog from '@/components/campaigns/DeleteCampaignDialog';
 import { useCampaignDeletion } from '@/hooks/useCampaignDeletion';
+import { useCampaignRealtime } from '@/hooks/useCampaignRealtime';
+import { setupRealtimeForCampaigns } from '@/utils/setupRealtimeCampaigns';
 
 const Campaigns = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -32,6 +34,17 @@ const Campaigns = () => {
     handleDeletePrompt,
     handleDeleteCampaign
   } = useCampaignDeletion({ refetch });
+
+  // Set up realtime updates for campaigns
+  useCampaignRealtime({ refetch });
+  
+  // Set up realtime configuration when component mounts
+  useEffect(() => {
+    (async () => {
+      await setupRealtimeForCampaigns();
+      refetch();
+    })();
+  }, [refetch]);
   
   const handleOpenAddModal = () => {
     setIsAddModalOpen(true);
