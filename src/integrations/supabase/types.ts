@@ -22,6 +22,7 @@ export type Database = {
           objective_id: string | null
           status: string
           target_audience: string | null
+          target_audience_summary: string | null
           targeting: string | null
           titel: string
           tone_style: string | null
@@ -38,6 +39,7 @@ export type Database = {
           objective_id?: string | null
           status?: string
           target_audience?: string | null
+          target_audience_summary?: string | null
           targeting?: string | null
           titel: string
           tone_style?: string | null
@@ -54,6 +56,7 @@ export type Database = {
           objective_id?: string | null
           status?: string
           target_audience?: string | null
+          target_audience_summary?: string | null
           targeting?: string | null
           titel?: string
           tone_style?: string | null

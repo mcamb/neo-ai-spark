@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Clock } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useNavigate } from 'react-router-dom';
 import CampaignStatusBadge from '@/components/campaigns/CampaignStatusBadge';
@@ -11,7 +11,6 @@ interface CampaignHeaderProps {
   status: string;
   clientName: string;
   clientLogo?: string;
-  createdAt: string;
   country?: string;
 }
 
@@ -20,17 +19,9 @@ export const CampaignHeader: React.FC<CampaignHeaderProps> = ({
   status,
   clientName,
   clientLogo,
-  createdAt,
   country
 }) => {
   const navigate = useNavigate();
-  
-  // Format date for display
-  const formattedDate = new Date(createdAt).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric'
-  });
   
   // Properly cast the status to match CampaignStatusBadge's expected types
   const normalizedStatus = status as 'active' | 'draft' | 'completed' | 'Idea' | 'Planned' | 'Running' | 'Finished';
@@ -65,17 +56,12 @@ export const CampaignHeader: React.FC<CampaignHeaderProps> = ({
           <div className="space-y-2">
             <div className="flex items-center gap-2">
               <h1 className="text-3xl font-bold text-black">{title}</h1>
-              <CampaignStatusBadge status={normalizedStatus} />
             </div>
             
             <div className="flex items-center gap-3">
-              <span className="text-sm text-gray-600">{clientName}</span>
-              {country && <span className="text-sm text-gray-600">• {country}</span>}
-            </div>
-            
-            <div className="flex items-center gap-1 text-sm text-gray-500">
-              <Clock className="h-3.5 w-3.5" />
-              <span>Created on {formattedDate}</span>
+              <span className="text-sm text-gray-600">
+                {clientName}{country && ` - ${country}`}
+              </span>
             </div>
           </div>
         </div>

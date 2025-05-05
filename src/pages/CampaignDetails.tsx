@@ -6,9 +6,9 @@ import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useCampaignDetails } from '@/hooks/useCampaignDetails';
 import { CampaignHeader } from '@/components/campaign-details/CampaignHeader';
-import { CampaignInfoSection } from '@/components/campaign-details/CampaignInfoSection';
+import { CampaignSummary } from '@/components/campaign-details/CampaignSummary';
+import { CampaignAudienceSection } from '@/components/campaign-details/CampaignAudienceSection';
 import { CampaignRecommendationsSection } from '@/components/campaign-details/CampaignRecommendationsSection';
-import { CampaignBrandSection } from '@/components/campaign-details/CampaignBrandSection';
 import { CampaignNotFoundMessage } from '@/components/campaign-details/CampaignNotFoundMessage';
 
 const CampaignDetails = () => {
@@ -50,26 +50,30 @@ const CampaignDetails = () => {
           status={campaignDetails.status}
           clientName={campaignDetails.clientName}
           clientLogo={campaignDetails.clientLogo}
-          createdAt={campaignDetails.created_at}
           country={campaignDetails.country}
         />
+        
+        <CampaignSummary
+          targetAudience={campaignDetails.target_audience}
+          objective={campaignDetails.objective_name}
+          channel={campaignDetails.channel_name}
+          status={campaignDetails.status}
+        />
+        
         <Separator />
         
-        <CampaignInfoSection
-          target_audience={campaignDetails.target_audience}
-          targeting={campaignDetails.targeting}
-          message_hook={campaignDetails.message_hook}
+        <CampaignAudienceSection
+          campaignId={campaignDetails.id}
+          targetAudienceSummary={campaignDetails.target_audience_summary}
         />
         
         <CampaignRecommendationsSection
+          campaignId={campaignDetails.id}
           tone_style={campaignDetails.tone_style}
           formats={campaignDetails.formats}
+          targeting={campaignDetails.targeting}
           creators_influencers={campaignDetails.creators_influencers}
-        />
-        
-        <CampaignBrandSection
-          brand_promise={campaignDetails.brand_promise}
-          brand_challenge={campaignDetails.brand_challenge}
+          message_hook={campaignDetails.message_hook}
         />
       </div>
     </MainLayout>

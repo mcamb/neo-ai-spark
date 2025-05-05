@@ -13,6 +13,7 @@ interface CampaignDetails {
   clientLogo?: string;
   country?: string;
   target_audience?: string;
+  target_audience_summary?: string;
   targeting?: string;
   message_hook?: string;
   tone_style?: string;
@@ -20,6 +21,8 @@ interface CampaignDetails {
   creators_influencers?: string;
   brand_promise?: string;
   brand_challenge?: string;
+  objective_name?: string;
+  channel_name?: string;
 }
 
 export const useCampaignDetails = (campaignId: string | undefined) => {
@@ -38,7 +41,7 @@ export const useCampaignDetails = (campaignId: string | undefined) => {
       setIsLoading(true);
       
       try {
-        // Use the campaigns table and join with clients to get all related campaign data
+        // Use the campaigns table and join with clients, objectives, and channels to get all related data
         const { data, error } = await supabase
           .from('campaigns')
           .select(`
@@ -49,17 +52,26 @@ export const useCampaignDetails = (campaignId: string | undefined) => {
             created_at,
             client_id,
             target_audience,
+            target_audience_summary,
             targeting,
             message_hook,
             tone_style,
             formats,
             creators_influencers,
+            objective_id,
+            channel_id,
             clients (
               brand,
               logo,
               brand_promise,
               brand_challenge,
               country
+            ),
+            objectives (
+              objective
+            ),
+            channels (
+              channel
             )
           `)
           .eq('id', campaignId)
@@ -78,13 +90,16 @@ export const useCampaignDetails = (campaignId: string | undefined) => {
             clientLogo: data.clients?.logo,
             country: data.clients?.country,
             target_audience: data.target_audience,
+            target_audience_summary: data.target_audience_summary,
             targeting: data.targeting,
             message_hook: data.message_hook,
             tone_style: data.tone_style,
             formats: data.formats,
             creators_influencers: data.creators_influencers,
             brand_promise: data.clients?.brand_promise,
-            brand_challenge: data.clients?.brand_challenge
+            brand_challenge: data.clients?.brand_challenge,
+            objective_name: data.objectives?.objective,
+            channel_name: data.channels?.channel
           });
         }
       } catch (err) {
