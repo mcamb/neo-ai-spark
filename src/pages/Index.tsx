@@ -60,10 +60,10 @@ const Index = () => {
       </div>
       
       {/* Right side - Background image */}
-      <div className="hidden lg:block lg:w-1/2">
+      <div className="hidden lg:block lg:w-1/2" style={{ overflow: 'hidden' }}>
         <img 
-          src="/lovable-uploads/defc2a77-e40f-402b-91b4-bf1ea8501a31.png" 
-          alt="Background" 
+          src="https://images.squarespace-cdn.com/content/v1/62bc0bb4f9bc3f2927ad3f04/40e41f11-d3fc-4fd9-9857-3af4643ab40f/serviceplan-23.jpg" 
+          alt="Modern office interior" 
           className="h-full w-full object-cover"
         />
       </div>
