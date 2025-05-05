@@ -58,18 +58,11 @@ const Index = () => {
         </div>
       </div>
       
-      {/* Right side - Background image */}
+      {/* Right side - Background image only, no text */}
       <div className="hidden lg:block lg:w-1/2 relative">
-        <div className="absolute inset-0 bg-gray-900 opacity-50"></div>
         <div className="absolute inset-0 bg-cover bg-center" style={{
-        backgroundImage: "url('/lovable-uploads/914650f6-245e-4410-9399-922053b76253.png')"
-      }}></div>
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="text-white text-center p-6 backdrop-blur-sm bg-black/30 rounded-lg max-w-md">
-            <h2 className="text-2xl font-bold mb-2">Smart AI Dashboard</h2>
-            <p>Automate your social media presence with powerful AI tools</p>
-          </div>
-        </div>
+          backgroundImage: "url('/lovable-uploads/0eed3130-85d5-49de-a1cf-356955707488.png')"
+        }}></div>
       </div>
     </div>;
 };
