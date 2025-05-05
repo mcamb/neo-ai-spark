@@ -15,6 +15,7 @@ export const useCampaigns = () => {
         status, 
         agent_status,
         client_id,
+        created_at,
         clients (
           brand,
           logo,
@@ -23,7 +24,8 @@ export const useCampaigns = () => {
             country
           )
         )
-      `);
+      `)
+      .order('created_at', { ascending: false });
     
     if (error) {
       console.error("Error fetching campaigns:", error);
@@ -41,7 +43,7 @@ export const useCampaigns = () => {
       country: campaign.clients?.countries?.country || 'Global',
       logo: campaign.clients?.logo || undefined,
       agent_status: campaign.agent_status,
-      created_at: undefined // Since the field doesn't exist, set to undefined
+      created_at: campaign.created_at
     }));
     
     return transformedCampaigns;

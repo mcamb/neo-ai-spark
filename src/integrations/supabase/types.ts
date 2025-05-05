@@ -14,6 +14,7 @@ export type Database = {
           agent_status: string
           channel_id: string | null
           client_id: string | null
+          created_at: string | null
           creators_influencers: string | null
           formats: string | null
           id: string
@@ -29,6 +30,7 @@ export type Database = {
           agent_status?: string
           channel_id?: string | null
           client_id?: string | null
+          created_at?: string | null
           creators_influencers?: string | null
           formats?: string | null
           id?: string
@@ -44,6 +46,7 @@ export type Database = {
           agent_status?: string
           channel_id?: string | null
           client_id?: string | null
+          created_at?: string | null
           creators_influencers?: string | null
           formats?: string | null
           id?: string
@@ -102,6 +105,7 @@ export type Database = {
           brand_promise: string | null
           country: string | null
           country_id: string | null
+          created_at: string | null
           domain: string
           id: string
           logo: string | null
@@ -118,6 +122,7 @@ export type Database = {
           brand_promise?: string | null
           country?: string | null
           country_id?: string | null
+          created_at?: string | null
           domain: string
           id?: string
           logo?: string | null
@@ -134,6 +139,7 @@ export type Database = {
           brand_promise?: string | null
           country?: string | null
           country_id?: string | null
+          created_at?: string | null
           domain?: string
           id?: string
           logo?: string | null
