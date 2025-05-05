@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Pencil, Save, Info, Tag } from 'lucide-react';
+import { Pencil, Save, Award, Target } from 'lucide-react';
 import { MarkdownBox } from './MarkdownBox';
 
 interface BrandSectionProps {
@@ -57,7 +57,7 @@ export const BrandSection: React.FC<BrandSectionProps> = ({
       <div className="grid md:grid-cols-2 gap-6">
         <div className="space-y-2">
           <h3 className="font-medium text-black flex items-center text-base">
-            <Tag className="h-4 w-4 mr-2 text-black" />
+            <Award className="h-4 w-4 mr-2 text-black" />
             Brand Promise
           </h3>
           <MarkdownBox 
@@ -72,7 +72,7 @@ export const BrandSection: React.FC<BrandSectionProps> = ({
         
         <div className="space-y-2">
           <h3 className="font-medium text-black flex items-center text-base">
-            <Info className="h-4 w-4 mr-2 text-black" />
+            <Target className="h-4 w-4 mr-2 text-black" />
             Brand Challenge
           </h3>
           <MarkdownBox

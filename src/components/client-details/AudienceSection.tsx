@@ -1,7 +1,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Pencil, Save, Star, Info } from 'lucide-react';
+import { Pencil, Save, Star, Users } from 'lucide-react';
 import { Switch } from '@/components/ui/switch';
 import { MarkdownBox } from './MarkdownBox';
 
@@ -124,7 +124,7 @@ export const AudienceSection: React.FC<AudienceSectionProps> = ({
         
         <div className="space-y-2">
           <h4 className="text-base font-medium text-black flex items-center">
-            <Info className="h-4 w-4 mr-2 text-black" />
+            <Users className="h-4 w-4 mr-2 text-black" />
             Secondary
           </h4>
           <div ref={secondaryRef}>

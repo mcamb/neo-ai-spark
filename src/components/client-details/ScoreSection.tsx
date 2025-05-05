@@ -1,8 +1,9 @@
+
 import React, { useState, useEffect } from 'react';
 import { ScoreBar } from './ScoreBar';
 import { MarkdownBox } from './MarkdownBox';
 import { Button } from '@/components/ui/button';
-import { Pencil, Save, Info } from 'lucide-react';
+import { Pencil, Save, Activity, FileText } from 'lucide-react';
 import { useChannels } from '@/hooks/useChannels';
 import { useToast } from '@/components/ui/use-toast';
 import { supabase } from '@/integrations/supabase/client';
@@ -221,7 +222,7 @@ export const ScoreSection: React.FC<ScoreSectionProps> = ({ socialMediaScores, c
             {selectedRationale && (
               <div className="h-full">
                 <h3 className="text-base font-medium text-black mb-2 flex items-center">
-                  <Info className="h-4 w-4 mr-2 text-black" />
+                  <FileText className="h-4 w-4 mr-2 text-black" />
                   {selectedPlatform} Rationale
                 </h3>
                 <MarkdownBox 
