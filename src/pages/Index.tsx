@@ -15,9 +15,10 @@ const Index = () => {
     navigate('/home');
   };
   
-  return <div className="flex min-h-screen">
+  return (
+    <div className="flex min-h-screen">
       {/* Left side - Login form */}
-      <div className="flex flex-1 items-center justify-center px-4 py-12 sm:px-6 lg:px-8 sign-up">
+      <div className="flex flex-1 items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
         <div className="w-full max-w-sm space-y-8">
           <div className="flex flex-col items-center mb-8">
             <div className="flex items-center gap-2">
@@ -58,15 +59,16 @@ const Index = () => {
         </div>
       </div>
       
-      {/* Right side - Background image only */}
+      {/* Right side - Background image */}
       <div className="hidden lg:block lg:w-1/2">
         <img 
-          src="/lovable-uploads/c2b59a15-d563-4996-958a-b801b324638d.png" 
+          src="/lovable-uploads/defc2a77-e40f-402b-91b4-bf1ea8501a31.png" 
           alt="Background" 
           className="h-full w-full object-cover"
         />
       </div>
-    </div>;
+    </div>
+  );
 };
 
 export default Index;
