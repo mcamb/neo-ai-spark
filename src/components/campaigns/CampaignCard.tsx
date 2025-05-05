@@ -16,6 +16,7 @@ export interface Campaign {
   status: 'active' | 'draft' | 'completed' | 'Idea' | 'Planned' | 'Running' | 'Finished';
   logo?: string;
   agent_status?: string;
+  created_at?: string; // Adding created_at for sorting
 }
 
 interface CampaignCardProps {
@@ -25,6 +26,8 @@ interface CampaignCardProps {
 }
 
 const CampaignCard: React.FC<CampaignCardProps> = ({ campaign, onDelete, onEdit }) => {
+  const isDisabled = campaign.agent_status === 'in_progress';
+  
   return (
     <Card className="overflow-hidden border border-[#E8E5DE] bg-white rounded-lg shadow-[0_2px_8px_rgba(0,0,0,0.05)] transition-shadow hover:shadow-[0_4px_12px_rgba(0,0,0,0.1)]">
       <CardContent className="p-4">
@@ -65,23 +68,30 @@ const CampaignCard: React.FC<CampaignCardProps> = ({ campaign, onDelete, onEdit 
             
             <div className="flex items-center gap-2">
               <Link to={`/campaigns/${campaign.id}`}>
-                <Button variant="ghost" size="icon" className="hover:bg-gray-100">
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className={`hover:bg-gray-100 ${isDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  disabled={isDisabled}
+                >
                   <Eye className="h-4 w-4" />
                 </Button>
               </Link>
               <Button 
                 variant="ghost" 
                 size="icon" 
-                className="hover:bg-gray-100"
+                className={`hover:bg-gray-100 ${isDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
                 onClick={() => onEdit(campaign.id)}
+                disabled={isDisabled}
               >
                 <Pencil className="h-4 w-4" />
               </Button>
               <Button 
                 variant="ghost" 
                 size="icon"
-                className="hover:bg-gray-100"
+                className={`hover:bg-gray-100 ${isDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
                 onClick={() => onDelete(campaign.id)}
+                disabled={isDisabled}
               >
                 <Trash2 className="h-4 w-4" />
               </Button>

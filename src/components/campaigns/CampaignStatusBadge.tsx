@@ -8,7 +8,7 @@ interface CampaignStatusBadgeProps {
 }
 
 const CampaignStatusBadge: React.FC<CampaignStatusBadgeProps> = ({ status }) => {
-  // Using consistent styling with #E8E5DE background and black text
+  // Always use #E8E5DE background with black text for campaign status
   return (
     <Badge 
       variant="outline"

@@ -5,7 +5,7 @@ import CampaignsHeader from '@/components/campaigns/CampaignsHeader';
 import CampaignsToolbar from '@/components/campaigns/CampaignsToolbar';
 import CampaignsContent from '@/components/campaigns/CampaignsContent';
 import { toast } from 'sonner';
-import { useCampaigns } from '@/hooks/useCampaigns';
+import { useCampaigns, deleteCampaign } from '@/hooks/useCampaigns';
 import NewCampaignModal from '@/components/campaigns/NewCampaignModal';
 import EditCampaignModal from '@/components/campaigns/EditCampaignModal';
 
@@ -14,6 +14,7 @@ const Campaigns = () => {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedCampaignId, setSelectedCampaignId] = useState<string | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
   
   const { 
     campaigns, 
@@ -41,14 +42,31 @@ const Campaigns = () => {
   };
   
   // Function for deleting a campaign
-  const handleDeleteCampaign = (id: string) => {
-    toast.success(`Campaign ${id} would be deleted in a real app.`);
+  const handleDeleteCampaign = async (id: string) => {
+    try {
+      setIsDeleting(true);
+      const { success, error } = await deleteCampaign(id);
+      
+      if (success) {
+        toast.success('Campaign deleted successfully');
+        refetch();
+      } else {
+        toast.error(`Error deleting campaign: ${error}`);
+      }
+    } catch (error) {
+      toast.error(`Error deleting campaign: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    } finally {
+      setIsDeleting(false);
+    }
   };
   
   const handleSubmit = () => {
     refetch();
     toast.success('Campaign updated successfully');
   };
+  
+  // Combine loading states for better UX
+  const isPageLoading = isLoading || isDeleting;
   
   return (
     <MainLayout>
@@ -62,12 +80,12 @@ const Campaigns = () => {
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}
           onAddCampaign={handleOpenAddModal}
-          isDisabled={isLoading}
+          isDisabled={isPageLoading}
         />
         
         <CampaignsContent 
           campaigns={campaigns}
-          isLoading={isLoading}
+          isLoading={isPageLoading}
           error={error}
           searchQuery={searchQuery}
           onDeleteCampaign={handleDeleteCampaign}
