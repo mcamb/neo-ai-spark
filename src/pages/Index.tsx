@@ -61,7 +61,7 @@ const Index = () => {
       {/* Right side - Background image only */}
       <div className="hidden lg:block lg:w-1/2">
         <img 
-          src="/lovable-uploads/0eed3130-85d5-49de-a1cf-356955707488.png" 
+          src="/lovable-uploads/c2b59a15-d563-4996-958a-b801b324638d.png" 
           alt="Background" 
           className="h-full w-full object-cover"
         />
