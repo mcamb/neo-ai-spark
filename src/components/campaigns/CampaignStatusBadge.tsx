@@ -12,7 +12,7 @@ const CampaignStatusBadge: React.FC<CampaignStatusBadgeProps> = ({ status }) => 
   return (
     <Badge 
       variant="outline"
-      className="flex items-center gap-1 px-2 py-1 bg-[#E8E5DE] text-black hover:bg-[#D8D5CE] border-0"
+      className="inline-flex items-center gap-1 px-2 py-1 bg-[#E8E5DE] text-black hover:bg-[#D8D5CE] border-0 whitespace-nowrap"
     >
       {status === 'active' || status === 'Running' ? (
         <>

@@ -52,14 +52,14 @@ export const CampaignAudienceSection: React.FC<CampaignAudienceSectionProps> = (
       <div className="grid md:grid-cols-2 gap-8">
         <div>
           <h3 className="text-md font-semibold mb-3 flex items-center">
-            <User className="h-4 w-4 mr-2" />
+            <User className="h-4 w-4 mr-2 text-[#FF4B4F]" />
             People we talk to
           </h3>
           <MarkdownBox 
             isEditing={isEditing}
             onEdit={setEditedAudienceSummary}
             value={editedAudienceSummary}
-            style={{ backgroundColor: "#E8E5DE", minHeight: "200px" }}
+            style={{ backgroundColor: isEditing ? "#FFFFFF" : "#E8E5DE", minHeight: "230px" }}
             className="h-full"
           >
             {targetAudienceSummary || "No audience information available."}
@@ -67,8 +67,11 @@ export const CampaignAudienceSection: React.FC<CampaignAudienceSectionProps> = (
         </div>
         
         <div>
-          <h3 className="text-md font-semibold mb-3">Typically look like this.</h3>
-          <div className="bg-gray-100 rounded-lg flex items-center justify-center h-[200px]">
+          <h3 className="text-md font-semibold mb-3 flex items-center">
+            <User className="h-4 w-4 mr-2 text-[#FF4B4F]" />
+            Typically look like this.
+          </h3>
+          <div className="bg-gray-100 rounded-lg flex items-center justify-center h-[230px]">
             <User className="h-20 w-20 text-gray-400" />
           </div>
         </div>

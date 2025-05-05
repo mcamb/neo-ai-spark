@@ -76,7 +76,7 @@ export const CampaignRecommendationsSection: React.FC<CampaignRecommendationsSec
   // Common style for all markdown boxes to maintain consistent height
   const boxStyle = {
     backgroundColor: isEditing ? "#FFFFFF" : "#E8E5DE",
-    minHeight: "180px"
+    minHeight: "230px"
   };
 
   return (
@@ -92,7 +92,7 @@ export const CampaignRecommendationsSection: React.FC<CampaignRecommendationsSec
       <div className="grid md:grid-cols-2 gap-8">
         <div>
           <h3 className="text-md font-semibold mb-3 flex items-center">
-            <MessageCircle className="h-4 w-4 mr-2" />
+            <MessageCircle className="h-4 w-4 mr-2 text-[#FF4B4F]" />
             Message Hook
           </h3>
           <MarkdownBox 
@@ -108,7 +108,7 @@ export const CampaignRecommendationsSection: React.FC<CampaignRecommendationsSec
         
         <div>
           <h3 className="text-md font-semibold mb-3 flex items-center">
-            <Palette className="h-4 w-4 mr-2" />
+            <Palette className="h-4 w-4 mr-2 text-[#FF4B4F]" />
             Tone & Style
           </h3>
           <MarkdownBox 
@@ -127,7 +127,7 @@ export const CampaignRecommendationsSection: React.FC<CampaignRecommendationsSec
       <div className="grid md:grid-cols-2 gap-8">
         <div>
           <h3 className="text-md font-semibold mb-3 flex items-center">
-            <FileText className="h-4 w-4 mr-2" />
+            <FileText className="h-4 w-4 mr-2 text-[#FF4B4F]" />
             Formats
           </h3>
           <MarkdownBox 
@@ -143,7 +143,7 @@ export const CampaignRecommendationsSection: React.FC<CampaignRecommendationsSec
         
         <div>
           <h3 className="text-md font-semibold mb-3 flex items-center">
-            <Target className="h-4 w-4 mr-2" />
+            <Target className="h-4 w-4 mr-2 text-[#FF4B4F]" />
             Targeting
           </h3>
           <MarkdownBox 
@@ -162,7 +162,7 @@ export const CampaignRecommendationsSection: React.FC<CampaignRecommendationsSec
       <div className="grid md:grid-cols-2 gap-8">
         <div>
           <h3 className="text-md font-semibold mb-3 flex items-center">
-            <Users className="h-4 w-4 mr-2" />
+            <Users className="h-4 w-4 mr-2 text-[#FF4B4F]" />
             Creators / Influencers
           </h3>
           <MarkdownBox 
@@ -178,10 +178,10 @@ export const CampaignRecommendationsSection: React.FC<CampaignRecommendationsSec
         
         <div>
           <h3 className="text-md font-semibold mb-3 flex items-center">
-            <Video className="h-4 w-4 mr-2" />
+            <Video className="h-4 w-4 mr-2 text-[#FF4B4F]" />
             #1 Creator Video
           </h3>
-          <div className="bg-gray-100 rounded-lg flex items-center justify-center h-[180px]">
+          <div className="bg-gray-100 rounded-lg flex items-center justify-center h-[230px]">
             <Video className="h-20 w-20 text-gray-400" />
           </div>
         </div>
