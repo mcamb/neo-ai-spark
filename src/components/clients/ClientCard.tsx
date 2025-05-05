@@ -42,10 +42,12 @@ const ClientCard: React.FC<ClientCardProps> = ({ client, countryName, onDelete, 
               )}
             </Avatar>
             <div className="ml-4">
-              <h3 className="font-medium text-lg">{client.brand}</h3>
-              <Badge variant="outline" className="text-xs w-fit mt-1 bg-white text-gray-700 border border-gray-200">
-                {countryName}
-              </Badge>
+              <div className="flex items-center gap-4">
+                <h3 className="font-medium text-lg">{client.brand}</h3>
+                <Badge variant="outline" className="text-xs w-fit bg-white text-gray-700 border border-gray-200">
+                  {countryName}
+                </Badge>
+              </div>
             </div>
           </div>
           
