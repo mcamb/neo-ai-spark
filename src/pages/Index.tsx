@@ -19,14 +19,11 @@ const Index = () => {
       {/* Left side - Login form */}
       <div className="flex flex-1 items-center justify-center px-4 py-12 sm:px-6 lg:px-8 sign-up">
         <div className="w-full max-w-sm space-y-8">
-          <div className="flex flex-col items-center">
+          <div className="flex flex-col items-center mb-8">
             <div className="flex items-center gap-2">
               <LogoIcon />
               <span className="font-semibold text-xl text-neo-black">NEO AI</span>
             </div>
-            <p className="text-center text-sm text-gray-600 py-[10px]">
-              Your Social Media Automation Partner
-            </p>
           </div>
           
           <form className="space-y-6" onSubmit={handleSubmit}>
@@ -65,7 +62,7 @@ const Index = () => {
       <div className="hidden lg:block lg:w-1/2 relative">
         <div className="absolute inset-0 bg-gray-900 opacity-50"></div>
         <div className="absolute inset-0 bg-cover bg-center" style={{
-        backgroundImage: "url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop')"
+        backgroundImage: "url('/lovable-uploads/914650f6-245e-4410-9399-922053b76253.png')"
       }}></div>
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="text-white text-center p-6 backdrop-blur-sm bg-black/30 rounded-lg max-w-md">

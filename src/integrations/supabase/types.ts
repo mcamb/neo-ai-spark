@@ -14,31 +14,46 @@ export type Database = {
           agent_status: string
           channel_id: string | null
           client_id: string | null
+          creators_influencers: string | null
+          formats: string | null
           id: string
+          message_hook: string | null
           objective_id: string | null
           status: string
           target_audience: string | null
+          targeting: string | null
           titel: string
+          tone_style: string | null
         }
         Insert: {
           agent_status?: string
           channel_id?: string | null
           client_id?: string | null
+          creators_influencers?: string | null
+          formats?: string | null
           id?: string
+          message_hook?: string | null
           objective_id?: string | null
           status?: string
           target_audience?: string | null
+          targeting?: string | null
           titel: string
+          tone_style?: string | null
         }
         Update: {
           agent_status?: string
           channel_id?: string | null
           client_id?: string | null
+          creators_influencers?: string | null
+          formats?: string | null
           id?: string
+          message_hook?: string | null
           objective_id?: string | null
           status?: string
           target_audience?: string | null
+          targeting?: string | null
           titel?: string
+          tone_style?: string | null
         }
         Relationships: [
           {
@@ -157,17 +172,17 @@ export type Database = {
         Row: {
           description: string | null
           id: string
-          name: string
+          objective: string
         }
         Insert: {
           description?: string | null
           id?: string
-          name: string
+          objective: string
         }
         Update: {
           description?: string | null
           id?: string
-          name?: string
+          objective?: string
         }
         Relationships: []
       }
@@ -218,7 +233,106 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      campaign_audience_context: {
+        Row: {
+          agent_status: string | null
+          audience_context: string | null
+          brand: string | null
+          brand_challenge: string | null
+          brand_promise: string | null
+          campaign_id: string | null
+          channel: string | null
+          channel_id: string | null
+          client_id: string | null
+          country: string | null
+          creators_influencers: string | null
+          domain: string | null
+          formats: string | null
+          message_hook: string | null
+          objective_id: string | null
+          profile: string | null
+          rationale: string | null
+          status: string | null
+          target_audience: string | null
+          targeting: string | null
+          titel: string | null
+          tone_style: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "campaigns_channel_id_fkey"
+            columns: ["channel_id"]
+            isOneToOne: false
+            referencedRelation: "channels"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "campaigns_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "campaigns_objective_id_fkey"
+            columns: ["objective_id"]
+            isOneToOne: false
+            referencedRelation: "objectives"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      campaign_context_n8n_agents: {
+        Row: {
+          agent_status: string | null
+          audience_context: string | null
+          brand: string | null
+          brand_challenge: string | null
+          brand_promise: string | null
+          campaign_id: string | null
+          channel: string | null
+          channel_id: string | null
+          client_id: string | null
+          country: string | null
+          creators_influencers: string | null
+          domain: string | null
+          formats: string | null
+          message_hook: string | null
+          objective_description: string | null
+          objective_id: string | null
+          objective_name: string | null
+          profile: string | null
+          rationale: string | null
+          status: string | null
+          target_audience: string | null
+          targeting: string | null
+          titel: string | null
+          tone_style: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "campaigns_channel_id_fkey"
+            columns: ["channel_id"]
+            isOneToOne: false
+            referencedRelation: "channels"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "campaigns_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "campaigns_objective_id_fkey"
+            columns: ["objective_id"]
+            isOneToOne: false
+            referencedRelation: "objectives"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Functions: {
       enable_realtime_for_clients: {
