@@ -32,6 +32,9 @@ export const CampaignHeader: React.FC<CampaignHeaderProps> = ({
     day: 'numeric'
   });
   
+  // Convert status to lowercase for CampaignStatusBadge
+  const normalizedStatus = status.toLowerCase() as 'active' | 'draft' | 'completed' | 'idea' | 'planned' | 'running' | 'finished';
+  
   return (
     <>
       {/* Navigation */}
@@ -62,7 +65,7 @@ export const CampaignHeader: React.FC<CampaignHeaderProps> = ({
           <div className="space-y-2">
             <div className="flex items-center gap-2">
               <h1 className="text-3xl font-bold text-black">{title}</h1>
-              <CampaignStatusBadge status={status} />
+              <CampaignStatusBadge status={normalizedStatus} />
             </div>
             
             <div className="flex items-center gap-3">

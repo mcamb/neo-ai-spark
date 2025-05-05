@@ -38,51 +38,53 @@ export const useCampaignDetails = (campaignId: string | undefined) => {
       setIsLoading(true);
       
       try {
-        // Use the campaign_context_n8n_agents view to get all related campaign data
+        // Use the campaigns table and join with clients to get all related campaign data
         const { data, error } = await supabase
-          .from('campaign_context_n8n_agents')
+          .from('campaigns')
           .select(`
-            campaign_id,
+            id,
             titel,
             status,
             agent_status,
             created_at,
             client_id,
-            brand,
-            logo:clients(logo),
-            country,
             target_audience,
             targeting,
             message_hook,
             tone_style,
             formats,
             creators_influencers,
-            brand_promise,
-            brand_challenge
+            clients (
+              brand,
+              logo,
+              brand_promise,
+              brand_challenge,
+              country
+            )
           `)
-          .eq('campaign_id', campaignId)
+          .eq('id', campaignId)
           .single();
 
         if (error) throw error;
 
         if (data) {
           setCampaignDetails({
-            id: data.campaign_id,
+            id: data.id,
             title: data.titel,
             status: data.status,
             agent_status: data.agent_status,
             created_at: data.created_at,
-            clientName: data.brand || 'Unknown Client',
-            clientLogo: data.logo?.logo,
-            country: data.country,
+            clientName: data.clients?.brand || 'Unknown Client',
+            clientLogo: data.clients?.logo,
+            country: data.clients?.country,
             target_audience: data.target_audience,
             targeting: data.targeting,
             message_hook: data.message_hook,
             tone_style: data.tone_style,
             formats: data.formats,
             creators_influencers: data.creators_influencers,
-            brand_promise: data.brand_promise,
-            brand_challenge: data.brand_challenge
+            brand_promise: data.clients?.brand_promise,
+            brand_challenge: data.clients?.brand_challenge
           });
         }
       } catch (err) {
