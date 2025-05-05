@@ -22,12 +22,12 @@ export const MarkdownBox: React.FC<MarkdownBoxProps> = ({
 }) => {
   if (isEditing && onEdit) {
     return (
-      <div className="relative">
+      <div className="relative h-full">
         <Textarea 
-          className="min-h-[120px] w-full border border-gray-300 rounded-lg focus:border-[#FF4B4F] text-black" 
+          className={`min-h-[120px] w-full h-full border border-gray-300 rounded-lg focus:border-[#FF4B4F] text-black ${className || ''}`}
           value={value} 
           onChange={(e) => onEdit(e.target.value)}
-          style={style}
+          style={{...style, height: '100%'}}
         />
         <div className="text-xs text-black mt-1">
           Supports Markdown: **bold**, *italic*, - bullets, 1. numbered lists

@@ -59,7 +59,8 @@ export const CampaignAudienceSection: React.FC<CampaignAudienceSectionProps> = (
             isEditing={isEditing}
             onEdit={setEditedAudienceSummary}
             value={editedAudienceSummary}
-            style={{ backgroundColor: "#E8E5DE" }}
+            style={{ backgroundColor: "#E8E5DE", minHeight: "200px" }}
+            className="h-full"
           >
             {targetAudienceSummary || "No audience information available."}
           </MarkdownBox>
@@ -67,7 +68,7 @@ export const CampaignAudienceSection: React.FC<CampaignAudienceSectionProps> = (
         
         <div>
           <h3 className="text-md font-semibold mb-3">Typically look like this.</h3>
-          <div className="bg-gray-100 aspect-square rounded-lg flex items-center justify-center">
+          <div className="bg-gray-100 rounded-lg flex items-center justify-center h-[200px]">
             <User className="h-20 w-20 text-gray-400" />
           </div>
         </div>

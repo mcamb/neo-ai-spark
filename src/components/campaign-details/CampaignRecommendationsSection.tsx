@@ -73,6 +73,12 @@ export const CampaignRecommendationsSection: React.FC<CampaignRecommendationsSec
     }));
   };
 
+  // Common style for all markdown boxes to maintain consistent height
+  const boxStyle = {
+    backgroundColor: isEditing ? "#FFFFFF" : "#E8E5DE",
+    minHeight: "180px"
+  };
+
   return (
     <div className="space-y-6 p-6 rounded-lg bg-[#FFFFFF]">
       <SectionHeader
@@ -93,7 +99,8 @@ export const CampaignRecommendationsSection: React.FC<CampaignRecommendationsSec
             isEditing={isEditing}
             onEdit={(value) => handleEdit('message_hook', value)}
             value={editedValues.message_hook}
-            style={{ backgroundColor: "#E8E5DE" }}
+            style={boxStyle}
+            className="h-full"
           >
             {message_hook || "No message hook defined for this campaign."}
           </MarkdownBox>
@@ -108,7 +115,8 @@ export const CampaignRecommendationsSection: React.FC<CampaignRecommendationsSec
             isEditing={isEditing}
             onEdit={(value) => handleEdit('tone_style', value)}
             value={editedValues.tone_style}
-            style={{ backgroundColor: "#E8E5DE" }}
+            style={boxStyle}
+            className="h-full"
           >
             {tone_style || "No tone and style recommendations available."}
           </MarkdownBox>
@@ -126,7 +134,8 @@ export const CampaignRecommendationsSection: React.FC<CampaignRecommendationsSec
             isEditing={isEditing}
             onEdit={(value) => handleEdit('formats', value)}
             value={editedValues.formats}
-            style={{ backgroundColor: "#E8E5DE" }}
+            style={boxStyle}
+            className="h-full"
           >
             {formats || "No format recommendations available."}
           </MarkdownBox>
@@ -141,7 +150,8 @@ export const CampaignRecommendationsSection: React.FC<CampaignRecommendationsSec
             isEditing={isEditing}
             onEdit={(value) => handleEdit('targeting', value)}
             value={editedValues.targeting}
-            style={{ backgroundColor: "#E8E5DE" }}
+            style={boxStyle}
+            className="h-full"
           >
             {targeting || "No targeting information available."}
           </MarkdownBox>
@@ -159,7 +169,8 @@ export const CampaignRecommendationsSection: React.FC<CampaignRecommendationsSec
             isEditing={isEditing}
             onEdit={(value) => handleEdit('creators_influencers', value)}
             value={editedValues.creators_influencers}
-            style={{ backgroundColor: "#E8E5DE" }}
+            style={boxStyle}
+            className="h-full"
           >
             {creators_influencers || "No creator or influencer recommendations available."}
           </MarkdownBox>
@@ -170,7 +181,7 @@ export const CampaignRecommendationsSection: React.FC<CampaignRecommendationsSec
             <Video className="h-4 w-4 mr-2" />
             #1 Creator Video
           </h3>
-          <div className="bg-gray-100 aspect-square rounded-lg flex items-center justify-center">
+          <div className="bg-gray-100 rounded-lg flex items-center justify-center h-[180px]">
             <Video className="h-20 w-20 text-gray-400" />
           </div>
         </div>
