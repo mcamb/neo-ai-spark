@@ -41,12 +41,12 @@ export const MarkdownBox: React.FC<MarkdownBoxProps> = ({
   const boxStyle = darkMode && !isEditing
     ? { 
         backgroundColor: "#363636",
-        color: "#FFFFFF",
+        color: "#000000", // Changed from #FFFFFF to #000000
         ...style
       }
     : style;
 
-  const boxClassName = `p-5 border border-gray-200 rounded-lg prose max-w-none ${darkMode && !isEditing ? 'prose-invert bg-[#363636] text-white' : 'bg-white prose-black'} ${className || ''}`;
+  const boxClassName = `p-5 border border-gray-200 rounded-lg prose max-w-none ${darkMode && !isEditing ? 'prose-invert bg-[#363636] text-black' : 'bg-white prose-black'} ${className || ''}`;
 
   return (
     <div 
