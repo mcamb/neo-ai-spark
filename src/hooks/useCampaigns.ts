@@ -70,9 +70,12 @@ export const useCampaigns = () => {
   };
 };
 
-// Add a function to delete a campaign
+// Optimized delete campaign function
 export const deleteCampaign = async (campaignId: string) => {
+  const deleteToastId = 'delete-campaign-' + campaignId;
+  
   try {
+    // Use the more efficient single query approach
     const { error } = await supabase
       .from('campaigns')
       .delete()

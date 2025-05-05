@@ -5,16 +5,17 @@ import CampaignsHeader from '@/components/campaigns/CampaignsHeader';
 import CampaignsToolbar from '@/components/campaigns/CampaignsToolbar';
 import CampaignsContent from '@/components/campaigns/CampaignsContent';
 import { toast } from 'sonner';
-import { useCampaigns, deleteCampaign } from '@/hooks/useCampaigns';
+import { useCampaigns } from '@/hooks/useCampaigns';
 import NewCampaignModal from '@/components/campaigns/NewCampaignModal';
 import EditCampaignModal from '@/components/campaigns/EditCampaignModal';
+import DeleteCampaignDialog from '@/components/campaigns/DeleteCampaignDialog';
+import { useCampaignDeletion } from '@/hooks/useCampaignDeletion';
 
 const Campaigns = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedCampaignId, setSelectedCampaignId] = useState<string | null>(null);
-  const [isDeleting, setIsDeleting] = useState(false);
   
   const { 
     campaigns, 
@@ -22,6 +23,15 @@ const Campaigns = () => {
     error, 
     refetch 
   } = useCampaigns();
+  
+  // Use the campaign deletion hook
+  const {
+    isDeleting,
+    deleteDialogOpen,
+    setDeleteDialogOpen,
+    handleDeletePrompt,
+    handleDeleteCampaign
+  } = useCampaignDeletion({ refetch });
   
   const handleOpenAddModal = () => {
     setIsAddModalOpen(true);
@@ -39,25 +49,6 @@ const Campaigns = () => {
   const handleCloseEditModal = () => {
     setIsEditModalOpen(false);
     setSelectedCampaignId(null);
-  };
-  
-  // Function for deleting a campaign
-  const handleDeleteCampaign = async (id: string) => {
-    try {
-      setIsDeleting(true);
-      const { success, error } = await deleteCampaign(id);
-      
-      if (success) {
-        toast.success('Campaign deleted successfully');
-        refetch();
-      } else {
-        toast.error(`Error deleting campaign: ${error}`);
-      }
-    } catch (error) {
-      toast.error(`Error deleting campaign: ${error instanceof Error ? error.message : 'Unknown error'}`);
-    } finally {
-      setIsDeleting(false);
-    }
   };
   
   const handleSubmit = () => {
@@ -88,7 +79,7 @@ const Campaigns = () => {
           isLoading={isPageLoading}
           error={error}
           searchQuery={searchQuery}
-          onDeleteCampaign={handleDeleteCampaign}
+          onDeleteCampaign={handleDeletePrompt}
           onEditCampaign={handleOpenEditModal}
           refetch={refetch}
         />
@@ -107,6 +98,13 @@ const Campaigns = () => {
             onSubmit={handleSubmit}
           />
         )}
+
+        <DeleteCampaignDialog
+          open={deleteDialogOpen}
+          onOpenChange={setDeleteDialogOpen}
+          onDelete={handleDeleteCampaign}
+          isDeleting={isDeleting}
+        />
       </div>
     </MainLayout>
   );
