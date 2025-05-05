@@ -41,7 +41,7 @@ export const MarkdownBox: React.FC<MarkdownBoxProps> = ({
   const boxStyle = darkMode && !isEditing
     ? { 
         backgroundColor: "#363636",
-        color: "#000000", // Changed from #FFFFFF to #000000
+        color: "#000000",
         ...style
       }
     : style;
@@ -53,7 +53,7 @@ export const MarkdownBox: React.FC<MarkdownBoxProps> = ({
       className={boxClassName}
       style={boxStyle}
     >
-      <ReactMarkdown>
+      <ReactMarkdown className="prose-headings:font-bold prose-headings:text-black prose-p:text-black prose-li:text-black prose-strong:text-black prose-em:text-black">
         {typeof children === 'string' ? children : ''}
       </ReactMarkdown>
     </div>
