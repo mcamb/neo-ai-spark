@@ -12,7 +12,7 @@ const ClientStatusBadge: React.FC<ClientStatusBadgeProps> = ({ status }) => {
     <Badge 
       variant={status === 'ready' ? 'default' : 'outline'}
       className={`flex items-center gap-1 px-2 py-1 ${
-        status === 'ready' ? 'bg-green-600 text-white hover:bg-green-700' : 'bg-amber-500 text-white hover:bg-amber-600'
+        status === 'ready' ? 'bg-[#94C29D] text-white hover:bg-[#85b38e]' : 'bg-[#FF4B4F] text-white hover:bg-[#e6444a]'
       } border-0`}
     >
       {status === 'ready' ? (

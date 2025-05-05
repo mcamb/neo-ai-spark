@@ -146,7 +146,6 @@ const NewClientModal: React.FC<NewClientModalProps> = ({
   const [brand, setBrand] = useState('');
   const [countryId, setCountryId] = useState('');
   const [domain, setDomain] = useState('');
-  const [logo, setLogo] = useState('');
   const [isAddingCountry, setIsAddingCountry] = useState(false);
   const [isCreatingCountry, setIsCreatingCountry] = useState(false);
 
@@ -194,8 +193,7 @@ const NewClientModal: React.FC<NewClientModalProps> = ({
       const clientData = {
         brand,
         domain,
-        country_id: countryId,
-        logo: logo || null
+        country_id: countryId
       };
       
       // Submit to parent component
@@ -205,7 +203,6 @@ const NewClientModal: React.FC<NewClientModalProps> = ({
       setBrand('');
       setCountryId('');
       setDomain('');
-      setLogo('');
       
     } catch (error: any) {
       console.error("Error handling form submission:", error);
@@ -254,18 +251,18 @@ const NewClientModal: React.FC<NewClientModalProps> = ({
           <SheetHeader className="mb-6">
             <SheetTitle>New Client</SheetTitle>
             <SheetDescription>
-              Add a new client to manage their social media presence.
+              Please follow the instructions.
             </SheetDescription>
           </SheetHeader>
           
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
-              <Label htmlFor="brand">Client Brand *</Label>
+              <Label htmlFor="brand">Brand *</Label>
               <Input 
                 id="brand"
                 value={brand} 
                 onChange={(e) => setBrand(e.target.value)} 
-                placeholder="Acme Inc."
+                placeholder="Provide one simple brand term, such as BMW"
                 required
               />
             </div>
@@ -326,18 +323,8 @@ const NewClientModal: React.FC<NewClientModalProps> = ({
                 id="domain"
                 value={domain} 
                 onChange={(e) => setDomain(e.target.value)} 
-                placeholder="example.com"
+                placeholder="Copy - paste the full URL, example: https://www.bmw.de"
                 required
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="logo">Logo URL (Optional)</Label>
-              <Input 
-                id="logo"
-                value={logo} 
-                onChange={(e) => setLogo(e.target.value)} 
-                placeholder="https://example.com/logo.png"
               />
             </div>
             

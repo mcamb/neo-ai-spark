@@ -81,7 +81,7 @@ const Clients = () => {
       <div className="space-y-6">
         <ClientsHeader 
           title="Clients" 
-          description="View your client accounts."
+          description="Select your client or create a new one. It takes about 2 minutes until the details are ready."
         />
         
         <ClientsToolbar
