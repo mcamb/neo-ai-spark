@@ -41,7 +41,7 @@ export const CampaignAudienceSection: React.FC<CampaignAudienceSectionProps> = (
   };
 
   return (
-    <div className="space-y-6 p-6 rounded-lg bg-[#FFFFFF]">
+    <div className="space-y-8 p-8 rounded-lg bg-[#FFFFFF]">
       <SectionHeader
         title="Audience Snapshot"
         isEditing={isEditing}
@@ -49,9 +49,9 @@ export const CampaignAudienceSection: React.FC<CampaignAudienceSectionProps> = (
         onSave={handleSaveEdits}
       />
       
-      <div className="grid md:grid-cols-2 gap-8">
-        <div>
-          <h3 className="text-md font-semibold mb-3 flex items-center">
+      <div className="grid md:grid-cols-2 gap-12">
+        <div className="flex flex-col">
+          <h3 className="text-md font-semibold mb-4 flex items-center">
             <User className="h-4 w-4 mr-2 text-[#FF4B4F]" />
             People we talk to
           </h3>
@@ -66,8 +66,8 @@ export const CampaignAudienceSection: React.FC<CampaignAudienceSectionProps> = (
           </MarkdownBox>
         </div>
         
-        <div>
-          <h3 className="text-md font-semibold mb-3 flex items-center">
+        <div className="flex flex-col">
+          <h3 className="text-md font-semibold mb-4 flex items-center">
             <User className="h-4 w-4 mr-2 text-[#FF4B4F]" />
             Typically look like this.
           </h3>
@@ -79,3 +79,4 @@ export const CampaignAudienceSection: React.FC<CampaignAudienceSectionProps> = (
     </div>
   );
 };
+

@@ -80,7 +80,7 @@ export const CampaignRecommendationsSection: React.FC<CampaignRecommendationsSec
   };
 
   return (
-    <div className="space-y-8 p-6 rounded-lg bg-[#FFFFFF]">
+    <div className="space-y-12 p-8 rounded-lg bg-[#FFFFFF]">
       <SectionHeader
         title="Recommendations"
         isEditing={isEditing}
@@ -88,9 +88,9 @@ export const CampaignRecommendationsSection: React.FC<CampaignRecommendationsSec
         onSave={handleSaveEdits}
       />
       
-      {/* First row - Added more spacing with gap-12 */}
+      {/* First row - Message Hook & Tone Style */}
       <div className="grid md:grid-cols-2 gap-12">
-        <div>
+        <div className="flex flex-col">
           <h3 className="text-md font-semibold mb-4 flex items-center">
             <MessageCircle className="h-4 w-4 mr-2 text-[#FF4B4F]" />
             Message Hook
@@ -106,7 +106,7 @@ export const CampaignRecommendationsSection: React.FC<CampaignRecommendationsSec
           </MarkdownBox>
         </div>
         
-        <div>
+        <div className="flex flex-col">
           <h3 className="text-md font-semibold mb-4 flex items-center">
             <Palette className="h-4 w-4 mr-2 text-[#FF4B4F]" />
             Tone & Style
@@ -123,9 +123,9 @@ export const CampaignRecommendationsSection: React.FC<CampaignRecommendationsSec
         </div>
       </div>
       
-      {/* Second row - Added more spacing with gap-12 and mt-8 */}
-      <div className="grid md:grid-cols-2 gap-12 mt-8">
-        <div>
+      {/* Second row - Formats & Targeting with significant vertical spacing */}
+      <div className="grid md:grid-cols-2 gap-12 pt-6">
+        <div className="flex flex-col">
           <h3 className="text-md font-semibold mb-4 flex items-center">
             <FileText className="h-4 w-4 mr-2 text-[#FF4B4F]" />
             Formats
@@ -141,7 +141,7 @@ export const CampaignRecommendationsSection: React.FC<CampaignRecommendationsSec
           </MarkdownBox>
         </div>
         
-        <div>
+        <div className="flex flex-col">
           <h3 className="text-md font-semibold mb-4 flex items-center">
             <Target className="h-4 w-4 mr-2 text-[#FF4B4F]" />
             Targeting
@@ -158,9 +158,9 @@ export const CampaignRecommendationsSection: React.FC<CampaignRecommendationsSec
         </div>
       </div>
       
-      {/* Third row - Added more spacing with gap-12 and mt-8 */}
-      <div className="grid md:grid-cols-2 gap-12 mt-8">
-        <div>
+      {/* Third row - Creators & Video with significant vertical spacing */}
+      <div className="grid md:grid-cols-2 gap-12 pt-6">
+        <div className="flex flex-col">
           <h3 className="text-md font-semibold mb-4 flex items-center">
             <Users className="h-4 w-4 mr-2 text-[#FF4B4F]" />
             Creators / Influencers
@@ -176,7 +176,7 @@ export const CampaignRecommendationsSection: React.FC<CampaignRecommendationsSec
           </MarkdownBox>
         </div>
         
-        <div>
+        <div className="flex flex-col">
           <h3 className="text-md font-semibold mb-4 flex items-center">
             <Video className="h-4 w-4 mr-2 text-[#FF4B4F]" />
             #1 Creator Video
@@ -189,3 +189,4 @@ export const CampaignRecommendationsSection: React.FC<CampaignRecommendationsSec
     </div>
   );
 };
+
