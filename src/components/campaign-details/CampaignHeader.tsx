@@ -55,7 +55,7 @@ export const CampaignHeader: React.FC<CampaignHeaderProps> = ({
             </div>
             
             <div className="flex items-center gap-3">
-              <span className="text-sm text-[#FF4B4F]">
+              <span className="text-sm text-black">
                 {clientName}{country ? ` - ${country}` : ''}
               </span>
             </div>
