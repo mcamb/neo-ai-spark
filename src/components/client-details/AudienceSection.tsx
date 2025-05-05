@@ -1,7 +1,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Pencil, Save } from 'lucide-react';
+import { Pencil, Save, Star, Info } from 'lucide-react';
 import { Switch } from '@/components/ui/switch';
 import { MarkdownBox } from './MarkdownBox';
 
@@ -65,7 +65,7 @@ export const AudienceSection: React.FC<AudienceSectionProps> = ({
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-xl font-semibold text-black relative pb-2">
           Target Audience
-          <span className="absolute bottom-0 left-0 w-16 h-1 bg-[#FF4B4F]"></span>
+          <span className="absolute bottom-0 left-0 h-1 bg-[#FF4B4F]" style={{ width: '100%' }}></span>
         </h2>
         <Button 
           variant="ghost" 
@@ -101,7 +101,10 @@ export const AudienceSection: React.FC<AudienceSectionProps> = ({
       {/* Show selected audience type */}
       <div className="grid md:grid-cols-2 gap-6">
         <div className="space-y-2">
-          <h4 className="text-sm font-medium text-black">Primary</h4>
+          <h4 className="text-base font-medium text-black flex items-center">
+            <Star className="h-4 w-4 mr-2 text-black" />
+            Primary
+          </h4>
           <div ref={primaryRef}>
             <MarkdownBox
               isEditing={isEditing}
@@ -120,7 +123,10 @@ export const AudienceSection: React.FC<AudienceSectionProps> = ({
         </div>
         
         <div className="space-y-2">
-          <h4 className="text-sm font-medium text-black">Secondary</h4>
+          <h4 className="text-base font-medium text-black flex items-center">
+            <Info className="h-4 w-4 mr-2 text-black" />
+            Secondary
+          </h4>
           <div ref={secondaryRef}>
             <MarkdownBox
               isEditing={isEditing}

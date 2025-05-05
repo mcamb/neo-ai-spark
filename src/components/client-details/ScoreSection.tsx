@@ -1,9 +1,8 @@
-
 import React, { useState, useEffect } from 'react';
 import { ScoreBar } from './ScoreBar';
 import { MarkdownBox } from './MarkdownBox';
 import { Button } from '@/components/ui/button';
-import { Pencil, Save } from 'lucide-react';
+import { Pencil, Save, Info } from 'lucide-react';
 import { useChannels } from '@/hooks/useChannels';
 import { useToast } from '@/components/ui/use-toast';
 import { supabase } from '@/integrations/supabase/client';
@@ -151,7 +150,7 @@ export const ScoreSection: React.FC<ScoreSectionProps> = ({ socialMediaScores, c
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-semibold text-black relative pb-2">
             Relevance Score
-            <span className="absolute bottom-0 left-0 w-16 h-1 bg-[#FF4B4F]"></span>
+            <span className="absolute bottom-0 left-0 h-1 bg-[#FF4B4F]" style={{ width: '100%' }}></span>
           </h2>
           
           <Button 
@@ -181,7 +180,7 @@ export const ScoreSection: React.FC<ScoreSectionProps> = ({ socialMediaScores, c
                 {editedScores.map((item) => (
                   <div key={item.platform} className="space-y-2">
                     <div className="flex justify-between mb-1">
-                      <span className="text-sm font-medium text-black">{item.platform}</span>
+                      <span className="text-base font-medium text-black">{item.platform}</span>
                       <div className="flex items-center">
                         <input
                           type="number"
@@ -221,7 +220,10 @@ export const ScoreSection: React.FC<ScoreSectionProps> = ({ socialMediaScores, c
           <div className="h-full">
             {selectedRationale && (
               <div className="h-full">
-                <h3 className="text-base font-medium text-black mb-2">{selectedPlatform} Rationale</h3>
+                <h3 className="text-base font-medium text-black mb-2 flex items-center">
+                  <Info className="h-4 w-4 mr-2 text-black" />
+                  {selectedPlatform} Rationale
+                </h3>
                 <MarkdownBox 
                   isEditing={isEditing}
                   onEdit={handleRationaleChange}

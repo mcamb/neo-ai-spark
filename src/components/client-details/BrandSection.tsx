@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Pencil, Save } from 'lucide-react';
+import { Pencil, Save, Info, Tag } from 'lucide-react';
 import { MarkdownBox } from './MarkdownBox';
 
 interface BrandSectionProps {
@@ -32,7 +32,7 @@ export const BrandSection: React.FC<BrandSectionProps> = ({
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-xl font-semibold text-black relative pb-2">
           Brand
-          <span className="absolute bottom-0 left-0 w-16 h-1 bg-[#FF4B4F]"></span>
+          <span className="absolute bottom-0 left-0 h-1 bg-[#FF4B4F]" style={{ width: '100%' }}></span>
         </h2>
         <Button 
           variant="ghost" 
@@ -56,7 +56,10 @@ export const BrandSection: React.FC<BrandSectionProps> = ({
       
       <div className="grid md:grid-cols-2 gap-6">
         <div className="space-y-2">
-          <h3 className="font-medium text-black">Brand Promise</h3>
+          <h3 className="font-medium text-black flex items-center text-base">
+            <Tag className="h-4 w-4 mr-2 text-black" />
+            Brand Promise
+          </h3>
           <MarkdownBox 
             isEditing={isEditing}
             onEdit={onEditBrandPromise}
@@ -68,7 +71,10 @@ export const BrandSection: React.FC<BrandSectionProps> = ({
         </div>
         
         <div className="space-y-2">
-          <h3 className="font-medium text-black">Brand Challenge</h3>
+          <h3 className="font-medium text-black flex items-center text-base">
+            <Info className="h-4 w-4 mr-2 text-black" />
+            Brand Challenge
+          </h3>
           <MarkdownBox
             isEditing={isEditing}
             onEdit={onEditBrandChallenge}
