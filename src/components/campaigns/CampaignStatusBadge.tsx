@@ -4,35 +4,30 @@ import { Badge } from '@/components/ui/badge';
 import { Check, Clock } from 'lucide-react';
 
 interface CampaignStatusBadgeProps {
-  status: 'active' | 'draft' | 'completed';
+  status: 'active' | 'draft' | 'completed' | 'Idea' | 'Planned' | 'Running' | 'Finished';
 }
 
 const CampaignStatusBadge: React.FC<CampaignStatusBadgeProps> = ({ status }) => {
+  // Using consistent styling with #E8E5DE background and black text
   return (
     <Badge 
-      variant={status === 'active' ? 'default' : 'outline'}
-      className={`flex items-center gap-1 px-2 py-1 ${
-        status === 'active' 
-          ? 'bg-green-600 text-white hover:bg-green-700' 
-          : status === 'draft' 
-            ? 'bg-amber-500 text-white hover:bg-amber-600'
-            : 'bg-gray-500 text-white hover:bg-gray-600'
-      } border-0`}
+      variant="outline"
+      className="flex items-center gap-1 px-2 py-1 bg-[#E8E5DE] text-black hover:bg-[#D8D5CE] border-0"
     >
-      {status === 'active' ? (
+      {status === 'active' || status === 'Running' ? (
         <>
           <Check className="w-3 h-3" />
-          <span>Active</span>
+          <span>{status}</span>
         </>
-      ) : status === 'draft' ? (
+      ) : status === 'draft' || status === 'Idea' || status === 'Planned' ? (
         <>
           <Clock className="w-3 h-3" />
-          <span>Draft</span>
+          <span>{status}</span>
         </>
       ) : (
         <>
           <Check className="w-3 h-3" />
-          <span>Completed</span>
+          <span>{status}</span>
         </>
       )}
     </Badge>

@@ -6,9 +6,14 @@ import CampaignsToolbar from '@/components/campaigns/CampaignsToolbar';
 import CampaignsContent from '@/components/campaigns/CampaignsContent';
 import { toast } from 'sonner';
 import { useCampaigns } from '@/hooks/useCampaigns';
+import NewCampaignModal from '@/components/campaigns/NewCampaignModal';
+import EditCampaignModal from '@/components/campaigns/EditCampaignModal';
 
 const Campaigns = () => {
   const [searchQuery, setSearchQuery] = useState('');
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [selectedCampaignId, setSelectedCampaignId] = useState<string | null>(null);
   
   const { 
     campaigns, 
@@ -17,19 +22,32 @@ const Campaigns = () => {
     refetch 
   } = useCampaigns();
   
-  // Mock function for adding a new campaign
   const handleOpenAddModal = () => {
-    toast.info("Add Campaign functionality will be implemented in the future.");
+    setIsAddModalOpen(true);
   };
   
-  // Mock function for deleting a campaign
+  const handleCloseAddModal = () => {
+    setIsAddModalOpen(false);
+  };
+  
+  const handleOpenEditModal = (id: string) => {
+    setSelectedCampaignId(id);
+    setIsEditModalOpen(true);
+  };
+  
+  const handleCloseEditModal = () => {
+    setIsEditModalOpen(false);
+    setSelectedCampaignId(null);
+  };
+  
+  // Function for deleting a campaign
   const handleDeleteCampaign = (id: string) => {
     toast.success(`Campaign ${id} would be deleted in a real app.`);
   };
   
-  // Mock function for editing a campaign
-  const handleEditCampaign = (id: string) => {
-    toast.info(`Editing Campaign ${id} would open an edit modal in a real app.`);
+  const handleSubmit = () => {
+    refetch();
+    toast.success('Campaign updated successfully');
   };
   
   return (
@@ -37,7 +55,7 @@ const Campaigns = () => {
       <div className="space-y-8">
         <CampaignsHeader 
           title="Campaigns" 
-          description="Create and manage your social media campaigns here."
+          description="Select your campaign or create a new one. It takes about 1 minute until the details are ready."
         />
         
         <CampaignsToolbar
@@ -53,9 +71,24 @@ const Campaigns = () => {
           error={error}
           searchQuery={searchQuery}
           onDeleteCampaign={handleDeleteCampaign}
-          onEditCampaign={handleEditCampaign}
+          onEditCampaign={handleOpenEditModal}
           refetch={refetch}
         />
+        
+        <NewCampaignModal 
+          isOpen={isAddModalOpen} 
+          onClose={handleCloseAddModal} 
+          onSubmit={handleSubmit}
+        />
+        
+        {selectedCampaignId && (
+          <EditCampaignModal
+            isOpen={isEditModalOpen}
+            onClose={handleCloseEditModal}
+            campaignId={selectedCampaignId}
+            onSubmit={handleSubmit}
+          />
+        )}
       </div>
     </MainLayout>
   );

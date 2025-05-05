@@ -5,7 +5,6 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Eye, Pencil, Trash2 } from 'lucide-react';
 import CampaignStatusBadge from './CampaignStatusBadge';
 import { Link } from 'react-router-dom';
-import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import ClientStatusBadge from '../clients/ClientStatusBadge';
 
@@ -14,7 +13,7 @@ export interface Campaign {
   title: string;
   clientName: string;
   country: string;
-  status: 'active' | 'draft' | 'completed';
+  status: 'active' | 'draft' | 'completed' | 'Idea' | 'Planned' | 'Running' | 'Finished';
   logo?: string;
   agent_status?: string;
 }
@@ -49,16 +48,17 @@ const CampaignCard: React.FC<CampaignCardProps> = ({ campaign, onDelete, onEdit 
               )}
             </Avatar>
             <div className="ml-4">
-              <h3 className="font-medium text-lg">{campaign.title}</h3>
-              <div className="mt-1 text-sm text-gray-600">
+              <div className="flex items-center gap-3">
+                <h3 className="font-medium text-lg">{campaign.title}</h3>
+                <CampaignStatusBadge status={campaign.status} />
+              </div>
+              <div className="text-sm text-gray-600 mt-0.5">
                 {campaign.clientName} - {campaign.country}
               </div>
             </div>
           </div>
           
           <div className="flex items-center gap-4">
-            <CampaignStatusBadge status={campaign.status} />
-            
             {campaign.agent_status && (
               <ClientStatusBadge status={campaign.agent_status as 'ready' | 'in_progress'} />
             )}
