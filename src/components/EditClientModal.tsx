@@ -10,22 +10,10 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { 
-  Select, 
-  SelectContent, 
-  SelectItem, 
-  SelectTrigger, 
-  SelectValue 
-} from '@/components/ui/select';
 import { useToast } from '@/components/ui/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { useQuery } from '@tanstack/react-query';
 import { Loader, AlertTriangle } from 'lucide-react';
-
-interface CountryOption {
-  id: string;
-  country: string;
-}
 
 interface EditClientModalProps {
   isOpen: boolean;
@@ -33,20 +21,6 @@ interface EditClientModalProps {
   clientId: string;
   onSubmit: () => void;
 }
-
-const fetchCountries = async (): Promise<CountryOption[]> => {
-  const { data, error } = await supabase
-    .from('countries')
-    .select('id, country')
-    .order('country');
-
-  if (error) {
-    console.error("Error fetching countries:", error);
-    throw new Error(error.message);
-  }
-
-  return data || [];
-};
 
 const fetchClient = async (clientId: string) => {
   const { data, error } = await supabase
@@ -71,20 +45,8 @@ const EditClientModal: React.FC<EditClientModalProps> = ({
 }) => {
   const { toast } = useToast();
   const [brand, setBrand] = useState('');
-  const [countryId, setCountryId] = useState('');
-  const [domain, setDomain] = useState('');
   const [logo, setLogo] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  // Fetch countries
-  const { 
-    data: countries = [], 
-    isLoading: isLoadingCountries,
-    error: countriesError
-  } = useQuery({
-    queryKey: ['countries'],
-    queryFn: fetchCountries
-  });
 
   // Fetch client data
   const { 
@@ -101,22 +63,12 @@ const EditClientModal: React.FC<EditClientModalProps> = ({
   useEffect(() => {
     if (client) {
       setBrand(client.brand || '');
-      setCountryId(client.country_id || '');
-      setDomain(client.domain || '');
       setLogo(client.logo || '');
     }
   }, [client]);
 
   // Log any errors
   useEffect(() => {
-    if (countriesError) {
-      toast({
-        title: "Error loading countries",
-        description: `${countriesError instanceof Error ? countriesError.message : 'Unknown error'}`,
-        variant: "destructive"
-      });
-    }
-
     if (clientError) {
       toast({
         title: "Error loading client",
@@ -124,15 +76,15 @@ const EditClientModal: React.FC<EditClientModalProps> = ({
         variant: "destructive"
       });
     }
-  }, [countriesError, clientError, toast]);
+  }, [clientError, toast]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!brand || !countryId || !domain) {
+    if (!brand) {
       toast({
         title: "Error",
-        description: "Please fill in all required fields",
+        description: "Please fill in the brand field",
         variant: "destructive"
       });
       return;
@@ -141,13 +93,11 @@ const EditClientModal: React.FC<EditClientModalProps> = ({
     setIsSubmitting(true);
     
     try {
-      // Update the client in the database
+      // Update the client in the database, but only brand and logo
       const { error } = await supabase
         .from('clients')
         .update({
           brand,
-          domain,
-          country_id: countryId,
           logo: logo || null
         })
         .eq('id', clientId);
@@ -199,57 +149,20 @@ const EditClientModal: React.FC<EditClientModalProps> = ({
         ) : (
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
-              <Label htmlFor="brand">Client Brand *</Label>
+              <Label htmlFor="brand">Brand *</Label>
               <Input 
                 id="brand"
                 value={brand} 
                 onChange={(e) => setBrand(e.target.value)} 
-                placeholder="Acme Inc."
                 required
               />
-            </div>
-            
-            <div className="space-y-2">
-              <Label htmlFor="country">Country *</Label>
-              {isLoadingCountries ? (
-                <div className="flex items-center gap-2">
-                  <Loader className="h-4 w-4 animate-spin" />
-                  <span className="text-sm text-gray-500">Loading countries...</span>
-                </div>
-              ) : countriesError ? (
-                <div className="flex items-center gap-2 text-red-500">
-                  <AlertTriangle className="h-4 w-4" />
-                  <span className="text-sm">Error loading countries</span>
-                </div>
-              ) : (
-                <Select value={countryId} onValueChange={setCountryId} required>
-                  <SelectTrigger id="country">
-                    <SelectValue placeholder="Select a country" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {countries.map(country => (
-                      <SelectItem key={country.id} value={country.id}>
-                        {country.country}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              )}
-            </div>
-            
-            <div className="space-y-2">
-              <Label htmlFor="domain">Domain *</Label>
-              <Input 
-                id="domain"
-                value={domain} 
-                onChange={(e) => setDomain(e.target.value)} 
-                placeholder="example.com"
-                required
-              />
+              <div className="bg-[#E8E5DE] p-3 rounded text-black text-sm">
+                Only change the brand name if necessary. But do not change the brand itself. Automations only work when a new client is created.
+              </div>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="logo">Logo URL (Optional)</Label>
+              <Label htmlFor="logo">Option: Change the logo URL</Label>
               <Input 
                 id="logo"
                 value={logo} 
