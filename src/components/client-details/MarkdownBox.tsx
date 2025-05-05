@@ -10,6 +10,7 @@ interface MarkdownBoxProps {
   value?: string;
   style?: React.CSSProperties;
   className?: string;
+  darkMode?: boolean;
 }
 
 export const MarkdownBox: React.FC<MarkdownBoxProps> = ({ 
@@ -18,7 +19,8 @@ export const MarkdownBox: React.FC<MarkdownBoxProps> = ({
   onEdit, 
   value,
   style,
-  className
+  className,
+  darkMode = false
 }) => {
   if (isEditing && onEdit) {
     return (
@@ -36,10 +38,20 @@ export const MarkdownBox: React.FC<MarkdownBoxProps> = ({
     );
   }
 
+  const boxStyle = darkMode && !isEditing
+    ? { 
+        backgroundColor: "#363636",
+        color: "#FFFFFF",
+        ...style
+      }
+    : style;
+
+  const boxClassName = `p-5 border border-gray-200 rounded-lg prose max-w-none ${darkMode && !isEditing ? 'prose-invert bg-[#363636] text-white' : 'bg-white prose-black'} ${className || ''}`;
+
   return (
     <div 
-      className={`p-5 bg-white border border-gray-200 rounded-lg prose prose-black max-w-none ${className || ''}`} 
-      style={style}
+      className={boxClassName}
+      style={boxStyle}
     >
       <ReactMarkdown>
         {typeof children === 'string' ? children : ''}

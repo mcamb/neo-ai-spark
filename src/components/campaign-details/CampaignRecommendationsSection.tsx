@@ -117,6 +117,7 @@ export const CampaignRecommendationsSection: React.FC<CampaignRecommendationsSec
             value={editedValues.tone_style}
             style={boxStyle}
             className="h-full"
+            darkMode={true}
           >
             {tone_style || "No tone and style recommendations available."}
           </MarkdownBox>
@@ -136,6 +137,7 @@ export const CampaignRecommendationsSection: React.FC<CampaignRecommendationsSec
             value={editedValues.formats}
             style={boxStyle}
             className="h-full"
+            darkMode={true}
           >
             {formats || "No format recommendations available."}
           </MarkdownBox>
@@ -171,6 +173,7 @@ export const CampaignRecommendationsSection: React.FC<CampaignRecommendationsSec
             value={editedValues.creators_influencers}
             style={boxStyle}
             className="h-full"
+            darkMode={true}
           >
             {creators_influencers || "No creator or influencer recommendations available."}
           </MarkdownBox>
@@ -189,4 +192,3 @@ export const CampaignRecommendationsSection: React.FC<CampaignRecommendationsSec
     </div>
   );
 };
-
