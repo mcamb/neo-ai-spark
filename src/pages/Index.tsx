@@ -58,11 +58,13 @@ const Index = () => {
         </div>
       </div>
       
-      {/* Right side - Background image only, no text */}
-      <div className="hidden lg:block lg:w-1/2 relative">
-        <div className="absolute inset-0 bg-cover bg-center" style={{
-          backgroundImage: "url('/lovable-uploads/0eed3130-85d5-49de-a1cf-356955707488.png')"
-        }}></div>
+      {/* Right side - Background image only */}
+      <div className="hidden lg:block lg:w-1/2">
+        <img 
+          src="/lovable-uploads/0eed3130-85d5-49de-a1cf-356955707488.png" 
+          alt="Background" 
+          className="h-full w-full object-cover"
+        />
       </div>
     </div>;
 };
