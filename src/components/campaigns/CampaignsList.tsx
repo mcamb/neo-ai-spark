@@ -24,14 +24,9 @@ const CampaignsList: React.FC<CampaignsListProps> = ({
           campaign.country.toLowerCase().includes(searchQuery.toLowerCase());
       });
   
-  // Sort campaigns by created_at (newest first), then by status, then alphabetically by title
+  // Sort campaigns by status, then alphabetically by title
   const sortedCampaigns = [...filteredCampaigns].sort((a, b) => {
-    // First sort by created_at if available (newest first)
-    if (a.created_at && b.created_at) {
-      return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
-    }
-    
-    // If created_at is not available, fall back to status sorting
+    // First sort by status
     if (a.status !== b.status) {
       if (a.status === 'active' || a.status === 'Running') return -1;
       if (b.status === 'active' || b.status === 'Running') return 1;

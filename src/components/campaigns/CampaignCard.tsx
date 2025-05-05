@@ -16,7 +16,7 @@ export interface Campaign {
   status: 'active' | 'draft' | 'completed' | 'Idea' | 'Planned' | 'Running' | 'Finished';
   logo?: string;
   agent_status?: string;
-  created_at?: string; // Adding created_at for sorting
+  created_at?: string; // Making this optional
 }
 
 interface CampaignCardProps {
