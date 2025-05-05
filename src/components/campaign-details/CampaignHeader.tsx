@@ -32,8 +32,8 @@ export const CampaignHeader: React.FC<CampaignHeaderProps> = ({
     day: 'numeric'
   });
   
-  // Convert status to lowercase for CampaignStatusBadge
-  const normalizedStatus = status.toLowerCase() as 'active' | 'draft' | 'completed' | 'idea' | 'planned' | 'running' | 'finished';
+  // Properly cast the status to match CampaignStatusBadge's expected types
+  const normalizedStatus = status as 'active' | 'draft' | 'completed' | 'Idea' | 'Planned' | 'Running' | 'Finished';
   
   return (
     <>
