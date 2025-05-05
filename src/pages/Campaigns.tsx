@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import MainLayout from '@/components/MainLayout';
 import CampaignsHeader from '@/components/campaigns/CampaignsHeader';
@@ -40,11 +39,17 @@ const Campaigns = () => {
   
   // Set up realtime configuration when component mounts
   useEffect(() => {
-    (async () => {
-      await setupRealtimeForCampaigns();
-      refetch();
-    })();
-  }, [refetch]);
+    const setupRealtime = async () => {
+      const success = await setupRealtimeForCampaigns();
+      if (success) {
+        console.log('Real-time updates for campaigns enabled successfully');
+      } else {
+        console.error('Failed to enable real-time updates for campaigns');
+      }
+    };
+    
+    setupRealtime();
+  }, []);
   
   const handleOpenAddModal = () => {
     setIsAddModalOpen(true);

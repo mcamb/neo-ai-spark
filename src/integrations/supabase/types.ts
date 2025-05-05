@@ -341,6 +341,10 @@ export type Database = {
       }
     }
     Functions: {
+      enable_realtime_for_campaigns: {
+        Args: Record<PropertyKey, never>
+        Returns: Json
+      }
       enable_realtime_for_clients: {
         Args: Record<PropertyKey, never>
         Returns: Json

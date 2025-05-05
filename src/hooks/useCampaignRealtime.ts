@@ -8,6 +8,8 @@ interface UseCampaignRealtimeProps {
 
 export const useCampaignRealtime = ({ refetch }: UseCampaignRealtimeProps) => {
   useEffect(() => {
+    console.log('Setting up real-time subscription for campaigns table');
+    
     // Subscribe to changes on the campaigns table
     const channel = supabase
       .channel('campaigns-changes')
@@ -23,10 +25,13 @@ export const useCampaignRealtime = ({ refetch }: UseCampaignRealtimeProps) => {
           refetch();
         }
       )
-      .subscribe();
+      .subscribe((status) => {
+        console.log('Realtime subscription status:', status);
+      });
 
     // Return cleanup function
     return () => {
+      console.log('Cleaning up real-time subscription');
       supabase.removeChannel(channel);
     };
   }, [refetch]);

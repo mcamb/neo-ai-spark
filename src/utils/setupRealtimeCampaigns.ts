@@ -3,6 +3,8 @@ import { supabase } from '@/integrations/supabase/client';
 
 export const setupRealtimeForCampaigns = async () => {
   try {
+    console.log('Setting up real-time for campaigns table...');
+    
     // Use the more generic supabase.rpc() approach with a type assertion
     // This bypasses the TypeScript type checking for the function name
     const { data, error } = await supabase.rpc(
