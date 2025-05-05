@@ -7,12 +7,9 @@ import {
   SheetHeader, 
   SheetTitle, 
 } from '@/components/ui/sheet';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { useToast } from '@/components/ui/use-toast';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import CountrySelector from './CountrySelector';
+import ClientForm from './ClientForm';
 import NewCountryForm from './NewCountryForm';
 import { useCountries, createCountry } from '@/hooks/useCountries';
 
@@ -30,9 +27,7 @@ const NewClientModal: React.FC<NewClientModalProps> = ({
   isSubmitting = false 
 }) => {
   const { toast } = useToast();
-  const [brand, setBrand] = useState('');
   const [countryId, setCountryId] = useState('');
-  const [domain, setDomain] = useState('');
   const [isAddingCountry, setIsAddingCountry] = useState(false);
   const [isCreatingCountry, setIsCreatingCountry] = useState(false);
 
@@ -43,34 +38,10 @@ const NewClientModal: React.FC<NewClientModalProps> = ({
     error: countriesError
   } = useCountries();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!brand || !countryId || !domain) {
-      toast({
-        title: "Error",
-        description: "Please fill in all required fields",
-        variant: "destructive"
-      });
-      return;
-    }
-    
+  const handleAddClient = async (clientData: any) => {
     try {
-      // Create client data object
-      const clientData = {
-        brand,
-        domain,
-        country_id: countryId
-      };
-      
-      // Submit to parent component
       await onSubmit(clientData);
-      
-      // Reset form
-      setBrand('');
       setCountryId('');
-      setDomain('');
-      
     } catch (error: any) {
       console.error("Error handling form submission:", error);
       toast({
@@ -122,49 +93,16 @@ const NewClientModal: React.FC<NewClientModalProps> = ({
             </SheetDescription>
           </SheetHeader>
           
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="space-y-2">
-              <Label htmlFor="brand">Brand *</Label>
-              <Input 
-                id="brand"
-                value={brand} 
-                onChange={(e) => setBrand(e.target.value)} 
-                placeholder="Provide one simple brand term, such as BMW"
-                required
-              />
-            </div>
-            
-            <div className="space-y-2">
-              <Label htmlFor="country">Country *</Label>
-              <CountrySelector
-                countryId={countryId}
-                onCountryChange={handleSelectChange}
-                isLoadingCountries={isLoadingCountries}
-                countriesError={countriesError as Error | null}
-                countries={countries}
-                onAddCountryClick={() => setIsAddingCountry(true)}
-              />
-            </div>
-            
-            <div className="space-y-2">
-              <Label htmlFor="domain">Domain *</Label>
-              <Input 
-                id="domain"
-                value={domain} 
-                onChange={(e) => setDomain(e.target.value)} 
-                placeholder="Copy - paste the full URL, example: https://www.bmw.de"
-                required
-              />
-            </div>
-            
-            <Button 
-              type="submit" 
-              disabled={isSubmitting || !countryId}
-              className="w-full bg-neo-red hover:bg-red-600 text-white"
-            >
-              {isSubmitting ? "Adding Client..." : "Add Client"}
-            </Button>
-          </form>
+          <ClientForm 
+            onSubmit={handleAddClient}
+            isSubmitting={isSubmitting}
+            onAddCountry={() => setIsAddingCountry(true)}
+            countryId={countryId}
+            onCountryChange={handleSelectChange}
+            isLoadingCountries={isLoadingCountries}
+            countriesError={countriesError as Error | null}
+            countries={countries}
+          />
         </SheetContent>
       </Sheet>
 
