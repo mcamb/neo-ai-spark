@@ -53,7 +53,22 @@ export const MarkdownBox: React.FC<MarkdownBoxProps> = ({
       className={boxClassName}
       style={boxStyle}
     >
-      <ReactMarkdown className="prose-headings:font-bold prose-headings:text-black prose-p:text-black prose-li:text-black prose-strong:text-black prose-em:text-black">
+      <ReactMarkdown
+        components={{
+          h1: ({node, ...props}) => <h1 className="font-bold text-black" {...props} />,
+          h2: ({node, ...props}) => <h2 className="font-bold text-black" {...props} />,
+          h3: ({node, ...props}) => <h3 className="font-bold text-black" {...props} />,
+          h4: ({node, ...props}) => <h4 className="font-bold text-black" {...props} />,
+          h5: ({node, ...props}) => <h5 className="font-bold text-black" {...props} />,
+          h6: ({node, ...props}) => <h6 className="font-bold text-black" {...props} />,
+          p: ({node, ...props}) => <p className="text-black" {...props} />,
+          ul: ({node, ...props}) => <ul className="text-black list-disc pl-6" {...props} />,
+          ol: ({node, ...props}) => <ol className="text-black list-decimal pl-6" {...props} />,
+          li: ({node, ...props}) => <li className="text-black" {...props} />,
+          strong: ({node, ...props}) => <strong className="text-black font-bold" {...props} />,
+          em: ({node, ...props}) => <em className="text-black italic" {...props} />
+        }}
+      >
         {typeof children === 'string' ? children : ''}
       </ReactMarkdown>
     </div>
