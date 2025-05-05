@@ -1,11 +1,10 @@
-
 import React, { useState, useEffect, useCallback } from 'react';
 import MainLayout from '@/components/MainLayout';
 import ClientsHeader from '@/components/clients/ClientsHeader';
 import ClientsToolbar from '@/components/clients/ClientsToolbar';
 import ClientsContent from '@/components/clients/ClientsContent';
 import { useClients } from '@/hooks/useClients';
-import NewClientModal from '@/components/NewClientModal';
+import NewClientModal from '@/components/clients/NewClientModal';
 import { toast } from "sonner";
 import { supabase } from '@/integrations/supabase/client';
 import EditClientModal from '@/components/EditClientModal';
