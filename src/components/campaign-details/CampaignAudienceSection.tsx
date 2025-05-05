@@ -52,7 +52,7 @@ export const CampaignAudienceSection: React.FC<CampaignAudienceSectionProps> = (
       <div className="grid md:grid-cols-2 gap-12">
         <div className="flex flex-col">
           <h3 className="text-md font-semibold mb-4 flex items-center">
-            <User className="h-4 w-4 mr-2 text-[#FF4B4F]" />
+            <User className="h-4 w-4 mr-2 text-black" />
             People we talk to
           </h3>
           <MarkdownBox 
@@ -68,7 +68,7 @@ export const CampaignAudienceSection: React.FC<CampaignAudienceSectionProps> = (
         
         <div className="flex flex-col">
           <h3 className="text-md font-semibold mb-4 flex items-center">
-            <User className="h-4 w-4 mr-2 text-[#FF4B4F]" />
+            <User className="h-4 w-4 mr-2 text-black" />
             Typically look like this.
           </h3>
           <div className="bg-gray-100 rounded-lg flex items-center justify-center h-[230px]">
@@ -79,4 +79,3 @@ export const CampaignAudienceSection: React.FC<CampaignAudienceSectionProps> = (
     </div>
   );
 };
-

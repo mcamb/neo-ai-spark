@@ -92,7 +92,7 @@ export const CampaignRecommendationsSection: React.FC<CampaignRecommendationsSec
       <div className="grid md:grid-cols-2 gap-12">
         <div className="flex flex-col">
           <h3 className="text-md font-semibold mb-4 flex items-center">
-            <MessageCircle className="h-4 w-4 mr-2 text-[#FF4B4F]" />
+            <MessageCircle className="h-4 w-4 mr-2 text-black" />
             Message Hook
           </h3>
           <MarkdownBox 
@@ -108,7 +108,7 @@ export const CampaignRecommendationsSection: React.FC<CampaignRecommendationsSec
         
         <div className="flex flex-col">
           <h3 className="text-md font-semibold mb-4 flex items-center">
-            <Palette className="h-4 w-4 mr-2 text-[#FF4B4F]" />
+            <Palette className="h-4 w-4 mr-2 text-black" />
             Tone & Style
           </h3>
           <MarkdownBox 
@@ -128,7 +128,7 @@ export const CampaignRecommendationsSection: React.FC<CampaignRecommendationsSec
       <div className="grid md:grid-cols-2 gap-12 pt-6">
         <div className="flex flex-col">
           <h3 className="text-md font-semibold mb-4 flex items-center">
-            <FileText className="h-4 w-4 mr-2 text-[#FF4B4F]" />
+            <FileText className="h-4 w-4 mr-2 text-black" />
             Formats
           </h3>
           <MarkdownBox 
@@ -145,7 +145,7 @@ export const CampaignRecommendationsSection: React.FC<CampaignRecommendationsSec
         
         <div className="flex flex-col">
           <h3 className="text-md font-semibold mb-4 flex items-center">
-            <Target className="h-4 w-4 mr-2 text-[#FF4B4F]" />
+            <Target className="h-4 w-4 mr-2 text-black" />
             Targeting
           </h3>
           <MarkdownBox 
@@ -164,7 +164,7 @@ export const CampaignRecommendationsSection: React.FC<CampaignRecommendationsSec
       <div className="grid md:grid-cols-2 gap-12 pt-6">
         <div className="flex flex-col">
           <h3 className="text-md font-semibold mb-4 flex items-center">
-            <Users className="h-4 w-4 mr-2 text-[#FF4B4F]" />
+            <Users className="h-4 w-4 mr-2 text-black" />
             Creators / Influencers
           </h3>
           <MarkdownBox 
@@ -181,7 +181,7 @@ export const CampaignRecommendationsSection: React.FC<CampaignRecommendationsSec
         
         <div className="flex flex-col">
           <h3 className="text-md font-semibold mb-4 flex items-center">
-            <Video className="h-4 w-4 mr-2 text-[#FF4B4F]" />
+            <Video className="h-4 w-4 mr-2 text-black" />
             #1 Creator Video
           </h3>
           <div className="bg-gray-100 rounded-lg flex items-center justify-center h-[230px]">
