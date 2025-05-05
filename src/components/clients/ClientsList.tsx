@@ -31,20 +31,20 @@ const ClientsList: React.FC<ClientsListProps> = ({
           client.domain?.toLowerCase().includes(searchQuery.toLowerCase());
       });
   
-  // Sort clients by status first (in_progress at the top), then by created_at (newer first)
+  // Sort clients by created_at (newer first), then by status (in_progress first)
   const sortedClients = [...filteredClients].sort((a, b) => {
-    // First sort by status - in_progress comes first
-    if (a.agent_status !== b.agent_status) {
-      return a.agent_status === 'in_progress' ? -1 : 1;
-    }
-    
-    // Then sort by creation date (newer first) if available
+    // First sort by created_at if available (newer first)
     if (a.created_at && b.created_at) {
       return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
     }
     
-    // Fallback to id
-    return a.id.localeCompare(b.id);
+    // Then sort by status - in_progress comes first
+    if (a.agent_status !== b.agent_status) {
+      return a.agent_status === 'in_progress' ? -1 : 1;
+    }
+    
+    // Fallback to brand name alphabetically
+    return a.brand.localeCompare(b.brand);
   });
   
   console.log("Filtered and sorted clients:", sortedClients);

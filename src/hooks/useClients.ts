@@ -9,7 +9,7 @@ export interface Client {
   logo?: string;
   agent_status: 'ready' | 'in_progress';
   country_id?: string;
-  created_at?: string; // Make this optional since it might not always be present in the data
+  created_at?: string; // This field is now used for sorting
   brand_promise?: string;
   brand_challenge?: string;
   primary_audience_b2c?: string;
@@ -17,7 +17,7 @@ export interface Client {
   primary_audience_b2b?: string;
   secondary_audience_b2b?: string;
   countries?: {
-    code?: string; // Make this optional since the code column was dropped
+    code?: string;
     country: string;
   };
 }
@@ -27,7 +27,8 @@ const fetchClients = async (): Promise<Client[]> => {
   
   const { data, error } = await supabase
     .from('clients')
-    .select('*, countries(country)');
+    .select('*, countries(country)')
+    .order('created_at', { ascending: false }); // Order by created_at, newest first
   
   if (error) {
     console.error("Error fetching clients from Supabase:", error);
@@ -35,7 +36,7 @@ const fetchClients = async (): Promise<Client[]> => {
   }
   
   console.log("Fetched clients:", data);
-  return data as Client[]; // Using type assertion here
+  return data as Client[];
 };
 
 export const useClients = () => {
