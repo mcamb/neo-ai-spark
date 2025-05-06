@@ -80,19 +80,17 @@ export const CampaignRecommendationsSection: React.FC<CampaignRecommendationsSec
   };
 
   return (
-    <div className="bg-[#FFFFFF] rounded-lg">
-      <div className="px-6 pt-6">
-        <SectionHeader
-          title="Recommendations"
-          isEditing={isEditing}
-          onEdit={handleStartEditing}
-          onSave={handleSaveEdits}
-        />
-      </div>
+    <div className="bg-[#FFFFFF] rounded-lg w-full">
+      <SectionHeader
+        title="Recommendations"
+        isEditing={isEditing}
+        onEdit={handleStartEditing}
+        onSave={handleSaveEdits}
+      />
       
-      <div className="px-6 pb-6">
+      <div className="p-6">
         {/* First row - Message Hook & Tone Style */}
-        <div className="grid md:grid-cols-2 gap-12 mt-6">
+        <div className="grid md:grid-cols-2 gap-12 w-full">
           <div className="flex flex-col">
             <h3 className="text-md font-semibold mb-4 flex items-center">
               <MessageCircle className="h-4 w-4 mr-2 text-black" />
@@ -128,7 +126,7 @@ export const CampaignRecommendationsSection: React.FC<CampaignRecommendationsSec
         </div>
         
         {/* Second row - Formats & Targeting with consistent spacing */}
-        <div className="grid md:grid-cols-2 gap-12 mt-8">
+        <div className="grid md:grid-cols-2 gap-12 mt-8 w-full">
           <div className="flex flex-col">
             <h3 className="text-md font-semibold mb-4 flex items-center">
               <FileText className="h-4 w-4 mr-2 text-black" />
@@ -164,7 +162,7 @@ export const CampaignRecommendationsSection: React.FC<CampaignRecommendationsSec
         </div>
         
         {/* Third row - Creators/Influencers only */}
-        <div className="grid md:grid-cols-2 gap-12 mt-8">
+        <div className="grid md:grid-cols-2 gap-12 mt-8 w-full">
           <div className="flex flex-col">
             <h3 className="text-md font-semibold mb-4 flex items-center">
               <Users className="h-4 w-4 mr-2 text-black" />

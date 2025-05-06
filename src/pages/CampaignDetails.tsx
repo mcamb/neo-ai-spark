@@ -10,6 +10,7 @@ import { CampaignSummary } from '@/components/campaign-details/CampaignSummary';
 import { CampaignAudienceSection } from '@/components/campaign-details/CampaignAudienceSection';
 import { CampaignRecommendationsSection } from '@/components/campaign-details/CampaignRecommendationsSection';
 import { CampaignNotFoundMessage } from '@/components/campaign-details/CampaignNotFoundMessage';
+import { CampaignBrandSection } from '@/components/campaign-details/CampaignBrandSection';
 
 const CampaignDetails = () => {
   const { campaignId } = useParams();
@@ -18,8 +19,8 @@ const CampaignDetails = () => {
   if (isLoading) {
     return (
       <MainLayout>
-        <div className="max-w-[1200px] mx-auto">
-          <div className="p-6">
+        <div className="max-w-[1200px] mx-auto w-full">
+          <div className="w-full">
             <div className="flex flex-col md:flex-row gap-6 pb-6">
               <Skeleton className="h-16 w-16 rounded-full" />
               <div className="space-y-2 w-full max-w-md">
@@ -46,7 +47,7 @@ const CampaignDetails = () => {
 
   return (
     <MainLayout>
-      <div className="max-w-[1200px] mx-auto">
+      <div className="max-w-[1200px] mx-auto w-full">
         <CampaignHeader
           title={campaignDetails.title}
           status={campaignDetails.status}
@@ -55,7 +56,7 @@ const CampaignDetails = () => {
           country={campaignDetails.country}
         />
         
-        <div className="px-6">
+        <div className="w-full">
           <CampaignSummary
             targetAudience={campaignDetails.target_audience}
             objective={campaignDetails.objective_name}
@@ -65,7 +66,14 @@ const CampaignDetails = () => {
           
           <Separator className="my-8" />
           
-          <div className="space-y-8">
+          <div className="space-y-8 w-full">
+            {(campaignDetails.brand_promise || campaignDetails.brand_challenge) && (
+              <CampaignBrandSection
+                brand_promise={campaignDetails.brand_promise}
+                brand_challenge={campaignDetails.brand_challenge}
+              />
+            )}
+            
             <CampaignAudienceSection
               campaignId={campaignDetails.id}
               targetAudienceSummary={campaignDetails.target_audience_summary}

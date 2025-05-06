@@ -44,18 +44,16 @@ export const CampaignAudienceSection: React.FC<CampaignAudienceSectionProps> = (
   };
 
   return (
-    <div className="bg-[#FFFFFF] rounded-lg">
-      <div className="px-6 pt-6">
-        <SectionHeader
-          title="Audience Snapshot"
-          isEditing={isEditing}
-          onEdit={handleStartEditing}
-          onSave={handleSaveEdits}
-        />
-      </div>
+    <div className="bg-[#FFFFFF] rounded-lg w-full">
+      <SectionHeader
+        title="Audience Snapshot"
+        isEditing={isEditing}
+        onEdit={handleStartEditing}
+        onSave={handleSaveEdits}
+      />
       
-      <div className="px-6 pb-6">
-        <div className="grid md:grid-cols-2 gap-12 mt-6">
+      <div className="p-6">
+        <div className="grid md:grid-cols-2 gap-12 w-full">
           <div className="flex flex-col">
             <h3 className="text-md font-semibold mb-4 flex items-center">
               <User className="h-4 w-4 mr-2 text-black" />

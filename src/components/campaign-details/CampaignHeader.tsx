@@ -23,7 +23,7 @@ export const CampaignHeader: React.FC<CampaignHeaderProps> = ({
   const navigate = useNavigate();
   
   return (
-    <div className="w-full px-6">
+    <div className="w-full mb-6">
       {/* Navigation - Left aligned */}
       <div className="mb-6">
         <Button variant="ghost" className="pl-0" onClick={() => navigate('/campaigns')}>
