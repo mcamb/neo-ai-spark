@@ -25,6 +25,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   const [email, setEmail] = useState<string>('');
   const [loading, setLoading] = useState(true);
   const [agencyName, setAgencyName] = useState<string | null>(null);
+  const [fullName, setFullName] = useState<string | null>(null);
   
   useEffect(() => {
     const checkAuth = async () => {
@@ -38,16 +39,22 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
       if (session.user) {
         setEmail(session.user.email || '');
         
-        // Try to fetch agency information if available
+        // Try to fetch colleague information including first_name and last_name
         try {
           const { data: colleagueData, error } = await supabase
             .from('colleagues')
-            .select('agency_id, agencies(name)')
+            .select('first_name, last_name, agency_id, agencies(name)')
             .eq('id', session.user.id)
             .single();
           
-          if (colleagueData && colleagueData.agencies) {
-            setAgencyName(colleagueData.agencies.name);
+          if (colleagueData) {
+            if (colleagueData.agencies) {
+              setAgencyName(colleagueData.agencies.name);
+            }
+            
+            if (colleagueData.first_name && colleagueData.last_name) {
+              setFullName(`${colleagueData.first_name} ${colleagueData.last_name}`);
+            }
           }
         } catch (err) {
           console.error('Error fetching colleague data:', err);
@@ -87,7 +94,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
       
       <main className="flex-1">
         <header className="border-b border-gray-100 p-4">
-          <div className="flex items-center justify-end max-w-5xl w-full mx-auto px-6">
+          <div className="flex items-center justify-end max-w-5xl w-full mx-auto">
             <DropdownMenu>
               <DropdownMenuTrigger className="flex items-center gap-2 px-3 py-1 rounded-md hover:bg-gray-100 outline-none">
                 <span className="text-sm font-medium">Account</span>
@@ -100,7 +107,10 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-64">
                 <div className="px-2 py-1.5">
-                  <p className="font-medium">{email}</p>
+                  {fullName && (
+                    <p className="font-normal text-black">{fullName}</p>
+                  )}
+                  <p className="text-xs text-muted-foreground">{email}</p>
                   {agencyName && (
                     <p className="text-xs text-muted-foreground">{agencyName}</p>
                   )}

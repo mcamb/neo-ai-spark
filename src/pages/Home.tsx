@@ -52,7 +52,7 @@ const cta_items = [
 
 const Home = () => {
   const navigate = useNavigate();
-  const [userEmail, setUserEmail] = useState<string>('there');
+  const [userName, setUserName] = useState<string>('there');
   const [loading, setLoading] = useState(true);
   
   useEffect(() => {
@@ -60,10 +60,21 @@ const Home = () => {
       try {
         const { data: { user } } = await supabase.auth.getUser();
         
-        if (user && user.email) {
-          // Extract name from email or use email as greeting
-          const nameFromEmail = user.email.split('@')[0];
-          setUserEmail(nameFromEmail);
+        if (user) {
+          // Try to get first_name from colleagues table
+          const { data: colleagueData, error } = await supabase
+            .from('colleagues')
+            .select('first_name')
+            .eq('id', user.id)
+            .single();
+          
+          if (colleagueData && colleagueData.first_name) {
+            setUserName(colleagueData.first_name);
+          } else if (user.email) {
+            // Fallback to email if colleague data not found
+            const nameFromEmail = user.email.split('@')[0];
+            setUserName(nameFromEmail);
+          }
         }
       } catch (error) {
         console.error('Error fetching user data:', error);
@@ -79,7 +90,7 @@ const Home = () => {
       <div className="max-w-5xl mx-auto">
         <div className="flex flex-col md:flex-row items-center justify-between mb-12">
           <div>
-            <h1 className="text-3xl font-bold pb-2">Hi {userEmail}!</h1>
+            <h1 className="text-3xl font-bold pb-2">Hi {userName}!</h1>
             <p className="text-custom-text">
               Welcome to NEO AI - our very own AI platform.
             </p>
