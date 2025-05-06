@@ -37,7 +37,7 @@ const Index = () => {
               <div className="space-y-2">
                 <Label htmlFor="password">Password</Label>
                 <Input id="password" type="password" placeholder="••••••••" required />
-                <div className="text-right">
+                <div className="text-left">
                   <a href="#" className="text-xs text-neo-red hover:underline">
                     Forgot password?
                   </a>
