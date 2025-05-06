@@ -20,6 +20,22 @@ export const ScoreEditor: React.FC<ScoreEditorProps> = ({
   onSelectPlatform,
   selectedPlatform
 }) => {
+  // Function to determine score color based on thresholds
+  const getScoreColor = (score: number) => {
+    if (score >= 75) return '#38A169'; // Green for excellent scores (75-100)
+    if (score >= 50) return '#94C29D'; // Light green for good scores (50-74)
+    if (score >= 25) return '#FFA500'; // Orange for average scores (25-49)
+    return '#ea384c';                  // Red for poor scores (0-24)
+  };
+  
+  // Function to get text description based on score
+  const getScoreDescription = (score: number) => {
+    if (score >= 75) return 'Excellent';
+    if (score >= 50) return 'Good';
+    if (score >= 25) return 'Average';
+    return 'Poor';
+  };
+
   return (
     <div className="space-y-3">
       {scores.map((item) => (
@@ -47,9 +63,17 @@ export const ScoreEditor: React.FC<ScoreEditorProps> = ({
                 className="h-full transition-all duration-500 ease-out" 
                 style={{ 
                   width: `${item.score}%`, 
-                  backgroundColor: item.score > 50 ? '#94C29D' : '#ea384c'
+                  backgroundColor: getScoreColor(item.score)
                 }}
               ></div>
+            </div>
+            <div className="flex justify-between items-center mt-1">
+              <span className="text-xs" style={{ color: getScoreColor(item.score) }}>
+                {getScoreDescription(item.score)}
+              </span>
+              <span className="text-xs text-gray-500">
+                {item.platform === selectedPlatform ? 'Selected' : 'Click to view details'}
+              </span>
             </div>
           </div>
         </div>
