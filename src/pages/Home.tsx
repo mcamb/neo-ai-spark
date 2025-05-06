@@ -52,30 +52,18 @@ const cta_items = [
 
 const Home = () => {
   const navigate = useNavigate();
-  const [firstName, setFirstName] = useState<string>('');
+  const [userEmail, setUserEmail] = useState<string>('there');
   const [loading, setLoading] = useState(true);
   
   useEffect(() => {
-    const fetchColleagueData = async () => {
+    const fetchUserData = async () => {
       try {
         const { data: { user } } = await supabase.auth.getUser();
         
-        if (user) {
-          // Fetch colleague data that matches the auth user ID
-          const { data, error } = await supabase
-            .from('colleagues')
-            .select('first_name')
-            .eq('id', user.id)
-            .single();
-            
-          if (error) {
-            console.error('Error fetching colleague data:', error);
-            return;
-          }
-          
-          if (data && data.first_name) {
-            setFirstName(data.first_name);
-          }
+        if (user && user.email) {
+          // Extract name from email or use email as greeting
+          const nameFromEmail = user.email.split('@')[0];
+          setUserEmail(nameFromEmail);
         }
       } catch (error) {
         console.error('Error fetching user data:', error);
@@ -84,14 +72,14 @@ const Home = () => {
       }
     };
     
-    fetchColleagueData();
+    fetchUserData();
   }, []);
   
   return <MainLayout>
       <div className="max-w-5xl mx-auto">
         <div className="flex flex-col md:flex-row items-center justify-between mb-12">
           <div>
-            <h1 className="text-3xl font-bold pb-2">Hi {firstName || 'there'}!</h1>
+            <h1 className="text-3xl font-bold pb-2">Hi {userEmail}!</h1>
             <p className="text-custom-text">
               Welcome to NEO AI - our very own AI platform.
             </p>

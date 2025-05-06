@@ -20,18 +20,11 @@ interface MainLayoutProps {
   children: React.ReactNode;
 }
 
-interface ColleagueData {
-  id: string;
-  first_name: string;
-  last_name: string;
-  agency_id: string;
-  agency_name?: string;
-}
-
 const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   const navigate = useNavigate();
-  const [colleagueData, setColleagueData] = useState<ColleagueData | null>(null);
+  const [email, setEmail] = useState<string>('');
   const [loading, setLoading] = useState(true);
+  const [agencyName, setAgencyName] = useState<string | null>(null);
   
   useEffect(() => {
     const checkAuth = async () => {
@@ -41,6 +34,27 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
         navigate('/');
         return;
       }
+      
+      if (session.user) {
+        setEmail(session.user.email || '');
+        
+        // Try to fetch agency information if available
+        try {
+          const { data: colleagueData, error } = await supabase
+            .from('colleagues')
+            .select('agency_id, agencies(name)')
+            .eq('id', session.user.id)
+            .single();
+          
+          if (colleagueData && colleagueData.agencies) {
+            setAgencyName(colleagueData.agencies.name);
+          }
+        } catch (err) {
+          console.error('Error fetching colleague data:', err);
+        }
+      }
+      
+      setLoading(false);
     };
     
     checkAuth();
@@ -56,44 +70,6 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
     return () => subscription.unsubscribe();
   }, [navigate]);
   
-  useEffect(() => {
-    const fetchColleagueData = async () => {
-      try {
-        const { data: { user } } = await supabase.auth.getUser();
-        
-        if (user) {
-          // Fetch colleague data that matches the auth user ID
-          const { data, error } = await supabase
-            .from('colleagues')
-            .select('id, first_name, last_name, agency_id, agencies(name)')
-            .eq('id', user.id)
-            .single();
-            
-          if (error) {
-            console.error('Error fetching colleague data:', error);
-            return;
-          }
-          
-          if (data) {
-            setColleagueData({
-              id: data.id,
-              first_name: data.first_name,
-              last_name: data.last_name,
-              agency_id: data.agency_id,
-              agency_name: data.agencies?.name
-            });
-          }
-        }
-      } catch (error) {
-        console.error('Error fetching user data:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    
-    fetchColleagueData();
-  }, []);
-  
   const handleSignOut = async () => {
     try {
       await supabase.auth.signOut();
@@ -104,8 +80,6 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
       toast.error("Failed to sign out");
     }
   };
-  
-  const fullName = colleagueData ? `${colleagueData.first_name} ${colleagueData.last_name}` : '';
   
   return (
     <div className="flex min-h-screen">
@@ -118,7 +92,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
               <DropdownMenuTrigger className="flex items-center gap-2 px-3 py-1 rounded-md hover:bg-gray-100 outline-none">
                 <span className="text-sm font-medium">Account</span>
                 <Avatar className="h-8 w-8 cursor-pointer">
-                  <AvatarImage src="" alt={fullName} />
+                  <AvatarImage src="" alt={email} />
                   <AvatarFallback>
                     <User size={16} />
                   </AvatarFallback>
@@ -126,9 +100,9 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-64">
                 <div className="px-2 py-1.5">
-                  <p className="font-medium">{fullName}</p>
-                  {colleagueData?.agency_name && (
-                    <p className="text-xs text-muted-foreground">{colleagueData.agency_name}</p>
+                  <p className="font-medium">{email}</p>
+                  {agencyName && (
+                    <p className="text-xs text-muted-foreground">{agencyName}</p>
                   )}
                 </div>
                 <DropdownMenuSeparator />

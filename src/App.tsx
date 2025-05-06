@@ -28,6 +28,7 @@ const App = () => {
 
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      console.log('Auth state changed:', event, session);
       setIsAuthenticated(!!session);
     });
 
@@ -47,14 +48,34 @@ const App = () => {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={isAuthenticated ? <Navigate to="/home" /> : <Index />} />
-            <Route path="/home" element={<Home />} />
-            <Route path="/clients" element={<Clients />} />
-            <Route path="/clients/:clientId" element={<ClientDetails />} />
-            <Route path="/campaigns" element={<Campaigns />} />
-            <Route path="/campaigns/:campaignId" element={<CampaignDetails />} />
-            <Route path="/lab" element={<Lab />} />
-            <Route path="/account" element={<NotFound />} /> {/* Placeholder until we create the account page */}
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route 
+              path="/home" 
+              element={isAuthenticated ? <Home /> : <Navigate to="/" />} 
+            />
+            <Route 
+              path="/clients" 
+              element={isAuthenticated ? <Clients /> : <Navigate to="/" />} 
+            />
+            <Route 
+              path="/clients/:clientId" 
+              element={isAuthenticated ? <ClientDetails /> : <Navigate to="/" />} 
+            />
+            <Route 
+              path="/campaigns" 
+              element={isAuthenticated ? <Campaigns /> : <Navigate to="/" />} 
+            />
+            <Route 
+              path="/campaigns/:campaignId" 
+              element={isAuthenticated ? <CampaignDetails /> : <Navigate to="/" />} 
+            />
+            <Route 
+              path="/lab" 
+              element={isAuthenticated ? <Lab /> : <Navigate to="/" />} 
+            />
+            <Route 
+              path="/account" 
+              element={isAuthenticated ? <NotFound /> : <Navigate to="/" />} 
+            /> 
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

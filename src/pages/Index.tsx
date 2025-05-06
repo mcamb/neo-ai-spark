@@ -27,11 +27,9 @@ const Index = () => {
       });
       
       if (error) {
+        console.error('Anmeldefehler:', error);
         toast.error(error.message);
-        return;
-      }
-      
-      if (data.user) {
+      } else if (data.user) {
         toast.success('Erfolgreich angemeldet');
         navigate('/home');
       }
@@ -43,22 +41,27 @@ const Index = () => {
     }
   };
   
-  const handlePasswordReset = (e: React.MouseEvent) => {
+  const handlePasswordReset = async (e: React.MouseEvent) => {
     e.preventDefault();
     if (!email) {
       toast.error('Bitte geben Sie Ihre E-Mail-Adresse ein');
       return;
     }
     
-    supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: window.location.origin + '/home',
-    }).then(({ error }) => {
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: window.location.origin + '/home',
+      });
+      
       if (error) {
         toast.error(error.message);
       } else {
         toast.success('Anweisungen zum Zurücksetzen des Passworts wurden gesendet');
       }
-    });
+    } catch (error) {
+      console.error('Fehler beim Zurücksetzen des Passworts:', error);
+      toast.error('Ein Fehler ist aufgetreten');
+    }
   };
   
   return (
@@ -97,22 +100,23 @@ const Index = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
-                <div className="text-left">
-                  <a href="#" onClick={handlePasswordReset} className="text-xs text-neo-red hover:underline">
-                    Forgot password?
-                  </a>
-                </div>
               </div>
               
-              <div className="flex items-center space-x-2">
-                <Checkbox 
-                  id="remember" 
-                  checked={rememberMe}
-                  onCheckedChange={(checked) => setRememberMe(!!checked)}
-                />
-                <label htmlFor="remember" className="text-sm text-gray-600">
-                  Remember me
-                </label>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  <Checkbox 
+                    id="remember" 
+                    checked={rememberMe}
+                    onCheckedChange={(checked) => setRememberMe(!!checked)}
+                  />
+                  <label htmlFor="remember" className="text-sm text-gray-600">
+                    Remember me
+                  </label>
+                </div>
+                
+                <a href="#" onClick={handlePasswordReset} className="text-xs text-neo-red hover:underline">
+                  Forgot password?
+                </a>
               </div>
             </div>
             
