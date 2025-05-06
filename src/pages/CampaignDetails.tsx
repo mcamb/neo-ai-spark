@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import MainLayout from '@/components/MainLayout';
@@ -10,7 +9,6 @@ import { CampaignSummary } from '@/components/campaign-details/CampaignSummary';
 import { CampaignAudienceSection } from '@/components/campaign-details/CampaignAudienceSection';
 import { CampaignRecommendationsSection } from '@/components/campaign-details/CampaignRecommendationsSection';
 import { CampaignNotFoundMessage } from '@/components/campaign-details/CampaignNotFoundMessage';
-import { CampaignBrandSection } from '@/components/campaign-details/CampaignBrandSection';
 
 const CampaignDetails = () => {
   const { campaignId } = useParams();
@@ -69,13 +67,6 @@ const CampaignDetails = () => {
             targetAudienceSummary={campaignDetails.target_audience_summary}
             heroImageUrl={campaignDetails.hero_image_url}
           />
-            
-          {(campaignDetails.brand_promise || campaignDetails.brand_challenge) && (
-            <CampaignBrandSection
-              brand_promise={campaignDetails.brand_promise}
-              brand_challenge={campaignDetails.brand_challenge}
-            />
-          )}
             
           <CampaignRecommendationsSection
             campaignId={campaignDetails.id}
