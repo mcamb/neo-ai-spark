@@ -120,3 +120,6 @@ VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
 
 This project is proprietary software - all rights reserved.
 
+---
+
+*Last updated: May 6, 2025*
