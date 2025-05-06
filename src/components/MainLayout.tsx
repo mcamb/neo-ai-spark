@@ -83,7 +83,6 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   };
   
   const fullName = colleagueData ? `${colleagueData.first_name} ${colleagueData.last_name}` : 'User';
-  const initials = colleagueData ? `${colleagueData.first_name.charAt(0)}${colleagueData.last_name.charAt(0)}` : 'U';
   
   return (
     <div className="flex min-h-screen">
@@ -91,7 +90,8 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
       
       <main className="flex-1">
         <header className="border-b border-gray-100 p-4 flex justify-end">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center max-w-5xl w-full mx-auto px-6">
+            <div className="flex-1"></div>
             <DropdownMenu>
               <DropdownMenuTrigger className="flex items-center gap-2 px-3 py-1 rounded-md hover:bg-gray-100 outline-none">
                 <span className="text-sm font-medium">Account</span>
