@@ -65,7 +65,7 @@ const CampaignsList: React.FC<CampaignsListProps> = ({
   }
   
   return (
-    <div className="space-y-4 p-2">
+    <div className="space-y-4 p-0">
       {sortedCampaigns.map((campaign) => (
         <CampaignCard 
           key={campaign.id}
