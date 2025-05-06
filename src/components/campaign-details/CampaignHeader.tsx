@@ -24,7 +24,7 @@ export const CampaignHeader: React.FC<CampaignHeaderProps> = ({
   
   return (
     <>
-      {/* Navigation - Aligning with the rest of the content */}
+      {/* Navigation - Proper left alignment */}
       <div className="mb-6">
         <Button variant="ghost" className="pl-0" onClick={() => navigate('/campaigns')}>
           <ArrowLeft className="h-4 w-4 mr-2" />

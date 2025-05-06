@@ -81,12 +81,9 @@ export const CampaignRecommendationsSection: React.FC<CampaignRecommendationsSec
 
   return (
     <div className="space-y-8 p-6 rounded-lg bg-[#FFFFFF] w-full">
-      <SectionHeader
-        title="Recommendations"
-        isEditing={isEditing}
-        onEdit={handleStartEditing}
-        onSave={handleSaveEdits}
-      />
+      <div className="mb-4">
+        <h2 className="section-title">Recommendations</h2>
+      </div>
       
       {/* First row - Message Hook & Tone Style */}
       <div className="grid md:grid-cols-2 gap-12">

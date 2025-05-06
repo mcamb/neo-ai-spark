@@ -62,7 +62,7 @@ const CampaignDetails = () => {
         
         <Separator className="my-8" />
         
-        <div className="flex flex-col space-y-8">
+        <div className="space-y-8">
           <CampaignAudienceSection
             campaignId={campaignDetails.id}
             targetAudienceSummary={campaignDetails.target_audience_summary}
