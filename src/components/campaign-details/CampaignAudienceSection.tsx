@@ -45,9 +45,12 @@ export const CampaignAudienceSection: React.FC<CampaignAudienceSectionProps> = (
 
   return (
     <div className="space-y-6 p-6 rounded-lg bg-[#FFFFFF] w-full">
-      <div className="mb-4">
-        <h2 className="section-title">Audience Snapshot</h2>
-      </div>
+      <SectionHeader
+        title="Audience Snapshot"
+        isEditing={isEditing}
+        onEdit={handleStartEditing}
+        onSave={handleSaveEdits}
+      />
       
       <div className="grid md:grid-cols-2 gap-12">
         <div className="flex flex-col">

@@ -18,7 +18,7 @@ const CampaignDetails = () => {
   if (isLoading) {
     return (
       <MainLayout>
-        <div className="space-y-8">
+        <div className="space-y-8 w-full">
           <div className="flex flex-col md:flex-row gap-6 pb-6">
             <Skeleton className="h-16 w-16 rounded-full" />
             <div className="space-y-2 w-full max-w-md">
@@ -44,7 +44,7 @@ const CampaignDetails = () => {
 
   return (
     <MainLayout>
-      <div className="space-y-8">
+      <div className="space-y-8 w-full">
         <CampaignHeader
           title={campaignDetails.title}
           status={campaignDetails.status}
@@ -62,7 +62,7 @@ const CampaignDetails = () => {
         
         <Separator className="my-8" />
         
-        <div className="space-y-8">
+        <div className="space-y-8 w-full">
           <CampaignAudienceSection
             campaignId={campaignDetails.id}
             targetAudienceSummary={campaignDetails.target_audience_summary}
