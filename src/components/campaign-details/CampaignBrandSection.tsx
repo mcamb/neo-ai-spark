@@ -16,27 +16,29 @@ export const CampaignBrandSection: React.FC<CampaignBrandSectionProps> = ({
   
   return (
     <div className="bg-[#FFFFFF] rounded-lg w-full">
-      <SectionHeader title="Brand Context" isEditing={false} onEdit={() => {}} onSave={() => {}} />
-      
-      <div className="px-6 pb-6">
-        <div className="grid md:grid-cols-2 gap-6 w-full">
-          {brand_promise && (
-            <div className="space-y-2">
-              <h3 className="font-medium text-black">Brand Promise</h3>
-              <MarkdownBox style={{ backgroundColor: "#E8E5DE" }}>
-                {brand_promise}
-              </MarkdownBox>
-            </div>
-          )}
-          
-          {brand_challenge && (
-            <div className="space-y-2">
-              <h3 className="font-medium text-black">Brand Challenge</h3>
-              <MarkdownBox style={{ backgroundColor: "#E8E5DE" }}>
-                {brand_challenge}
-              </MarkdownBox>
-            </div>
-          )}
+      <div className="flex flex-col">
+        <SectionHeader title="Brand Context" isEditing={false} onEdit={() => {}} onSave={() => {}} />
+        
+        <div className="px-6 pb-6">
+          <div className="grid md:grid-cols-2 gap-6 w-full">
+            {brand_promise && (
+              <div className="space-y-2">
+                <h3 className="font-medium text-black">Brand Promise</h3>
+                <MarkdownBox style={{ backgroundColor: "#E8E5DE" }}>
+                  {brand_promise}
+                </MarkdownBox>
+              </div>
+            )}
+            
+            {brand_challenge && (
+              <div className="space-y-2">
+                <h3 className="font-medium text-black">Brand Challenge</h3>
+                <MarkdownBox style={{ backgroundColor: "#E8E5DE" }}>
+                  {brand_challenge}
+                </MarkdownBox>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
