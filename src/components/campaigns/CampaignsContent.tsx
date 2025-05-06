@@ -75,7 +75,7 @@ const CampaignsContent: React.FC<CampaignsContentProps> = ({
 
   // Add a subtle loading indicator when refreshing with existing data
   return (
-    <div className="relative">
+    <div className="relative px-0">
       {isLoading && (
         <div className="absolute top-0 left-0 right-0 h-1 bg-gray-100 overflow-hidden">
           <div className="h-full bg-neo-red animate-pulse" style={{ width: '100%' }}></div>

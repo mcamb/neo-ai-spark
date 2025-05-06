@@ -71,7 +71,7 @@ const ClientsList: React.FC<ClientsListProps> = ({
   }
   
   return (
-    <div className="space-y-4 p-2">
+    <div className="space-y-4 p-0">
       {sortedClients.map((client) => {
         const countryName = client.countries?.country || 'Unknown';
         return (

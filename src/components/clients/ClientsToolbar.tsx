@@ -18,7 +18,7 @@ const ClientsToolbar: React.FC<ClientsToolbarProps> = ({
   isDisabled = false
 }) => {
   return (
-    <div className="flex flex-col sm:flex-row justify-between gap-4">
+    <div className="flex flex-col sm:flex-row justify-between gap-4 mb-6">
       <div className="w-full sm:max-w-xs">
         <Input
           placeholder="Search clients..."
@@ -28,14 +28,16 @@ const ClientsToolbar: React.FC<ClientsToolbarProps> = ({
           disabled={isDisabled}
         />
       </div>
-      <Button 
-        onClick={onAddClient}
-        className="bg-neo-red hover:bg-red-600 text-white"
-        disabled={isDisabled}
-      >
-        <Plus className="h-4 w-4 mr-2" />
-        Add Client
-      </Button>
+      <div className="flex justify-start sm:justify-end">
+        <Button 
+          onClick={onAddClient}
+          className="bg-neo-red hover:bg-red-600 text-white"
+          disabled={isDisabled}
+        >
+          <Plus className="h-4 w-4 mr-2" />
+          Add Client
+        </Button>
+      </div>
     </div>
   );
 };
