@@ -14,7 +14,6 @@ import Campaigns from "./pages/Campaigns";
 import CampaignDetails from "./pages/CampaignDetails";
 import Lab from "./pages/Lab";
 import NotFound from "./pages/NotFound";
-import ForgotPassword from "./pages/ForgotPassword";
 
 const queryClient = new QueryClient();
 
@@ -65,7 +64,6 @@ const App = () => {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={isAuthenticated ? <Navigate to="/home" /> : <Index />} />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route 
               path="/home" 
               element={isAuthenticated ? <Home /> : <Navigate to="/" />} 

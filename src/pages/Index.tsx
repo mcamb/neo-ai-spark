@@ -93,21 +93,15 @@ const Index = () => {
                 />
               </div>
               
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-2">
-                  <Checkbox 
-                    id="remember" 
-                    checked={rememberMe}
-                    onCheckedChange={(checked) => setRememberMe(!!checked)}
-                  />
-                  <label htmlFor="remember" className="text-sm text-gray-600">
-                    Remember me
-                  </label>
-                </div>
-                
-                <a href="/forgot-password" className="text-xs text-neo-red hover:underline">
-                  Forgot password?
-                </a>
+              <div className="flex items-center space-x-2">
+                <Checkbox 
+                  id="remember" 
+                  checked={rememberMe}
+                  onCheckedChange={(checked) => setRememberMe(!!checked)}
+                />
+                <label htmlFor="remember" className="text-sm text-gray-600">
+                  Remember me
+                </label>
               </div>
             </div>
             
