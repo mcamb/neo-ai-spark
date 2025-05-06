@@ -23,6 +23,7 @@ interface CampaignDetails {
   brand_challenge?: string;
   objective_name?: string;
   channel_name?: string;
+  hero_image_url?: string;
 }
 
 export const useCampaignDetails = (campaignId: string | undefined) => {
@@ -60,6 +61,7 @@ export const useCampaignDetails = (campaignId: string | undefined) => {
             creators_influencers,
             objective_id,
             channel_id,
+            hero_image_url,
             clients (
               brand,
               logo,
@@ -99,7 +101,8 @@ export const useCampaignDetails = (campaignId: string | undefined) => {
             brand_promise: data.clients?.brand_promise,
             brand_challenge: data.clients?.brand_challenge,
             objective_name: data.objectives?.objective,
-            channel_name: data.channels?.channel
+            channel_name: data.channels?.channel,
+            hero_image_url: data.hero_image_url
           });
         }
       } catch (err) {

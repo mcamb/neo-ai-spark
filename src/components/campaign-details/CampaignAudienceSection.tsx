@@ -5,15 +5,19 @@ import { SectionHeader } from '@/components/client-details/SectionHeader';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { User } from 'lucide-react';
+import { AspectRatio } from '@/components/ui/aspect-ratio';
+import { cn } from '@/lib/utils';
 
 interface CampaignAudienceSectionProps {
   campaignId: string;
   targetAudienceSummary?: string;
+  heroImageUrl?: string;
 }
 
 export const CampaignAudienceSection: React.FC<CampaignAudienceSectionProps> = ({
   campaignId,
-  targetAudienceSummary
+  targetAudienceSummary,
+  heroImageUrl
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedAudienceSummary, setEditedAudienceSummary] = useState(targetAudienceSummary || '');
@@ -71,8 +75,28 @@ export const CampaignAudienceSection: React.FC<CampaignAudienceSectionProps> = (
             <User className="h-4 w-4 mr-2 text-black" />
             Typically look like this.
           </h3>
-          <div className="bg-gray-100 rounded-lg flex items-center justify-center h-[230px]">
-            <User className="h-20 w-20 text-gray-400" />
+          <div className="bg-gray-100 rounded-lg overflow-hidden h-[230px]">
+            {heroImageUrl ? (
+              <AspectRatio ratio={16/9} className="h-full">
+                <img 
+                  src={heroImageUrl} 
+                  alt="Target audience" 
+                  className={cn(
+                    "object-cover w-full h-full",
+                    !heroImageUrl && "hidden"
+                  )}
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.src = "/placeholder.svg";
+                    target.className = "p-8 object-contain w-full h-full";
+                  }}
+                />
+              </AspectRatio>
+            ) : (
+              <div className="flex items-center justify-center h-full">
+                <User className="h-20 w-20 text-gray-400" />
+              </div>
+            )}
           </div>
         </div>
       </div>

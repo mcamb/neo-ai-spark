@@ -17,6 +17,7 @@ export type Database = {
           created_at: string | null
           creators_influencers: string | null
           formats: string | null
+          hero_image_url: string | null
           id: string
           message_hook: string | null
           objective_id: string | null
@@ -34,6 +35,7 @@ export type Database = {
           created_at?: string | null
           creators_influencers?: string | null
           formats?: string | null
+          hero_image_url?: string | null
           id?: string
           message_hook?: string | null
           objective_id?: string | null
@@ -51,6 +53,7 @@ export type Database = {
           created_at?: string | null
           creators_influencers?: string | null
           formats?: string | null
+          hero_image_url?: string | null
           id?: string
           message_hook?: string | null
           objective_id?: string | null

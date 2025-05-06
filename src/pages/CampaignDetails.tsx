@@ -65,6 +65,7 @@ const CampaignDetails = () => {
         <CampaignAudienceSection
           campaignId={campaignDetails.id}
           targetAudienceSummary={campaignDetails.target_audience_summary}
+          heroImageUrl={campaignDetails.hero_image_url}
         />
         
         <CampaignRecommendationsSection
