@@ -4,7 +4,7 @@ import { MarkdownBox } from '@/components/client-details/MarkdownBox';
 import { SectionHeader } from '@/components/client-details/SectionHeader';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
-import { User } from 'lucide-react';
+import { User, Image } from 'lucide-react';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { cn } from '@/lib/utils';
 
@@ -72,12 +72,12 @@ export const CampaignAudienceSection: React.FC<CampaignAudienceSectionProps> = (
         
         <div className="flex flex-col">
           <h3 className="text-md font-semibold mb-4 flex items-center">
-            <User className="h-4 w-4 mr-2 text-black" />
-            Typically look like this.
+            <Image className="h-4 w-4 mr-2 text-black" />
+            Images they respond to
           </h3>
-          <div className="bg-gray-100 rounded-lg overflow-hidden h-[230px]">
+          <div className="bg-gray-100 rounded-lg overflow-hidden h-[300px]">
             {heroImageUrl ? (
-              <AspectRatio ratio={16/9} className="h-full">
+              <AspectRatio ratio={4/3} className="h-full">
                 <img 
                   src={heroImageUrl} 
                   alt="Target audience" 
@@ -94,7 +94,7 @@ export const CampaignAudienceSection: React.FC<CampaignAudienceSectionProps> = (
               </AspectRatio>
             ) : (
               <div className="flex items-center justify-center h-full">
-                <User className="h-20 w-20 text-gray-400" />
+                <Image className="h-20 w-20 text-gray-400" />
               </div>
             )}
           </div>
