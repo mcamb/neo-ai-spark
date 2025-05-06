@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import Sidebar from './Sidebar';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -93,7 +92,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
       
       <main className="flex-1">
         <header className="border-b border-gray-100 p-4">
-          <div className="flex items-center justify-end max-w-5xl w-full mx-auto">
+          <div className="flex items-center justify-end max-w-[90%] w-full mx-auto">
             <DropdownMenu>
               <DropdownMenuTrigger className="flex items-center gap-2 px-3 py-1 rounded-md hover:bg-gray-100 outline-none">
                 <span className="text-sm font-medium">Account</span>
@@ -126,7 +125,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
         </header>
         
         <div className="p-6">
-          <div className="max-w-5xl mx-auto bg-white rounded-lg shadow-sm p-6">
+          <div className="max-w-[90%] mx-auto bg-white rounded-lg shadow-sm p-6">
             {children}
           </div>
         </div>

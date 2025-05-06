@@ -62,7 +62,7 @@ const ClientsContent: React.FC<ClientsContentProps> = ({
   // Show an empty state when there are no clients
   if (!clients || clients.length === 0) {
     return (
-      <div className="text-center py-10 bg-white rounded-lg shadow-sm p-6">
+      <div className="text-center py-10">
         <Database className="h-12 w-12 mx-auto mb-4 text-gray-400" />
         <h3 className="text-lg font-medium text-gray-900">No clients found</h3>
         <p className="mt-2 text-sm text-gray-500">
@@ -80,7 +80,7 @@ const ClientsContent: React.FC<ClientsContentProps> = ({
 
   // Add a subtle loading indicator when refreshing with existing data
   return (
-    <div className="bg-white rounded-lg shadow-sm p-1 relative">
+    <div className="relative">
       {isLoading && (
         <div className="absolute top-0 left-0 right-0 h-1 bg-gray-100 overflow-hidden">
           <div className="h-full bg-neo-red animate-pulse" style={{ width: '100%' }}></div>
