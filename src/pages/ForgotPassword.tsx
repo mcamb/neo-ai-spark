@@ -1,46 +1,34 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { Mail, ArrowLeft } from 'lucide-react';
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [step, setStep] = useState<'email' | 'password'>('email');
-  const [emailExists, setEmailExists] = useState<boolean | null>(null);
   
-  const checkEmailExists = async (email: string) => {
-    try {
-      // Try to sign in with an invalid password to check if the email exists
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password: 'check_email_exists_only'
-      });
-      
-      // If the error message indicates the user doesn't exist
-      if (error && error.message.includes('Email not confirmed')) {
-        return true; // Email exists but not confirmed
-      } else if (error && error.message.includes('Invalid login credentials')) {
-        return true; // Email exists but wrong password
-      } else if (error && (error.message.includes('user not found') || error.message.includes('User not found'))) {
-        return false; // Email doesn't exist
-      }
-      
-      return true; // Assume email exists if we can't definitively say it doesn't
-    } catch (err) {
-      console.error('Error checking email:', err);
-      return null; // Error checking
+  // Check for password reset token in URL
+  useEffect(() => {
+    const hashParams = new URLSearchParams(location.hash.substring(1));
+    const type = hashParams.get('type');
+    const accessToken = hashParams.get('access_token');
+    
+    // If we have an access_token and the type is recovery, move to the password reset step
+    if (accessToken && type === 'recovery') {
+      setStep('password');
     }
-  };
+  }, [location]);
   
   const handleEmailSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,23 +36,24 @@ const ForgotPassword = () => {
     setLoading(true);
     
     try {
-      const exists = await checkEmailExists(email);
-      setEmailExists(exists);
+      // Send reset password email
+      const { error } = await supabase.auth.resetPasswordForEmail(
+        email,
+        {
+          redirectTo: `${window.location.origin}/forgot-password`, // This URL should be set in Supabase
+        }
+      );
       
-      if (!exists) {
-        setError("You don't have an account yet. Talk to Marcus Ambrus.");
-        setLoading(false);
-        return;
+      if (error) {
+        throw error;
       }
       
-      // If email exists, move to password reset step
-      setStep('password');
-      toast.success('Email verified. Please set your new password.');
+      toast.success('Check your email for the password reset link');
       
     } catch (err: any) {
-      console.error('Error during email verification:', err);
+      console.error('Error sending reset password email:', err);
       setError(err.message || 'An unexpected error occurred');
-      toast.error('An error occurred during verification');
+      toast.error('Failed to send reset email');
     } finally {
       setLoading(false);
     }
@@ -87,44 +76,25 @@ const ForgotPassword = () => {
     setLoading(true);
     
     try {
-      // First, get a one-time password for the user
-      const { data: otpData, error: otpError } = await supabase.auth.resetPasswordForEmail(
-        email, 
-        { redirectTo: window.location.origin }
-      );
-      
-      if (otpError) {
-        setError(otpError.message);
-        toast.error(otpError.message);
-        setLoading(false);
-        return;
-      }
-      
-      // Now attempt to sign in with the OTP
-      // This is a workaround since we can't directly update passwords without authentication
-      const { error: signInError } = await supabase.auth.signInWithPassword({
-        email,
-        password
-      });
-      
-      // Even if sign in fails (which it likely will), we'll still attempt to update the password
-      // Using a server-side admin function would be better, but we'll use this client-side approach
-      
-      // This would update the password for a signed-in user
+      // Update user's password using the token from URL
       const { error } = await supabase.auth.updateUser({ password });
       
       if (error) {
-        console.error('Password update error:', error);
-        setError("Could not update password. Please try again later.");
-        toast.error('Password update failed');
-      } else {
-        toast.success('Password has been updated successfully');
-        navigate('/');
+        throw error;
       }
+      
+      toast.success('Password has been updated successfully');
+      
+      // Sign out the user after password reset
+      await supabase.auth.signOut();
+      
+      // Redirect to login page
+      navigate('/');
+      
     } catch (err: any) {
       console.error('Error updating password:', err);
       setError(err.message || 'An unexpected error occurred');
-      toast.error('An error occurred while updating your password');
+      toast.error('Failed to update password');
     } finally {
       setLoading(false);
     }
@@ -136,7 +106,9 @@ const ForgotPassword = () => {
       <div className="flex flex-1 items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
         <div className="w-full max-w-sm space-y-8">
           <div className="flex flex-col items-center mb-8">
-            <h1 className="text-2xl font-semibold text-center">Set new password</h1>
+            <h1 className="text-2xl font-semibold text-center">
+              {step === 'email' ? 'Reset your password' : 'Set new password'}
+            </h1>
           </div>
           
           {step === 'email' ? (
@@ -170,7 +142,7 @@ const ForgotPassword = () => {
                 className="w-full bg-neo-red hover:bg-red-600 text-white"
                 disabled={loading}
               >
-                {loading ? 'Checking...' : 'Continue'}
+                {loading ? 'Sending...' : 'Send Reset Link'}
               </Button>
               
               <div className="text-center">
@@ -222,18 +194,8 @@ const ForgotPassword = () => {
                 className="w-full bg-neo-red hover:bg-red-600 text-white"
                 disabled={loading}
               >
-                {loading ? 'Updating...' : 'Save'}
+                {loading ? 'Updating...' : 'Reset Password'}
               </Button>
-              
-              <div className="text-center">
-                <button 
-                  type="button" 
-                  onClick={() => navigate('/')} 
-                  className="text-sm text-gray-600 hover:text-neo-red flex items-center justify-center w-full"
-                >
-                  <ArrowLeft size={16} className="mr-1" /> Back to login
-                </button>
-              </div>
             </form>
           )}
         </div>
