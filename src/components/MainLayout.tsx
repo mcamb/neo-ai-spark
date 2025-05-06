@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import Sidebar from './Sidebar';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -99,7 +98,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
               <DropdownMenuTrigger className="flex items-center gap-2 px-3 py-1 rounded-md hover:bg-gray-100 outline-none">
                 <span className="text-sm font-medium">Account</span>
                 <Avatar className="h-8 w-8 cursor-pointer">
-                  <AvatarImage src="" alt={email} />
+                  <AvatarImage src="" alt={fullName || "User"} />
                   <AvatarFallback>
                     <User size={16} />
                   </AvatarFallback>
@@ -110,7 +109,6 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
                   {fullName && (
                     <p className="font-normal text-black">{fullName}</p>
                   )}
-                  <p className="text-xs text-muted-foreground">{email}</p>
                   {agencyName && (
                     <p className="text-xs text-muted-foreground">{agencyName}</p>
                   )}
