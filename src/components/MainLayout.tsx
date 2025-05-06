@@ -82,14 +82,14 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
     }
   };
   
-  const fullName = colleagueData ? `${colleagueData.first_name} ${colleagueData.last_name}` : 'User';
+  const fullName = colleagueData ? `${colleagueData.first_name} ${colleagueData.last_name}` : '';
   
   return (
     <div className="flex min-h-screen">
       <Sidebar />
       
       <main className="flex-1">
-        <header className="border-b border-gray-100 p-4 flex justify-end">
+        <header className="border-b border-gray-100 p-4">
           <div className="flex items-center max-w-5xl w-full mx-auto px-6">
             <div className="flex-1"></div>
             <DropdownMenu>

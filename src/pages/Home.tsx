@@ -73,7 +73,7 @@ const Home = () => {
             return;
           }
           
-          if (data) {
+          if (data && data.first_name) {
             setFirstName(data.first_name);
           }
         }
