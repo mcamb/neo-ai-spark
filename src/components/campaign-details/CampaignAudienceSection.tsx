@@ -44,55 +44,59 @@ export const CampaignAudienceSection: React.FC<CampaignAudienceSectionProps> = (
   };
 
   return (
-    <div className="space-y-6 p-6 rounded-lg bg-[#FFFFFF] w-full">
-      <SectionHeader
-        title="Audience Snapshot"
-        isEditing={isEditing}
-        onEdit={handleStartEditing}
-        onSave={handleSaveEdits}
-      />
+    <div className="bg-[#FFFFFF] rounded-lg">
+      <div className="px-6 pt-6">
+        <SectionHeader
+          title="Audience Snapshot"
+          isEditing={isEditing}
+          onEdit={handleStartEditing}
+          onSave={handleSaveEdits}
+        />
+      </div>
       
-      <div className="grid md:grid-cols-2 gap-12">
-        <div className="flex flex-col">
-          <h3 className="text-md font-semibold mb-4 flex items-center">
-            <User className="h-4 w-4 mr-2 text-black" />
-            People we talk to
-          </h3>
-          <MarkdownBox 
-            isEditing={isEditing}
-            onEdit={setEditedAudienceSummary}
-            value={editedAudienceSummary}
-            style={{ backgroundColor: isEditing ? "#FFFFFF" : "#E8E5DE", minHeight: "230px" }}
-            className="h-full"
-          >
-            {targetAudienceSummary || "No audience information available."}
-          </MarkdownBox>
-        </div>
-        
-        <div className="flex flex-col">
-          <h3 className="text-md font-semibold mb-4 flex items-center">
-            <Image className="h-4 w-4 mr-2 text-black" />
-            Images they respond to
-          </h3>
-          <div className="bg-gray-100 rounded-lg overflow-hidden w-full h-auto">
-            <AspectRatio ratio={4/3}>
-              {heroImageUrl ? (
-                <img 
-                  src={heroImageUrl} 
-                  alt="Target audience" 
-                  className="object-cover w-full h-full"
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    target.src = "/placeholder.svg";
-                    target.className = "p-8 object-contain w-full h-full";
-                  }}
-                />
-              ) : (
-                <div className="flex items-center justify-center w-full h-full">
-                  <Image className="h-20 w-20 text-gray-400" />
-                </div>
-              )}
-            </AspectRatio>
+      <div className="px-6 pb-6">
+        <div className="grid md:grid-cols-2 gap-12 mt-6">
+          <div className="flex flex-col">
+            <h3 className="text-md font-semibold mb-4 flex items-center">
+              <User className="h-4 w-4 mr-2 text-black" />
+              People we talk to
+            </h3>
+            <MarkdownBox 
+              isEditing={isEditing}
+              onEdit={setEditedAudienceSummary}
+              value={editedAudienceSummary}
+              style={{ backgroundColor: isEditing ? "#FFFFFF" : "#E8E5DE", minHeight: "230px" }}
+              className="h-full"
+            >
+              {targetAudienceSummary || "No audience information available."}
+            </MarkdownBox>
+          </div>
+          
+          <div className="flex flex-col">
+            <h3 className="text-md font-semibold mb-4 flex items-center">
+              <Image className="h-4 w-4 mr-2 text-black" />
+              Images they respond to
+            </h3>
+            <div className="bg-gray-100 rounded-lg overflow-hidden w-full h-auto">
+              <AspectRatio ratio={4/3}>
+                {heroImageUrl ? (
+                  <img 
+                    src={heroImageUrl} 
+                    alt="Target audience" 
+                    className="object-cover w-full h-full"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.src = "/placeholder.svg";
+                      target.className = "p-8 object-contain w-full h-full";
+                    }}
+                  />
+                ) : (
+                  <div className="flex items-center justify-center w-full h-full">
+                    <Image className="h-20 w-20 text-gray-400" />
+                  </div>
+                )}
+              </AspectRatio>
+            </div>
           </div>
         </div>
       </div>

@@ -23,8 +23,8 @@ export const CampaignHeader: React.FC<CampaignHeaderProps> = ({
   const navigate = useNavigate();
   
   return (
-    <div className="w-full">
-      {/* Navigation - Properly aligned to the left */}
+    <div className="w-full px-6">
+      {/* Navigation - Left aligned */}
       <div className="mb-6">
         <Button variant="ghost" className="pl-0" onClick={() => navigate('/campaigns')}>
           <ArrowLeft className="h-4 w-4 mr-2" />
@@ -32,7 +32,7 @@ export const CampaignHeader: React.FC<CampaignHeaderProps> = ({
         </Button>
       </div>
       
-      {/* Header Section - Better aligned like client details */}
+      {/* Header Section */}
       <div className="flex flex-col md:flex-row gap-6 pb-6">
         <div className="flex items-start gap-4">
           <Avatar className="h-16 w-16 flex-shrink-0">
