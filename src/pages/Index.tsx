@@ -49,29 +49,6 @@ const Index = () => {
     }
   };
   
-  const handlePasswordReset = async (e: React.MouseEvent) => {
-    e.preventDefault();
-    if (!email) {
-      toast.error('Please enter your email address');
-      return;
-    }
-    
-    try {
-      const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: window.location.origin + '/home',
-      });
-      
-      if (error) {
-        toast.error(error.message);
-      } else {
-        toast.success('Password reset instructions have been sent');
-      }
-    } catch (error: any) {
-      console.error('Error during password reset:', error);
-      toast.error('An error occurred during password reset');
-    }
-  };
-  
   return (
     <div className="flex min-h-screen">
       {/* Left side - Login form */}
@@ -128,7 +105,7 @@ const Index = () => {
                   </label>
                 </div>
                 
-                <a href="#" onClick={handlePasswordReset} className="text-xs text-neo-red hover:underline">
+                <a href="/forgot-password" className="text-xs text-neo-red hover:underline">
                   Forgot password?
                 </a>
               </div>
