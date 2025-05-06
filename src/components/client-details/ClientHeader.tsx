@@ -23,7 +23,7 @@ export const ClientHeader: React.FC<ClientHeaderProps> = ({
   const navigate = useNavigate();
   
   return (
-    <>
+    <div className="w-full">
       {/* Navigation */}
       <div className="flex items-center gap-2 mb-6">
         <Button variant="ghost" onClick={() => navigate('/clients')} className="pl-0">
@@ -79,6 +79,6 @@ export const ClientHeader: React.FC<ClientHeaderProps> = ({
       <div className="pb-6">
         <p className="text-black">{description}</p>
       </div>
-    </>
+    </div>
   );
 };

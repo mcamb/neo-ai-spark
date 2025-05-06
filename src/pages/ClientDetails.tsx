@@ -35,7 +35,7 @@ const ClientDetailsPage = () => {
   if (isLoading) {
     return (
       <MainLayout>
-        <div className="space-y-8">
+        <div className="space-y-8 w-full">
           <div className="flex flex-col md:flex-row gap-6 pb-6">
             <Skeleton className="h-16 w-16 rounded-full" />
             <div className="space-y-2 w-full max-w-md">
@@ -62,7 +62,7 @@ const ClientDetailsPage = () => {
 
   return (
     <MainLayout>
-      <div className="space-y-8 max-w-[100%] w-full">
+      <div className="space-y-8 w-full">
         <ClientHeader
           name={clientDetails.name}
           country={clientDetails.country}
@@ -70,37 +70,39 @@ const ClientDetailsPage = () => {
           logo={clientDetails.logo}
           description={clientDetails.description}
         />
-        <Separator />
+        <Separator className="w-full" />
         
-        <BrandSection
-          isEditing={isEditingBrand}
-          brandPromise={clientDetails.brandPromise}
-          brandChallenge={clientDetails.brandChallenge}
-          editedBrandPromise={editedBrandPromise}
-          editedBrandChallenge={editedBrandChallenge}
-          onStartEditing={startEditingBrand}
-          onSaveEdits={saveBrandEdits}
-          onEditBrandPromise={setEditedBrandPromise}
-          onEditBrandChallenge={setEditedBrandChallenge}
-        />
-        
-        <AudienceSection
-          isEditing={isEditingAudience}
-          audienceType={audienceType}
-          targetAudience={clientDetails.targetAudience}
-          editedTargetAudience={editedTargetAudience}
-          onSetAudienceType={setAudienceType}
-          onStartEditing={startEditingAudience}
-          onSaveEdits={saveAudienceEdits}
-          onEditTargetAudience={handleEditTargetAudience}
-        />
-        
-        {clientDetails.socialMediaScores && clientDetails.socialMediaScores.length > 0 ? (
-          <ScoreSection 
-            socialMediaScores={clientDetails.socialMediaScores} 
-            clientId={clientDetails.id} 
+        <div className="space-y-8 w-full">
+          <BrandSection
+            isEditing={isEditingBrand}
+            brandPromise={clientDetails.brandPromise}
+            brandChallenge={clientDetails.brandChallenge}
+            editedBrandPromise={editedBrandPromise}
+            editedBrandChallenge={editedBrandChallenge}
+            onStartEditing={startEditingBrand}
+            onSaveEdits={saveBrandEdits}
+            onEditBrandPromise={setEditedBrandPromise}
+            onEditBrandChallenge={setEditedBrandChallenge}
           />
-        ) : null}
+          
+          <AudienceSection
+            isEditing={isEditingAudience}
+            audienceType={audienceType}
+            targetAudience={clientDetails.targetAudience}
+            editedTargetAudience={editedTargetAudience}
+            onSetAudienceType={setAudienceType}
+            onStartEditing={startEditingAudience}
+            onSaveEdits={saveAudienceEdits}
+            onEditTargetAudience={handleEditTargetAudience}
+          />
+          
+          {clientDetails.socialMediaScores && clientDetails.socialMediaScores.length > 0 ? (
+            <ScoreSection 
+              socialMediaScores={clientDetails.socialMediaScores} 
+              clientId={clientDetails.id} 
+            />
+          ) : null}
+        </div>
       </div>
     </MainLayout>
   );

@@ -43,7 +43,7 @@ export const AudienceContent: React.FC<AudienceContentProps> = ({
   }, [audienceType, isEditing, targetAudience]);
 
   return (
-    <div className="grid md:grid-cols-2 gap-6 w-full">
+    <div className="grid md:grid-cols-2 gap-6 w-full mt-4">
       <div className="space-y-2">
         <h4 className="text-base font-medium text-black flex items-center">
           <Star className="h-4 w-4 mr-2 text-black" />

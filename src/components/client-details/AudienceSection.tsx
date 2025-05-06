@@ -27,7 +27,7 @@ export const AudienceSection: React.FC<AudienceSectionProps> = ({
   onEditTargetAudience
 }) => {
   return (
-    <div className="space-y-6 p-6 rounded-lg bg-[#FFFFFF] w-full">
+    <div className="w-full bg-[#FFFFFF] rounded-lg">
       <SectionHeader
         title="Target Audience"
         isEditing={isEditing}
