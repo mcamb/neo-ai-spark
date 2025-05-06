@@ -19,6 +19,11 @@ NEO AI is a comprehensive marketing platform designed to help agencies manage cl
 - Store detailed campaign recommendations including tone, style, formats and targeting
 - Link campaigns to specific clients
 
+### Performance Visualization
+- Interactive score visualization for social media platforms
+- Rationale editor for explaining performance metrics
+- Real-time updates of score changes
+
 ## Technical Architecture
 
 ### Frontend
@@ -43,6 +48,8 @@ Clients table stores basic information about each client:
 - Country
 - Created date
 - Updated date
+- Brand information (promise, challenge)
+- Audience targeting (B2B and B2C)
 
 ### Campaigns
 Campaigns table contains information about marketing initiatives:
@@ -56,6 +63,12 @@ Campaigns table contains information about marketing initiatives:
 - Objectives
 - Recommendations (tone, style, formats, targeting, creators/influencers)
 
+### Social Media Scores
+Performance metrics for different platforms:
+- Platform name
+- Score (0-100)
+- Rationale (markdown format)
+
 ## Realtime Features
 
 The application leverages Supabase Realtime for live updates:
@@ -67,6 +80,7 @@ The application leverages Supabase Realtime for live updates:
 ### Prerequisites
 - Node.js (v16+)
 - npm or yarn package manager
+- Supabase account
 
 ### Local Development
 
@@ -78,7 +92,7 @@ npm install
 npm run dev
 ```
 
-The application will be available at http://localhost:8080
+The application will be available at http://localhost:5173
 
 ### Environment Variables
 
@@ -103,18 +117,32 @@ VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
 ### Client Details
 - Brand information section
 - Score visualization with rationale
-- Audience insights
+- Audience insights (B2B and B2C)
 
 ### Campaign Details
 - Campaign information
 - Recommendations section (tone, style, formats, targeting, creators)
 - Performance metrics
 
+### Score Visualization
+- Interactive score visualization for different platforms
+- Editable scores with real-time updates
+- Detailed rationales for each platform score
+
 ## Development Workflow
 
-1. All code changes should be committed to the connected GitHub repository
+1. All code changes are committed to the connected GitHub repository
 2. Database changes should be made through Supabase interface or SQL migrations
 3. Component additions should follow existing design patterns
+4. Use the realtime features for collaborative editing
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
 ## License
 
