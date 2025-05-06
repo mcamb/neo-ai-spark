@@ -20,14 +20,21 @@ const ForgotPassword = () => {
   
   // Check for password reset token in URL
   useEffect(() => {
-    const hashParams = new URLSearchParams(location.hash.substring(1));
-    const type = hashParams.get('type');
-    const accessToken = hashParams.get('access_token');
+    const handlePasswordResetToken = async () => {
+      const hashParams = new URLSearchParams(location.hash.substring(1));
+      const type = hashParams.get('type');
+      const accessToken = hashParams.get('access_token');
+      
+      if (accessToken && type === 'recovery') {
+        // Set to password reset step but don't automatically log the user in
+        setStep('password');
+        
+        // Clear the URL hash to avoid token leakage in browser history
+        window.history.replaceState({}, document.title, window.location.pathname);
+      }
+    };
     
-    // If we have an access_token and the type is recovery, move to the password reset step
-    if (accessToken && type === 'recovery') {
-      setStep('password');
-    }
+    handlePasswordResetToken();
   }, [location]);
   
   const handleEmailSubmit = async (e: React.FormEvent) => {
@@ -85,7 +92,7 @@ const ForgotPassword = () => {
       
       toast.success('Password has been updated successfully');
       
-      // Sign out the user after password reset
+      // Sign out the user after password reset to force them to log in with new password
       await supabase.auth.signOut();
       
       // Redirect to login page
