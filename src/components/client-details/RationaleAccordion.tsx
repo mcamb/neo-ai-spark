@@ -17,7 +17,9 @@ export const RationaleAccordion: React.FC<RationaleAccordionProps> = ({ socialMe
   return (
     <div className="w-full">
       <div className="flex items-center justify-between mb-4 w-full">
-        <h2 className="text-xl font-semibold text-black pb-2 border-b border-[#FF4B4F] w-full">Relevance Score Rationale</h2>
+        <h2 className="text-xl font-semibold text-black pb-2 border-b border-[#FF4B4F] w-full">
+          Relevance Score Rationale
+        </h2>
       </div>
       
       <Accordion type="single" defaultValue="item-0" collapsible className="w-full">

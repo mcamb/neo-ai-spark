@@ -6,7 +6,6 @@ import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { User, Image } from 'lucide-react';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
-import { cn } from '@/lib/utils';
 
 interface CampaignAudienceSectionProps {
   campaignId: string;
@@ -45,7 +44,7 @@ export const CampaignAudienceSection: React.FC<CampaignAudienceSectionProps> = (
   };
 
   return (
-    <div className="space-y-8 p-8 rounded-lg bg-[#FFFFFF]">
+    <div className="space-y-6 p-6 rounded-lg bg-[#FFFFFF] w-full">
       <SectionHeader
         title="Audience Snapshot"
         isEditing={isEditing}

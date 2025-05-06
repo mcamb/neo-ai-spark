@@ -44,7 +44,7 @@ const CampaignDetails = () => {
 
   return (
     <MainLayout>
-      <div className="space-y-8">
+      <div className="space-y-8 px-0">
         <CampaignHeader
           title={campaignDetails.title}
           status={campaignDetails.status}
@@ -60,22 +60,24 @@ const CampaignDetails = () => {
           status={campaignDetails.status}
         />
         
-        <Separator />
+        <Separator className="my-8" />
         
-        <CampaignAudienceSection
-          campaignId={campaignDetails.id}
-          targetAudienceSummary={campaignDetails.target_audience_summary}
-          heroImageUrl={campaignDetails.hero_image_url}
-        />
-        
-        <CampaignRecommendationsSection
-          campaignId={campaignDetails.id}
-          tone_style={campaignDetails.tone_style}
-          formats={campaignDetails.formats}
-          targeting={campaignDetails.targeting}
-          creators_influencers={campaignDetails.creators_influencers}
-          message_hook={campaignDetails.message_hook}
-        />
+        <div className="flex flex-col space-y-8">
+          <CampaignAudienceSection
+            campaignId={campaignDetails.id}
+            targetAudienceSummary={campaignDetails.target_audience_summary}
+            heroImageUrl={campaignDetails.hero_image_url}
+          />
+          
+          <CampaignRecommendationsSection
+            campaignId={campaignDetails.id}
+            tone_style={campaignDetails.tone_style}
+            formats={campaignDetails.formats}
+            targeting={campaignDetails.targeting}
+            creators_influencers={campaignDetails.creators_influencers}
+            message_hook={campaignDetails.message_hook}
+          />
+        </div>
       </div>
     </MainLayout>
   );

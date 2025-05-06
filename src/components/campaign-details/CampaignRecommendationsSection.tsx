@@ -80,7 +80,7 @@ export const CampaignRecommendationsSection: React.FC<CampaignRecommendationsSec
   };
 
   return (
-    <div className="space-y-12 p-8 rounded-lg bg-[#FFFFFF]">
+    <div className="space-y-8 p-6 rounded-lg bg-[#FFFFFF] w-full">
       <SectionHeader
         title="Recommendations"
         isEditing={isEditing}
@@ -124,8 +124,8 @@ export const CampaignRecommendationsSection: React.FC<CampaignRecommendationsSec
         </div>
       </div>
       
-      {/* Second row - Formats & Targeting with significant vertical spacing */}
-      <div className="grid md:grid-cols-2 gap-12 pt-6">
+      {/* Second row - Formats & Targeting with consistent spacing */}
+      <div className="grid md:grid-cols-2 gap-12">
         <div className="flex flex-col">
           <h3 className="text-md font-semibold mb-4 flex items-center">
             <FileText className="h-4 w-4 mr-2 text-black" />
@@ -160,8 +160,8 @@ export const CampaignRecommendationsSection: React.FC<CampaignRecommendationsSec
         </div>
       </div>
       
-      {/* Third row - Creators/Influencers only (Video section removed) */}
-      <div className="grid md:grid-cols-2 gap-12 pt-6">
+      {/* Third row - Creators/Influencers only */}
+      <div className="grid md:grid-cols-2 gap-12">
         <div className="flex flex-col">
           <h3 className="text-md font-semibold mb-4 flex items-center">
             <Users className="h-4 w-4 mr-2 text-black" />
@@ -178,8 +178,6 @@ export const CampaignRecommendationsSection: React.FC<CampaignRecommendationsSec
             {creators_influencers || "No creator or influencer recommendations available."}
           </MarkdownBox>
         </div>
-        
-        {/* Video section has been removed */}
       </div>
     </div>
   );
