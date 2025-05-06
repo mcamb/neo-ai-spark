@@ -17,8 +17,8 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
   onSave
 }) => {
   return (
-    <div className="flex items-center justify-between mb-6 w-full pb-2 border-b border-[#FF4B4F]">
-      <h2 className="text-xl font-semibold text-black">
+    <div className="flex items-center justify-between mb-6 w-full">
+      <h2 className="section-title">
         {title}
       </h2>
       
