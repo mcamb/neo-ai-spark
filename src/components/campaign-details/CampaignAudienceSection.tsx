@@ -75,28 +75,25 @@ export const CampaignAudienceSection: React.FC<CampaignAudienceSectionProps> = (
             <Image className="h-4 w-4 mr-2 text-black" />
             Images they respond to
           </h3>
-          <div className="bg-gray-100 rounded-lg overflow-hidden h-[300px]">
-            {heroImageUrl ? (
-              <AspectRatio ratio={4/3} className="h-full">
+          <div className="bg-gray-100 rounded-lg overflow-hidden w-full h-auto">
+            <AspectRatio ratio={4/3}>
+              {heroImageUrl ? (
                 <img 
                   src={heroImageUrl} 
                   alt="Target audience" 
-                  className={cn(
-                    "object-cover w-full h-full",
-                    !heroImageUrl && "hidden"
-                  )}
+                  className="object-cover w-full h-full"
                   onError={(e) => {
                     const target = e.target as HTMLImageElement;
                     target.src = "/placeholder.svg";
                     target.className = "p-8 object-contain w-full h-full";
                   }}
                 />
-              </AspectRatio>
-            ) : (
-              <div className="flex items-center justify-center h-full">
-                <Image className="h-20 w-20 text-gray-400" />
-              </div>
-            )}
+              ) : (
+                <div className="flex items-center justify-center w-full h-full">
+                  <Image className="h-20 w-20 text-gray-400" />
+                </div>
+              )}
+            </AspectRatio>
           </div>
         </div>
       </div>
