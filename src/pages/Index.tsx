@@ -1,18 +1,64 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import LogoIcon from '@/components/LogoIcon';
 import { useNavigate } from 'react-router-dom';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
 
 const Index = () => {
   const navigate = useNavigate();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
   
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    navigate('/home');
+    setLoading(true);
+    
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password
+      });
+      
+      if (error) {
+        toast.error(error.message);
+        return;
+      }
+      
+      if (data.user) {
+        toast.success('Erfolgreich angemeldet');
+        navigate('/home');
+      }
+    } catch (error) {
+      console.error('Fehler bei der Anmeldung:', error);
+      toast.error('Ein Fehler ist aufgetreten');
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  const handlePasswordReset = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (!email) {
+      toast.error('Bitte geben Sie Ihre E-Mail-Adresse ein');
+      return;
+    }
+    
+    supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: window.location.origin + '/home',
+    }).then(({ error }) => {
+      if (error) {
+        toast.error(error.message);
+      } else {
+        toast.success('Anweisungen zum Zurücksetzen des Passworts wurden gesendet');
+      }
+    });
   };
   
   return (
@@ -31,29 +77,51 @@ const Index = () => {
             <div className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
-                <Input id="email" type="email" placeholder="you@example.com" required />
+                <Input 
+                  id="email" 
+                  type="email" 
+                  placeholder="you@example.com" 
+                  required 
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
               </div>
               
               <div className="space-y-2">
                 <Label htmlFor="password">Password</Label>
-                <Input id="password" type="password" placeholder="••••••••" required />
+                <Input 
+                  id="password" 
+                  type="password" 
+                  placeholder="••••••••" 
+                  required 
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
                 <div className="text-left">
-                  <a href="#" className="text-xs text-neo-red hover:underline">
+                  <a href="#" onClick={handlePasswordReset} className="text-xs text-neo-red hover:underline">
                     Forgot password?
                   </a>
                 </div>
               </div>
               
               <div className="flex items-center space-x-2">
-                <Checkbox id="remember" />
+                <Checkbox 
+                  id="remember" 
+                  checked={rememberMe}
+                  onCheckedChange={(checked) => setRememberMe(!!checked)}
+                />
                 <label htmlFor="remember" className="text-sm text-gray-600">
                   Remember me
                 </label>
               </div>
             </div>
             
-            <Button type="submit" className="w-full bg-neo-red hover:bg-red-600 text-white">
-              Sign In
+            <Button 
+              type="submit" 
+              className="w-full bg-neo-red hover:bg-red-600 text-white"
+              disabled={loading}
+            >
+              {loading ? 'Anmeldung...' : 'Sign In'}
             </Button>
           </form>
         </div>

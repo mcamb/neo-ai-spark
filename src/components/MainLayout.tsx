@@ -34,6 +34,29 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   const [loading, setLoading] = useState(true);
   
   useEffect(() => {
+    const checkAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (!session) {
+        navigate('/');
+        return;
+      }
+    };
+    
+    checkAuth();
+    
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        if (event === 'SIGNED_OUT' || !session) {
+          navigate('/');
+        }
+      }
+    );
+    
+    return () => subscription.unsubscribe();
+  }, [navigate]);
+  
+  useEffect(() => {
     const fetchColleagueData = async () => {
       try {
         const { data: { user } } = await supabase.auth.getUser();
@@ -90,8 +113,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
       
       <main className="flex-1">
         <header className="border-b border-gray-100 p-4">
-          <div className="flex items-center max-w-5xl w-full mx-auto px-6">
-            <div className="flex-1"></div>
+          <div className="flex items-center justify-end max-w-5xl w-full mx-auto px-6">
             <DropdownMenu>
               <DropdownMenuTrigger className="flex items-center gap-2 px-3 py-1 rounded-md hover:bg-gray-100 outline-none">
                 <span className="text-sm font-medium">Account</span>
