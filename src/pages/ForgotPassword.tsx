@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -17,6 +17,23 @@ const ForgotPassword = () => {
   const [error, setError] = useState<string | null>(null);
   const [step, setStep] = useState<'email' | 'password'>('email');
   const [emailExists, setEmailExists] = useState<boolean | null>(null);
+  
+  // Check if we have a hash in the URL (for password reset session)
+  useEffect(() => {
+    // If we have a hash in the URL, this is likely a password reset session
+    const hash = window.location.hash;
+    if (hash && hash.includes('access_token')) {
+      // Extract the token and type
+      const params = new URLSearchParams(hash.substring(1));
+      const accessToken = params.get('access_token');
+      const tokenType = params.get('type');
+      
+      if (accessToken && tokenType === 'recovery') {
+        console.log('Password reset session detected');
+        setStep('password');
+      }
+    }
+  }, []);
   
   const checkEmailExists = async (email: string) => {
     try {
@@ -67,7 +84,6 @@ const ForgotPassword = () => {
         toast.error(error.message);
       } else {
         toast.success('Password reset instructions have been sent to your email');
-        setStep('password');
       }
     } catch (err: any) {
       console.error('Error during password reset:', err);
@@ -99,6 +115,8 @@ const ForgotPassword = () => {
         toast.error(error.message);
       } else {
         toast.success('Password has been reset successfully');
+        // Sign the user out and redirect to login
+        await supabase.auth.signOut();
         navigate('/');
       }
     } catch (err: any) {
@@ -204,6 +222,16 @@ const ForgotPassword = () => {
               >
                 {loading ? 'Updating...' : 'Save'}
               </Button>
+              
+              <div className="text-center">
+                <button 
+                  type="button" 
+                  onClick={() => navigate('/')} 
+                  className="text-sm text-gray-600 hover:text-neo-red flex items-center justify-center w-full"
+                >
+                  <ArrowLeft size={16} className="mr-1" /> Back to login
+                </button>
+              </div>
             </form>
           )}
         </div>
