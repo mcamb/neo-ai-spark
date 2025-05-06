@@ -115,14 +115,8 @@ const ForgotPassword = () => {
       
       if (error) {
         console.error('Password update error:', error);
-        setError("Could not update password. Please use the reset link sent to your email.");
+        setError("Could not update password. Please try again later.");
         toast.error('Password update failed');
-        
-        // Send the reset email as fallback
-        await supabase.auth.resetPasswordForEmail(email, {
-          redirectTo: window.location.origin + '/forgot-password',
-        });
-        toast.info('We\'ve sent you an email with password reset instructions');
       } else {
         toast.success('Password has been updated successfully');
         navigate('/');
