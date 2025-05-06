@@ -1,10 +1,11 @@
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { UserPlus, Rocket, FlaskConical } from 'lucide-react';
 import MainLayout from '@/components/MainLayout';
 import LogoIcon from '@/components/LogoIcon';
 import { useNavigate } from 'react-router-dom';
+import { supabase } from '@/integrations/supabase/client';
 
 const CTACard = ({
   title,
@@ -49,23 +50,48 @@ const cta_items = [
   }
 ];
 
-// This would be replaced with actual user authentication in a real app
-const getCurrentUser = () => {
-  // Hard-coded for now, but would be replaced with actual user data
-  return {
-    firstName: 'Marcus'
-  };
-};
-
 const Home = () => {
   const navigate = useNavigate();
-  const user = getCurrentUser();
+  const [firstName, setFirstName] = useState<string>('');
+  const [loading, setLoading] = useState(true);
+  
+  useEffect(() => {
+    const fetchColleagueData = async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        
+        if (user) {
+          // Fetch colleague data that matches the auth user ID
+          const { data, error } = await supabase
+            .from('colleagues')
+            .select('first_name')
+            .eq('id', user.id)
+            .single();
+            
+          if (error) {
+            console.error('Error fetching colleague data:', error);
+            return;
+          }
+          
+          if (data) {
+            setFirstName(data.first_name);
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchColleagueData();
+  }, []);
   
   return <MainLayout>
       <div className="max-w-5xl mx-auto">
         <div className="flex flex-col md:flex-row items-center justify-between mb-12">
           <div>
-            <h1 className="text-3xl font-bold pb-2">Hi {user.firstName}!</h1>
+            <h1 className="text-3xl font-bold pb-2">Hi {firstName || 'there'}!</h1>
             <p className="text-custom-text">
               Welcome to NEO AI - our very own AI platform.
             </p>

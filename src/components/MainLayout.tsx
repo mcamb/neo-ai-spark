@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Sidebar from './Sidebar';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useNavigate } from 'react-router-dom';
@@ -12,7 +12,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger 
 } from '@/components/ui/dropdown-menu';
-import { LogOut } from 'lucide-react';
+import { LogOut, User } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 
@@ -20,25 +20,56 @@ interface MainLayoutProps {
   children: React.ReactNode;
 }
 
-interface User {
-  firstName: string;
-  lastName: string;
+interface ColleagueData {
+  id: string;
+  first_name: string;
+  last_name: string;
+  agency_id: string;
+  agency_name?: string;
 }
-
-// This would be replaced with actual user authentication in a real app
-const getCurrentUser = (): User => {
-  // Hard-coded for now, but would be replaced with actual user data
-  return {
-    firstName: 'Marcus',
-    lastName: 'Ambrus'
-  };
-};
 
 const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   const navigate = useNavigate();
-  const user = getCurrentUser();
-  const fullName = `${user.firstName} ${user.lastName}`;
-  const initials = `${user.firstName.charAt(0)}${user.lastName.charAt(0)}`;
+  const [colleagueData, setColleagueData] = useState<ColleagueData | null>(null);
+  const [loading, setLoading] = useState(true);
+  
+  useEffect(() => {
+    const fetchColleagueData = async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        
+        if (user) {
+          // Fetch colleague data that matches the auth user ID
+          const { data, error } = await supabase
+            .from('colleagues')
+            .select('id, first_name, last_name, agency_id, agencies(name)')
+            .eq('id', user.id)
+            .single();
+            
+          if (error) {
+            console.error('Error fetching colleague data:', error);
+            return;
+          }
+          
+          if (data) {
+            setColleagueData({
+              id: data.id,
+              first_name: data.first_name,
+              last_name: data.last_name,
+              agency_id: data.agency_id,
+              agency_name: data.agencies?.name
+            });
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchColleagueData();
+  }, []);
   
   const handleSignOut = async () => {
     try {
@@ -51,6 +82,9 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
     }
   };
   
+  const fullName = colleagueData ? `${colleagueData.first_name} ${colleagueData.last_name}` : 'User';
+  const initials = colleagueData ? `${colleagueData.first_name.charAt(0)}${colleagueData.last_name.charAt(0)}` : 'U';
+  
   return (
     <div className="flex min-h-screen">
       <Sidebar />
@@ -59,17 +93,28 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
         <header className="border-b border-gray-100 p-4 flex justify-end">
           <div className="flex items-center gap-3">
             <DropdownMenu>
-              <DropdownMenuTrigger className="flex items-center gap-3 outline-none">
-                <span className="text-sm font-medium">{fullName}</span>
+              <DropdownMenuTrigger className="flex items-center gap-2 px-3 py-1 rounded-md hover:bg-gray-100 outline-none">
+                <span className="text-sm font-medium">Account</span>
                 <Avatar className="h-8 w-8 cursor-pointer">
                   <AvatarImage src="" alt={fullName} />
-                  <AvatarFallback>{initials}</AvatarFallback>
+                  <AvatarFallback>
+                    <User size={16} />
+                  </AvatarFallback>
                 </Avatar>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56">
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuContent align="end" className="w-64">
+                <div className="px-2 py-1.5">
+                  <p className="font-medium">{fullName}</p>
+                  {colleagueData?.agency_name && (
+                    <p className="text-xs text-muted-foreground">{colleagueData.agency_name}</p>
+                  )}
+                </div>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
+                  <DropdownMenuItem className="cursor-pointer" onClick={() => navigate('/account')}>
+                    <User className="mr-2 h-4 w-4" />
+                    <span>My Account</span>
+                  </DropdownMenuItem>
                   <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer text-red-600">
                     <LogOut className="mr-2 h-4 w-4" />
                     <span>Sign out</span>

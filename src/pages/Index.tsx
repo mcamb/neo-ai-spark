@@ -35,13 +35,13 @@ const Index = () => {
               </div>
               
               <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <Label htmlFor="password">Password</Label>
+                <Label htmlFor="password">Password</Label>
+                <Input id="password" type="password" placeholder="••••••••" required />
+                <div className="text-right">
                   <a href="#" className="text-xs text-neo-red hover:underline">
                     Forgot password?
                   </a>
                 </div>
-                <Input id="password" type="password" placeholder="••••••••" required />
               </div>
               
               <div className="flex items-center space-x-2">

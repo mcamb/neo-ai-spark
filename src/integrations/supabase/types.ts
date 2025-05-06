@@ -9,6 +9,21 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      agencies: {
+        Row: {
+          id: string
+          name: string
+        }
+        Insert: {
+          id?: string
+          name: string
+        }
+        Update: {
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
       campaigns: {
         Row: {
           agent_status: string
@@ -161,6 +176,38 @@ export type Database = {
             columns: ["country_id"]
             isOneToOne: false
             referencedRelation: "countries"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      colleagues: {
+        Row: {
+          agency_id: string | null
+          created_at: string | null
+          first_name: string
+          id: string
+          last_name: string
+        }
+        Insert: {
+          agency_id?: string | null
+          created_at?: string | null
+          first_name: string
+          id: string
+          last_name: string
+        }
+        Update: {
+          agency_id?: string | null
+          created_at?: string | null
+          first_name?: string
+          id?: string
+          last_name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "colleagues_agency_id_fkey"
+            columns: ["agency_id"]
+            isOneToOne: false
+            referencedRelation: "agencies"
             referencedColumns: ["id"]
           },
         ]

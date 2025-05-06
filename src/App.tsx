@@ -29,6 +29,7 @@ const App = () => (
           <Route path="/campaigns" element={<Campaigns />} />
           <Route path="/campaigns/:campaignId" element={<CampaignDetails />} />
           <Route path="/lab" element={<Lab />} />
+          <Route path="/account" element={<NotFound />} /> {/* Placeholder until we create the account page */}
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
