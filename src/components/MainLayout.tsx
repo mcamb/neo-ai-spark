@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import Sidebar from './Sidebar';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -7,7 +8,6 @@ import {
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger 
 } from '@/components/ui/dropdown-menu';
@@ -115,10 +115,6 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
                 </div>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
-                  <DropdownMenuItem className="cursor-pointer" onClick={() => navigate('/account')}>
-                    <User className="mr-2 h-4 w-4" />
-                    <span>My Account</span>
-                  </DropdownMenuItem>
                   <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer text-red-600">
                     <LogOut className="mr-2 h-4 w-4" />
                     <span>Sign out</span>
@@ -130,7 +126,9 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
         </header>
         
         <div className="p-6">
-          {children}
+          <div className="max-w-5xl mx-auto bg-white rounded-lg shadow-sm p-6">
+            {children}
+          </div>
         </div>
       </main>
     </div>

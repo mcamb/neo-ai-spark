@@ -87,7 +87,7 @@ const Home = () => {
   }, []);
   
   return <MainLayout>
-      <div className="max-w-5xl mx-auto">
+      <div>
         <div className="flex flex-col md:flex-row items-center justify-between mb-12">
           <div>
             <h1 className="text-3xl font-bold pb-2">Hi {userName}!</h1>
