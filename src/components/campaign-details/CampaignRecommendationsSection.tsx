@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { MarkdownBox } from '@/components/client-details/MarkdownBox';
-import { FileText, Palette, Users, Target, MessageCircle, Video } from 'lucide-react';
+import { FileText, Palette, Users, Target, MessageCircle } from 'lucide-react';
 import { SectionHeader } from '@/components/client-details/SectionHeader';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
@@ -160,7 +160,7 @@ export const CampaignRecommendationsSection: React.FC<CampaignRecommendationsSec
         </div>
       </div>
       
-      {/* Third row - Creators & Video with significant vertical spacing */}
+      {/* Third row - Creators/Influencers only (Video section removed) */}
       <div className="grid md:grid-cols-2 gap-12 pt-6">
         <div className="flex flex-col">
           <h3 className="text-md font-semibold mb-4 flex items-center">
@@ -179,15 +179,7 @@ export const CampaignRecommendationsSection: React.FC<CampaignRecommendationsSec
           </MarkdownBox>
         </div>
         
-        <div className="flex flex-col">
-          <h3 className="text-md font-semibold mb-4 flex items-center">
-            <Video className="h-4 w-4 mr-2 text-black" />
-            #1 Creator Video
-          </h3>
-          <div className="bg-gray-100 rounded-lg flex items-center justify-center h-[230px]">
-            <Video className="h-20 w-20 text-gray-400" />
-          </div>
-        </div>
+        {/* Video section has been removed */}
       </div>
     </div>
   );
