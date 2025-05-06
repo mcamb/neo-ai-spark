@@ -15,13 +15,13 @@ export const CampaignBrandSection: React.FC<CampaignBrandSectionProps> = ({
   
   return (
     <div className="bg-[#FFFFFF] rounded-lg w-full">
-      <div className="p-6">
+      <div className="px-6 pt-6">
         <h2 className="text-xl font-semibold text-black relative pb-2 mb-6">
           Brand Context
           <span className="absolute bottom-0 left-0 w-16 h-1 bg-[#FF4B4F]"></span>
         </h2>
         
-        <div className="grid md:grid-cols-2 gap-6 w-full">
+        <div className="grid md:grid-cols-2 gap-6 w-full pb-6">
           {brand_promise && (
             <div className="space-y-2">
               <h3 className="font-medium text-black">Brand Promise</h3>

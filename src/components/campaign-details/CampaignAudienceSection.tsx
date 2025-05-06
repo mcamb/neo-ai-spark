@@ -52,7 +52,7 @@ export const CampaignAudienceSection: React.FC<CampaignAudienceSectionProps> = (
         onSave={handleSaveEdits}
       />
       
-      <div className="p-6">
+      <div className="px-6 pb-6">
         <div className="grid md:grid-cols-2 gap-12 w-full">
           <div className="flex flex-col">
             <h3 className="text-md font-semibold mb-4 flex items-center">

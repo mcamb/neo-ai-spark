@@ -88,7 +88,7 @@ export const CampaignRecommendationsSection: React.FC<CampaignRecommendationsSec
         onSave={handleSaveEdits}
       />
       
-      <div className="p-6">
+      <div className="px-6 pb-6">
         {/* First row - Message Hook & Tone Style */}
         <div className="grid md:grid-cols-2 gap-12 w-full">
           <div className="flex flex-col">
