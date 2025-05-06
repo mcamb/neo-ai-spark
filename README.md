@@ -1,73 +1,122 @@
-# Welcome to your Lovable project
 
-## Project info
+# NEO AI Marketing Platform
 
-**URL**: https://lovable.dev/projects/fba1c3cc-522c-4932-99aa-cad7cab8b5ad
+## Project Overview
 
-## How can I edit this code?
+NEO AI is a comprehensive marketing platform designed to help agencies manage clients and campaigns. The platform provides tools for tracking client information, campaign details, and performance metrics across various marketing channels.
 
-There are several ways of editing your application.
+## Core Features
 
-**Use Lovable**
+### Client Management
+- Create, view, edit and delete client profiles
+- Track client status (Active, Inactive, Prospect)
+- Store detailed brand information and audience insights
+- Visualize platform performance with score metrics
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/fba1c3cc-522c-4932-99aa-cad7cab8b5ad) and start prompting.
+### Campaign Management
+- Create and manage marketing campaigns
+- Track campaign status (Draft, Active, Completed, On Hold)
+- Store detailed campaign recommendations including tone, style, formats and targeting
+- Link campaigns to specific clients
 
-Changes made via Lovable will be committed automatically to this repo.
+## Technical Architecture
 
-**Use your preferred IDE**
+### Frontend
+- **Framework**: React with TypeScript
+- **UI Libraries**: Tailwind CSS, shadcn/ui
+- **State Management**: React Query (Tanstack Query)
+- **Routing**: React Router
+- **Charts**: Recharts
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### Backend
+- **Database**: Supabase (PostgreSQL)
+- **Real-time Updates**: Supabase Realtime
+- **Authentication**: Supabase Auth
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+## Data Structure
 
-Follow these steps:
+### Clients
+Clients table stores basic information about each client:
+- ID (UUID)
+- Name
+- Status (Active, Inactive, Prospect)
+- Country
+- Created date
+- Updated date
+
+### Campaigns
+Campaigns table contains information about marketing initiatives:
+- ID (UUID)
+- Name
+- Client ID (foreign key)
+- Status (Draft, Active, Completed, On Hold)
+- Start date
+- End date
+- Budget
+- Objectives
+- Recommendations (tone, style, formats, targeting, creators/influencers)
+
+## Realtime Features
+
+The application leverages Supabase Realtime for live updates:
+- Client profile changes are reflected instantly across all connected clients
+- Campaign updates propagate in real-time
+
+## Getting Started
+
+### Prerequisites
+- Node.js (v16+)
+- npm or yarn package manager
+
+### Local Development
 
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+# Install dependencies
+npm install
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Start development server
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+The application will be available at http://localhost:8080
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### Environment Variables
 
-**Use GitHub Codespaces**
+Create a `.env` file with the following variables:
+```
+VITE_SUPABASE_URL=your_supabase_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## Pages and Navigation
 
-## What technologies are used for this project?
+- `/` - Welcome/Login page
+- `/home` - Dashboard overview
+- `/clients` - Client management
+- `/clients/:clientId` - Detailed client view
+- `/campaigns` - Campaign management
+- `/campaigns/:campaignId` - Detailed campaign view
+- `/lab` - Experimental features
 
-This project is built with:
+## Key Components
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+### Client Details
+- Brand information section
+- Score visualization with rationale
+- Audience insights
 
-## How can I deploy this project?
+### Campaign Details
+- Campaign information
+- Recommendations section (tone, style, formats, targeting, creators)
+- Performance metrics
 
-Simply open [Lovable](https://lovable.dev/projects/fba1c3cc-522c-4932-99aa-cad7cab8b5ad) and click on Share -> Publish.
+## Development Workflow
 
-## Can I connect a custom domain to my Lovable project?
+1. All code changes should be committed to the connected GitHub repository
+2. Database changes should be made through Supabase interface or SQL migrations
+3. Component additions should follow existing design patterns
 
-Yes, you can!
+## License
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+This project is proprietary software - all rights reserved.
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
