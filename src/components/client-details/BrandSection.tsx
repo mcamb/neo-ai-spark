@@ -28,7 +28,7 @@ export const BrandSection: React.FC<BrandSectionProps> = ({
   onEditBrandChallenge
 }) => {
   return (
-    <div className="space-y-6 p-6 rounded-lg bg-[#FFFFFF]">
+    <div className="space-y-6 p-6 rounded-lg bg-[#FFFFFF] w-full">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-xl font-semibold text-black relative pb-2">
           Brand

@@ -15,8 +15,8 @@ interface RationaleAccordionProps {
 
 export const RationaleAccordion: React.FC<RationaleAccordionProps> = ({ socialMediaScores }) => {
   return (
-    <div className="space-y-6 p-6 rounded-lg">
-      <div className="flex items-center justify-between mb-2">
+    <div className="space-y-6 p-6 rounded-lg w-full">
+      <div className="flex items-center justify-between mb-2 w-full">
         <h2 className="text-xl font-semibold text-black">Relevance Score Rationale</h2>
       </div>
       

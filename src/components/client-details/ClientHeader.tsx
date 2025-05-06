@@ -26,7 +26,7 @@ export const ClientHeader: React.FC<ClientHeaderProps> = ({
     <>
       {/* Navigation */}
       <div className="flex items-center gap-2 mb-6">
-        <Button variant="ghost" onClick={() => navigate('/clients')}>
+        <Button variant="ghost" onClick={() => navigate('/clients')} className="pl-0">
           <ArrowLeft className="h-4 w-4 mr-2" />
           Back to Clients
         </Button>

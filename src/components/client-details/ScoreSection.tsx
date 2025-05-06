@@ -96,7 +96,7 @@ export const ScoreSection: React.FC<ScoreSectionProps> = ({ socialMediaScores, c
   };
 
   return (
-    <div className="space-y-6 bg-white shadow-sm rounded-lg">
+    <div className="space-y-6 bg-white shadow-sm rounded-lg w-full">
       <div className="p-6">
         <SectionHeader
           title="Relevance Score"
@@ -105,8 +105,8 @@ export const ScoreSection: React.FC<ScoreSectionProps> = ({ socialMediaScores, c
           onSave={saveScoresChanges}
         />
         
-        <div className="grid md:grid-cols-2 gap-6">
-          <div>
+        <div className="grid md:grid-cols-2 gap-6 w-full">
+          <div className="w-full">
             {isEditing ? (
               <ScoreEditor
                 scores={editedScores}
@@ -119,7 +119,7 @@ export const ScoreSection: React.FC<ScoreSectionProps> = ({ socialMediaScores, c
             )}
           </div>
           
-          <div className="h-full">
+          <div className="h-full w-full">
             {selectedRationale && (
               <ScoreRationale
                 platform={selectedPlatform}

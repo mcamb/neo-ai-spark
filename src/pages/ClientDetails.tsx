@@ -62,7 +62,7 @@ const ClientDetailsPage = () => {
 
   return (
     <MainLayout>
-      <div className="space-y-8">
+      <div className="space-y-8 max-w-[100%] w-full">
         <ClientHeader
           name={clientDetails.name}
           country={clientDetails.country}
