@@ -15,9 +15,11 @@ const Index = () => {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError(null);
     setLoading(true);
     
     try {
@@ -27,15 +29,21 @@ const Index = () => {
       });
       
       if (error) {
-        console.error('Anmeldefehler:', error);
-        toast.error(error.message);
+        console.error('Login error:', error);
+        setError(error.message);
+        toast.error(error.message || 'Invalid login credentials');
       } else if (data.user) {
-        toast.success('Erfolgreich angemeldet');
+        toast.success('Successfully logged in');
         navigate('/home');
+      } else {
+        // This should not happen but handle it just in case
+        setError('Authentication failed. Please try again.');
+        toast.error('Authentication failed');
       }
-    } catch (error) {
-      console.error('Fehler bei der Anmeldung:', error);
-      toast.error('Ein Fehler ist aufgetreten');
+    } catch (error: any) {
+      console.error('Error during login:', error);
+      setError(error.message || 'An unexpected error occurred');
+      toast.error('An error occurred during login');
     } finally {
       setLoading(false);
     }
@@ -44,7 +52,7 @@ const Index = () => {
   const handlePasswordReset = async (e: React.MouseEvent) => {
     e.preventDefault();
     if (!email) {
-      toast.error('Bitte geben Sie Ihre E-Mail-Adresse ein');
+      toast.error('Please enter your email address');
       return;
     }
     
@@ -56,11 +64,11 @@ const Index = () => {
       if (error) {
         toast.error(error.message);
       } else {
-        toast.success('Anweisungen zum Zurücksetzen des Passworts wurden gesendet');
+        toast.success('Password reset instructions have been sent');
       }
-    } catch (error) {
-      console.error('Fehler beim Zurücksetzen des Passworts:', error);
-      toast.error('Ein Fehler ist aufgetreten');
+    } catch (error: any) {
+      console.error('Error during password reset:', error);
+      toast.error('An error occurred during password reset');
     }
   };
   
@@ -77,6 +85,12 @@ const Index = () => {
           </div>
           
           <form className="space-y-6" onSubmit={handleSubmit}>
+            {error && (
+              <div className="p-3 bg-red-50 border border-red-200 text-red-700 rounded-md text-sm">
+                {error}
+              </div>
+            )}
+            
             <div className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
@@ -125,7 +139,7 @@ const Index = () => {
               className="w-full bg-neo-red hover:bg-red-600 text-white"
               disabled={loading}
             >
-              {loading ? 'Anmeldung...' : 'Sign In'}
+              {loading ? 'Signing in...' : 'Sign In'}
             </Button>
           </form>
         </div>
