@@ -24,9 +24,9 @@ export const CampaignHeader: React.FC<CampaignHeaderProps> = ({
   
   return (
     <>
-      {/* Navigation */}
-      <div className="flex items-center gap-2 mb-6">
-        <Button variant="ghost" onClick={() => navigate('/campaigns')}>
+      {/* Navigation - Aligning with the rest of the content */}
+      <div className="mb-6">
+        <Button variant="ghost" className="pl-0" onClick={() => navigate('/campaigns')}>
           <ArrowLeft className="h-4 w-4 mr-2" />
           Back to Campaigns
         </Button>

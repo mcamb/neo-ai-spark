@@ -44,7 +44,7 @@ const CampaignDetails = () => {
 
   return (
     <MainLayout>
-      <div className="space-y-8 px-0">
+      <div className="space-y-8">
         <CampaignHeader
           title={campaignDetails.title}
           status={campaignDetails.status}
