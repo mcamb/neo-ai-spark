@@ -133,10 +133,10 @@
     @apply text-xl font-semibold text-black relative inline-block pb-2;
   }
   
+  /* Ensure the red underline is visible and properly sized */
   .section-title::after {
     content: '';
-    @apply absolute bottom-0 left-0 h-1.5 bg-[#FF4B4F];
-    width: 100%; /* Line exactly as wide as the text */
+    @apply absolute bottom-0 left-0 w-full h-1.5 bg-[#FF4B4F] block;
   }
   
   .section-card {
