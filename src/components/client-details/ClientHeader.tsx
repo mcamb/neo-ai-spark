@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Globe } from 'lucide-react';
+import { ArrowLeft, Globe, ExternalLink } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useNavigate } from 'react-router-dom';
 
@@ -62,12 +62,13 @@ export const ClientHeader: React.FC<ClientHeaderProps> = ({
             <div className="flex items-center gap-1">
               <Globe className="h-3.5 w-3.5 text-neo-red" />
               <a 
-                href={`https://${domain}`} 
+                href={domain.startsWith('http') ? domain : `https://${domain}`}
                 target="_blank" 
                 rel="noopener noreferrer" 
-                className="text-neo-red hover:underline"
+                className="text-neo-red hover:underline flex items-center"
               >
                 {domain}
+                <ExternalLink className="h-3 w-3 ml-1" />
               </a>
             </div>
           </div>
