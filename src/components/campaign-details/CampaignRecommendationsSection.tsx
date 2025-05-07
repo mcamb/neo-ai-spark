@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { MarkdownBox } from '@/components/client-details/MarkdownBox';
+import { CampaignMarkdownBox } from '@/components/campaign-details/CampaignMarkdownBox';
 import { FileText, Palette, Users, Target, MessageCircle } from 'lucide-react';
 import { SectionHeader } from '@/components/client-details/SectionHeader';
 import { toast } from 'sonner';
@@ -96,7 +96,7 @@ export const CampaignRecommendationsSection: React.FC<CampaignRecommendationsSec
               <MessageCircle className="h-4 w-4 mr-2 text-black" />
               Message Hook
             </h3>
-            <MarkdownBox 
+            <CampaignMarkdownBox 
               isEditing={isEditing}
               onEdit={(value) => handleEdit('message_hook', value)}
               value={editedValues.message_hook}
@@ -104,7 +104,7 @@ export const CampaignRecommendationsSection: React.FC<CampaignRecommendationsSec
               className="h-full"
             >
               {message_hook || "No message hook defined for this campaign."}
-            </MarkdownBox>
+            </CampaignMarkdownBox>
           </div>
           
           <div className="flex flex-col px-6">
@@ -112,7 +112,7 @@ export const CampaignRecommendationsSection: React.FC<CampaignRecommendationsSec
               <Palette className="h-4 w-4 mr-2 text-black" />
               Tone & Style
             </h3>
-            <MarkdownBox 
+            <CampaignMarkdownBox 
               isEditing={isEditing}
               onEdit={(value) => handleEdit('tone_style', value)}
               value={editedValues.tone_style}
@@ -121,7 +121,7 @@ export const CampaignRecommendationsSection: React.FC<CampaignRecommendationsSec
               darkMode={true}
             >
               {tone_style || "No tone and style recommendations available."}
-            </MarkdownBox>
+            </CampaignMarkdownBox>
           </div>
         </div>
         
@@ -132,7 +132,7 @@ export const CampaignRecommendationsSection: React.FC<CampaignRecommendationsSec
               <FileText className="h-4 w-4 mr-2 text-black" />
               Formats
             </h3>
-            <MarkdownBox 
+            <CampaignMarkdownBox 
               isEditing={isEditing}
               onEdit={(value) => handleEdit('formats', value)}
               value={editedValues.formats}
@@ -141,7 +141,7 @@ export const CampaignRecommendationsSection: React.FC<CampaignRecommendationsSec
               darkMode={true}
             >
               {formats || "No format recommendations available."}
-            </MarkdownBox>
+            </CampaignMarkdownBox>
           </div>
           
           <div className="flex flex-col px-6">
@@ -149,7 +149,7 @@ export const CampaignRecommendationsSection: React.FC<CampaignRecommendationsSec
               <Target className="h-4 w-4 mr-2 text-black" />
               Targeting
             </h3>
-            <MarkdownBox 
+            <CampaignMarkdownBox 
               isEditing={isEditing}
               onEdit={(value) => handleEdit('targeting', value)}
               value={editedValues.targeting}
@@ -157,7 +157,7 @@ export const CampaignRecommendationsSection: React.FC<CampaignRecommendationsSec
               className="h-full"
             >
               {targeting || "No targeting information available."}
-            </MarkdownBox>
+            </CampaignMarkdownBox>
           </div>
         </div>
         
@@ -168,7 +168,7 @@ export const CampaignRecommendationsSection: React.FC<CampaignRecommendationsSec
               <Users className="h-4 w-4 mr-2 text-black" />
               Creators / Influencers
             </h3>
-            <MarkdownBox 
+            <CampaignMarkdownBox 
               isEditing={isEditing}
               onEdit={(value) => handleEdit('creators_influencers', value)}
               value={editedValues.creators_influencers}
@@ -177,7 +177,7 @@ export const CampaignRecommendationsSection: React.FC<CampaignRecommendationsSec
               darkMode={true}
             >
               {creators_influencers || "No creator or influencer recommendations available."}
-            </MarkdownBox>
+            </CampaignMarkdownBox>
           </div>
         </div>
       </div>

@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { MarkdownBox } from '@/components/client-details/MarkdownBox';
+import { CampaignMarkdownBox } from '@/components/campaign-details/CampaignMarkdownBox';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { BarChart2, MessageCircle, Users } from 'lucide-react';
 
@@ -32,9 +32,9 @@ export const CampaignInfoSection: React.FC<CampaignInfoSectionProps> = ({
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <MarkdownBox style={{ backgroundColor: "#E8E5DE" }}>
+            <CampaignMarkdownBox style={{ backgroundColor: "#E8E5DE" }}>
               {target_audience || "No target audience information available."}
-            </MarkdownBox>
+            </CampaignMarkdownBox>
           </CardContent>
         </Card>
         
@@ -45,9 +45,9 @@ export const CampaignInfoSection: React.FC<CampaignInfoSectionProps> = ({
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <MarkdownBox style={{ backgroundColor: "#E8E5DE" }}>
+            <CampaignMarkdownBox style={{ backgroundColor: "#E8E5DE" }}>
               {targeting || "No targeting information available."}
-            </MarkdownBox>
+            </CampaignMarkdownBox>
           </CardContent>
         </Card>
       </div>
@@ -59,9 +59,9 @@ export const CampaignInfoSection: React.FC<CampaignInfoSectionProps> = ({
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <MarkdownBox style={{ backgroundColor: "#E8E5DE" }}>
+          <CampaignMarkdownBox style={{ backgroundColor: "#E8E5DE" }}>
             {message_hook || "No message hook defined for this campaign."}
-          </MarkdownBox>
+          </CampaignMarkdownBox>
         </CardContent>
       </Card>
     </div>

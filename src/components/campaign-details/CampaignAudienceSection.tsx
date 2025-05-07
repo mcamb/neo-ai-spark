@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { MarkdownBox } from '@/components/client-details/MarkdownBox';
+import { CampaignMarkdownBox } from '@/components/campaign-details/CampaignMarkdownBox';
 import { SectionHeader } from '@/components/client-details/SectionHeader';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
@@ -59,7 +59,7 @@ export const CampaignAudienceSection: React.FC<CampaignAudienceSectionProps> = (
               <User className="h-4 w-4 mr-2 text-black" />
               People we talk to
             </h3>
-            <MarkdownBox 
+            <CampaignMarkdownBox 
               isEditing={isEditing}
               onEdit={setEditedAudienceSummary}
               value={editedAudienceSummary}
@@ -67,7 +67,7 @@ export const CampaignAudienceSection: React.FC<CampaignAudienceSectionProps> = (
               className="h-full"
             >
               {targetAudienceSummary || "No audience information available."}
-            </MarkdownBox>
+            </CampaignMarkdownBox>
           </div>
           
           <div className="flex flex-col px-6">

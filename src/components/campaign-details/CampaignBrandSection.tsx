@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { MarkdownBox } from '@/components/client-details/MarkdownBox';
+import { CampaignMarkdownBox } from '@/components/campaign-details/CampaignMarkdownBox';
 import { SectionHeader } from '@/components/client-details/SectionHeader';
 import { Award, Target } from 'lucide-react';
 
@@ -28,9 +28,9 @@ export const CampaignBrandSection: React.FC<CampaignBrandSectionProps> = ({
                   <Award className="h-4 w-4 mr-2 text-black" />
                   Brand Promise
                 </h3>
-                <MarkdownBox style={{ backgroundColor: "#E8E5DE" }}>
+                <CampaignMarkdownBox style={{ backgroundColor: "#E8E5DE" }}>
                   {brand_promise}
-                </MarkdownBox>
+                </CampaignMarkdownBox>
               </div>
             )}
             
@@ -40,9 +40,9 @@ export const CampaignBrandSection: React.FC<CampaignBrandSectionProps> = ({
                   <Target className="h-4 w-4 mr-2 text-black" />
                   Brand Challenge
                 </h3>
-                <MarkdownBox style={{ backgroundColor: "#E8E5DE" }}>
+                <CampaignMarkdownBox style={{ backgroundColor: "#E8E5DE" }}>
                   {brand_challenge}
-                </MarkdownBox>
+                </CampaignMarkdownBox>
               </div>
             )}
           </div>
