@@ -44,7 +44,7 @@ const CampaignDetails = () => {
 
   return (
     <MainLayout>
-      <div className="w-full">
+      <div className="w-full space-y-8">
         <CampaignHeader
           title={campaignDetails.title}
           status={campaignDetails.status}
@@ -53,7 +53,7 @@ const CampaignDetails = () => {
           country={campaignDetails.country}
         />
         
-        <div className="w-full mb-8">
+        <div className="w-full">
           <CampaignSummary
             targetAudience={campaignDetails.target_audience}
             objective={campaignDetails.objective_name}

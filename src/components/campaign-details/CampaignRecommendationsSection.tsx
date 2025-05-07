@@ -88,10 +88,10 @@ export const CampaignRecommendationsSection: React.FC<CampaignRecommendationsSec
         onSave={handleSaveEdits}
       />
       
-      <div className="px-6 pb-6">
+      <div className="px-0 pb-6">
         {/* First row - Message Hook & Tone Style */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-          <div className="flex flex-col">
+          <div className="flex flex-col px-6">
             <h3 className="text-md font-semibold mb-4 flex items-center">
               <MessageCircle className="h-4 w-4 mr-2 text-black" />
               Message Hook
@@ -107,7 +107,7 @@ export const CampaignRecommendationsSection: React.FC<CampaignRecommendationsSec
             </MarkdownBox>
           </div>
           
-          <div className="flex flex-col">
+          <div className="flex flex-col px-6">
             <h3 className="text-md font-semibold mb-4 flex items-center">
               <Palette className="h-4 w-4 mr-2 text-black" />
               Tone & Style
@@ -127,7 +127,7 @@ export const CampaignRecommendationsSection: React.FC<CampaignRecommendationsSec
         
         {/* Second row - Formats & Targeting with consistent spacing */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-          <div className="flex flex-col">
+          <div className="flex flex-col px-6">
             <h3 className="text-md font-semibold mb-4 flex items-center">
               <FileText className="h-4 w-4 mr-2 text-black" />
               Formats
@@ -144,7 +144,7 @@ export const CampaignRecommendationsSection: React.FC<CampaignRecommendationsSec
             </MarkdownBox>
           </div>
           
-          <div className="flex flex-col">
+          <div className="flex flex-col px-6">
             <h3 className="text-md font-semibold mb-4 flex items-center">
               <Target className="h-4 w-4 mr-2 text-black" />
               Targeting
@@ -163,7 +163,7 @@ export const CampaignRecommendationsSection: React.FC<CampaignRecommendationsSec
         
         {/* Third row - Creators/Influencers only */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="flex flex-col">
+          <div className="flex flex-col px-6">
             <h3 className="text-md font-semibold mb-4 flex items-center">
               <Users className="h-4 w-4 mr-2 text-black" />
               Creators / Influencers

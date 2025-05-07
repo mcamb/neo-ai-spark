@@ -52,9 +52,9 @@ export const CampaignAudienceSection: React.FC<CampaignAudienceSectionProps> = (
         onSave={handleSaveEdits}
       />
       
-      <div className="px-6 pb-6">
+      <div className="px-0 pb-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="flex flex-col">
+          <div className="flex flex-col px-6">
             <h3 className="text-md font-semibold mb-4 flex items-center">
               <User className="h-4 w-4 mr-2 text-black" />
               People we talk to
@@ -70,7 +70,7 @@ export const CampaignAudienceSection: React.FC<CampaignAudienceSectionProps> = (
             </MarkdownBox>
           </div>
           
-          <div className="flex flex-col">
+          <div className="flex flex-col px-6">
             <h3 className="text-md font-semibold mb-4 flex items-center">
               <Image className="h-4 w-4 mr-2 text-black" />
               Images they respond to
