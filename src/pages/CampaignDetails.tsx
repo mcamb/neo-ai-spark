@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import MainLayout from '@/components/MainLayout';
@@ -17,10 +18,10 @@ const CampaignDetails = () => {
   if (isLoading) {
     return (
       <MainLayout>
-        <div className="space-y-8 w-full">
+        <div className="w-full">
           <div className="flex flex-col md:flex-row gap-6 pb-6">
             <Skeleton className="h-16 w-16 rounded-full" />
-            <div className="space-y-2 w-full max-w-md">
+            <div className="space-y-2 w-full">
               <Skeleton className="h-8 w-64" />
               <Skeleton className="h-4 w-48" />
             </div>
@@ -43,7 +44,7 @@ const CampaignDetails = () => {
 
   return (
     <MainLayout>
-      <div className="space-y-8 w-full">
+      <div className="w-full">
         <CampaignHeader
           title={campaignDetails.title}
           status={campaignDetails.status}
@@ -52,16 +53,18 @@ const CampaignDetails = () => {
           country={campaignDetails.country}
         />
         
-        <CampaignSummary
-          targetAudience={campaignDetails.target_audience}
-          objective={campaignDetails.objective_name}
-          channel={campaignDetails.channel_name}
-          status={campaignDetails.status}
-        />
+        <div className="w-full mb-8">
+          <CampaignSummary
+            targetAudience={campaignDetails.target_audience}
+            objective={campaignDetails.objective_name}
+            channel={campaignDetails.channel_name}
+            status={campaignDetails.status}
+          />
+        </div>
           
-        <Separator className="my-6" />
-          
-        <div className="space-y-8">
+        <Separator className="my-8" />
+        
+        <div className="w-full space-y-8">
           <CampaignAudienceSection
             campaignId={campaignDetails.id}
             targetAudienceSummary={campaignDetails.target_audience_summary}

@@ -292,55 +292,6 @@ export type Database = {
       }
     }
     Views: {
-      campaign_audience_context: {
-        Row: {
-          agent_status: string | null
-          audience_context: string | null
-          brand: string | null
-          brand_challenge: string | null
-          brand_promise: string | null
-          campaign_id: string | null
-          channel: string | null
-          channel_id: string | null
-          client_id: string | null
-          country: string | null
-          creators_influencers: string | null
-          domain: string | null
-          formats: string | null
-          message_hook: string | null
-          objective_id: string | null
-          profile: string | null
-          rationale: string | null
-          status: string | null
-          target_audience: string | null
-          targeting: string | null
-          titel: string | null
-          tone_style: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "campaigns_channel_id_fkey"
-            columns: ["channel_id"]
-            isOneToOne: false
-            referencedRelation: "channels"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "campaigns_client_id_fkey"
-            columns: ["client_id"]
-            isOneToOne: false
-            referencedRelation: "clients"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "campaigns_objective_id_fkey"
-            columns: ["objective_id"]
-            isOneToOne: false
-            referencedRelation: "objectives"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       campaign_context_n8n_agents: {
         Row: {
           agent_status: string | null
