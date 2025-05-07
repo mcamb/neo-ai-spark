@@ -29,7 +29,7 @@ export const MarkdownBox: React.FC<MarkdownBoxProps> = ({
           className={`min-h-[120px] w-full h-full border border-gray-300 rounded-lg focus:border-[#FF4B4F] bg-white text-black text-left ${className || ''}`}
           value={value} 
           onChange={(e) => onEdit(e.target.value)}
-          style={{...style, backgroundColor: "#FFFFFF", height: '100%', textAlign: 'left'}}
+          style={{...style, backgroundColor: "#FFFFFF", height: '100%'}}
         />
         <div className="text-xs text-black mt-2">
           Supports Markdown: **bold**, *italic*, - bullets, 1. numbered lists
@@ -38,24 +38,16 @@ export const MarkdownBox: React.FC<MarkdownBoxProps> = ({
     );
   }
 
-  const boxStyle = darkMode && !isEditing
-    ? { 
-        backgroundColor: "#363636",
-        color: "#000000",
-        textAlign: 'left',
-        ...style
-      }
-    : {
-        textAlign: 'left',
-        ...style
-      };
-
   const boxClassName = `p-5 border border-gray-200 rounded-lg prose max-w-none text-left ${darkMode && !isEditing ? 'prose-invert bg-[#363636] text-black' : 'bg-white prose-black'} ${className || ''}`;
 
   return (
     <div 
       className={boxClassName}
-      style={boxStyle}
+      style={{
+        backgroundColor: darkMode && !isEditing ? "#363636" : undefined,
+        color: "#000000",
+        ...style
+      }}
     >
       <ReactMarkdown
         components={{
