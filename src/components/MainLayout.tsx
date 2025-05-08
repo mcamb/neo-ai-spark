@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import Sidebar from './Sidebar';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -115,10 +116,6 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
                 </div>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
-                  <DropdownMenuItem className="cursor-pointer" onClick={() => navigate('/account')}>
-                    <User className="mr-2 h-4 w-4" />
-                    <span>My Account</span>
-                  </DropdownMenuItem>
                   <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer text-red-600">
                     <LogOut className="mr-2 h-4 w-4" />
                     <span>Sign out</span>

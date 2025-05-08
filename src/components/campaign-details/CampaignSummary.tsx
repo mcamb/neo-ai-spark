@@ -20,7 +20,7 @@ export const CampaignSummary: React.FC<CampaignSummaryProps> = ({
   const normalizedStatus = status as 'active' | 'draft' | 'completed' | 'Idea' | 'Planned' | 'Running' | 'Finished';
   
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6 max-w-5xl mx-auto">
       <div className="flex flex-col">
         <div className="flex items-center gap-2 mb-2">
           <Users className="h-5 w-5 text-black" />
