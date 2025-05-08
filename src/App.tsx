@@ -87,6 +87,10 @@ const App = () => {
             <Route 
               path="/lab" 
               element={isAuthenticated ? <Lab /> : <Navigate to="/" />} 
+            />
+            <Route 
+              path="/account" 
+              element={isAuthenticated ? <NotFound /> : <Navigate to="/" />} 
             /> 
             <Route path="*" element={<NotFound />} />
           </Routes>

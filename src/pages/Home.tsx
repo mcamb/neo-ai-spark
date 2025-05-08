@@ -87,15 +87,15 @@ const Home = () => {
   }, []);
   
   return <MainLayout>
-      <div>
+      <div className="max-w-5xl mx-auto">
         <div className="flex flex-col md:flex-row items-center justify-between mb-12">
-          <div className="text-left">
+          <div>
             <h1 className="text-3xl font-bold pb-2">Hi {userName}!</h1>
             <p className="text-custom-text">
               Welcome to NEO AI - our very own AI platform.
             </p>
           </div>
-          <div className="mt-6 md:mt-0 text-right">
+          <div className="mt-6 md:mt-0">
             <LogoIcon className="w-24 h-24" />
           </div>
         </div>

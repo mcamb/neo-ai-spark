@@ -18,7 +18,7 @@ const CampaignsToolbar: React.FC<CampaignsToolbarProps> = ({
   isDisabled = false
 }) => {
   return (
-    <div className="flex flex-col sm:flex-row justify-between gap-4 mb-6">
+    <div className="flex flex-col sm:flex-row justify-between gap-4">
       <div className="w-full sm:max-w-xs">
         <Input
           placeholder="Search campaigns..."
@@ -28,16 +28,14 @@ const CampaignsToolbar: React.FC<CampaignsToolbarProps> = ({
           disabled={isDisabled}
         />
       </div>
-      <div className="flex justify-start sm:justify-end">
-        <Button 
-          onClick={onAddCampaign}
-          className="bg-neo-red hover:bg-red-600 text-white"
-          disabled={isDisabled}
-        >
-          <Plus className="h-4 w-4 mr-2" />
-          Add Campaign
-        </Button>
-      </div>
+      <Button 
+        onClick={onAddCampaign}
+        className="bg-neo-red hover:bg-red-600 text-white"
+        disabled={isDisabled}
+      >
+        <Plus className="h-4 w-4 mr-2" />
+        Add Campaign
+      </Button>
     </div>
   );
 };

@@ -18,17 +18,17 @@ const CampaignDetails = () => {
   if (isLoading) {
     return (
       <MainLayout>
-        <div className="w-full">
+        <div className="space-y-8">
           <div className="flex flex-col md:flex-row gap-6 pb-6">
             <Skeleton className="h-16 w-16 rounded-full" />
-            <div className="space-y-2 w-full">
+            <div className="space-y-2 w-full max-w-md">
               <Skeleton className="h-8 w-64" />
               <Skeleton className="h-4 w-48" />
             </div>
           </div>
           <Skeleton className="h-24 w-full" />
-          <Skeleton className="h-64 w-full mt-8" />
-          <Skeleton className="h-64 w-full mt-8" />
+          <Skeleton className="h-64 w-full" />
+          <Skeleton className="h-64 w-full" />
         </div>
       </MainLayout>
     );
@@ -44,7 +44,7 @@ const CampaignDetails = () => {
 
   return (
     <MainLayout>
-      <div className="w-full space-y-8">
+      <div className="space-y-8">
         <CampaignHeader
           title={campaignDetails.title}
           status={campaignDetails.status}
@@ -53,33 +53,29 @@ const CampaignDetails = () => {
           country={campaignDetails.country}
         />
         
-        <div className="w-full">
-          <CampaignSummary
-            targetAudience={campaignDetails.target_audience}
-            objective={campaignDetails.objective_name}
-            channel={campaignDetails.channel_name}
-            status={campaignDetails.status}
-          />
-        </div>
-          
-        <Separator className="my-8" />
+        <CampaignSummary
+          targetAudience={campaignDetails.target_audience}
+          objective={campaignDetails.objective_name}
+          channel={campaignDetails.channel_name}
+          status={campaignDetails.status}
+        />
         
-        <div className="w-full space-y-8">
-          <CampaignAudienceSection
-            campaignId={campaignDetails.id}
-            targetAudienceSummary={campaignDetails.target_audience_summary}
-            heroImageUrl={campaignDetails.hero_image_url}
-          />
-            
-          <CampaignRecommendationsSection
-            campaignId={campaignDetails.id}
-            tone_style={campaignDetails.tone_style}
-            formats={campaignDetails.formats}
-            targeting={campaignDetails.targeting}
-            creators_influencers={campaignDetails.creators_influencers}
-            message_hook={campaignDetails.message_hook}
-          />
-        </div>
+        <Separator />
+        
+        <CampaignAudienceSection
+          campaignId={campaignDetails.id}
+          targetAudienceSummary={campaignDetails.target_audience_summary}
+          heroImageUrl={campaignDetails.hero_image_url}
+        />
+        
+        <CampaignRecommendationsSection
+          campaignId={campaignDetails.id}
+          tone_style={campaignDetails.tone_style}
+          formats={campaignDetails.formats}
+          targeting={campaignDetails.targeting}
+          creators_influencers={campaignDetails.creators_influencers}
+          message_hook={campaignDetails.message_hook}
+        />
       </div>
     </MainLayout>
   );

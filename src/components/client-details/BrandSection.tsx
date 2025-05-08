@@ -3,7 +3,6 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Pencil, Save, Award, Target } from 'lucide-react';
 import { MarkdownBox } from './MarkdownBox';
-import { SectionHeader } from './SectionHeader';
 
 interface BrandSectionProps {
   isEditing: boolean;
@@ -29,15 +28,33 @@ export const BrandSection: React.FC<BrandSectionProps> = ({
   onEditBrandChallenge
 }) => {
   return (
-    <div className="w-full bg-[#FFFFFF] rounded-lg">
-      <SectionHeader
-        title="Brand"
-        isEditing={isEditing}
-        onEdit={onStartEditing}
-        onSave={onSaveEdits}
-      />
+    <div className="space-y-6 p-6 rounded-lg bg-[#FFFFFF]">
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-xl font-semibold text-black relative pb-2">
+          Brand
+          <span className="absolute bottom-0 left-0 h-1 bg-[#FF4B4F]" style={{ width: '100%' }}></span>
+        </h2>
+        <Button 
+          variant="ghost" 
+          size="sm" 
+          onClick={isEditing ? onSaveEdits : onStartEditing}
+          className="text-[#FF4B4F] hover:text-[#FF4B4F] hover:bg-[#FF4B4F]/10"
+        >
+          {isEditing ? (
+            <>
+              <Save className="h-3.5 w-3.5 mr-2" />
+              Save
+            </>
+          ) : (
+            <>
+              <Pencil className="h-3.5 w-3.5 mr-2" />
+              Edit
+            </>
+          )}
+        </Button>
+      </div>
       
-      <div className="grid md:grid-cols-2 gap-6 w-full">
+      <div className="grid md:grid-cols-2 gap-6">
         <div className="space-y-2">
           <h3 className="font-medium text-black flex items-center text-base">
             <Award className="h-4 w-4 mr-2 text-black" />

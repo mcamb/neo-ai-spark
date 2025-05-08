@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { CampaignMarkdownBox } from '@/components/campaign-details/CampaignMarkdownBox';
+import { MarkdownBox } from '@/components/client-details/MarkdownBox';
 import { FileText, Palette, Users, Target, MessageCircle } from 'lucide-react';
 import { SectionHeader } from '@/components/client-details/SectionHeader';
 import { toast } from 'sonner';
@@ -80,7 +80,7 @@ export const CampaignRecommendationsSection: React.FC<CampaignRecommendationsSec
   };
 
   return (
-    <div className="w-full bg-white rounded-lg shadow-sm">
+    <div className="space-y-12 p-8 rounded-lg bg-[#FFFFFF]">
       <SectionHeader
         title="Recommendations"
         isEditing={isEditing}
@@ -88,98 +88,98 @@ export const CampaignRecommendationsSection: React.FC<CampaignRecommendationsSec
         onSave={handleSaveEdits}
       />
       
-      <div className="px-0 pb-6">
-        {/* First row - Message Hook & Tone Style */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-          <div className="flex flex-col px-6">
-            <h3 className="text-md font-semibold mb-4 flex items-center">
-              <MessageCircle className="h-4 w-4 mr-2 text-black" />
-              Message Hook
-            </h3>
-            <CampaignMarkdownBox 
-              isEditing={isEditing}
-              onEdit={(value) => handleEdit('message_hook', value)}
-              value={editedValues.message_hook}
-              style={boxStyle}
-              className="h-full"
-            >
-              {message_hook || "No message hook defined for this campaign."}
-            </CampaignMarkdownBox>
-          </div>
-          
-          <div className="flex flex-col px-6">
-            <h3 className="text-md font-semibold mb-4 flex items-center">
-              <Palette className="h-4 w-4 mr-2 text-black" />
-              Tone & Style
-            </h3>
-            <CampaignMarkdownBox 
-              isEditing={isEditing}
-              onEdit={(value) => handleEdit('tone_style', value)}
-              value={editedValues.tone_style}
-              style={boxStyle}
-              className="h-full"
-              darkMode={true}
-            >
-              {tone_style || "No tone and style recommendations available."}
-            </CampaignMarkdownBox>
-          </div>
+      {/* First row - Message Hook & Tone Style */}
+      <div className="grid md:grid-cols-2 gap-12">
+        <div className="flex flex-col">
+          <h3 className="text-md font-semibold mb-4 flex items-center">
+            <MessageCircle className="h-4 w-4 mr-2 text-black" />
+            Message Hook
+          </h3>
+          <MarkdownBox 
+            isEditing={isEditing}
+            onEdit={(value) => handleEdit('message_hook', value)}
+            value={editedValues.message_hook}
+            style={boxStyle}
+            className="h-full"
+          >
+            {message_hook || "No message hook defined for this campaign."}
+          </MarkdownBox>
         </div>
         
-        {/* Second row - Formats & Targeting with consistent spacing */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-          <div className="flex flex-col px-6">
-            <h3 className="text-md font-semibold mb-4 flex items-center">
-              <FileText className="h-4 w-4 mr-2 text-black" />
-              Formats
-            </h3>
-            <CampaignMarkdownBox 
-              isEditing={isEditing}
-              onEdit={(value) => handleEdit('formats', value)}
-              value={editedValues.formats}
-              style={boxStyle}
-              className="h-full"
-              darkMode={true}
-            >
-              {formats || "No format recommendations available."}
-            </CampaignMarkdownBox>
-          </div>
-          
-          <div className="flex flex-col px-6">
-            <h3 className="text-md font-semibold mb-4 flex items-center">
-              <Target className="h-4 w-4 mr-2 text-black" />
-              Targeting
-            </h3>
-            <CampaignMarkdownBox 
-              isEditing={isEditing}
-              onEdit={(value) => handleEdit('targeting', value)}
-              value={editedValues.targeting}
-              style={boxStyle}
-              className="h-full"
-            >
-              {targeting || "No targeting information available."}
-            </CampaignMarkdownBox>
-          </div>
+        <div className="flex flex-col">
+          <h3 className="text-md font-semibold mb-4 flex items-center">
+            <Palette className="h-4 w-4 mr-2 text-black" />
+            Tone & Style
+          </h3>
+          <MarkdownBox 
+            isEditing={isEditing}
+            onEdit={(value) => handleEdit('tone_style', value)}
+            value={editedValues.tone_style}
+            style={boxStyle}
+            className="h-full"
+            darkMode={true}
+          >
+            {tone_style || "No tone and style recommendations available."}
+          </MarkdownBox>
+        </div>
+      </div>
+      
+      {/* Second row - Formats & Targeting with significant vertical spacing */}
+      <div className="grid md:grid-cols-2 gap-12 pt-6">
+        <div className="flex flex-col">
+          <h3 className="text-md font-semibold mb-4 flex items-center">
+            <FileText className="h-4 w-4 mr-2 text-black" />
+            Formats
+          </h3>
+          <MarkdownBox 
+            isEditing={isEditing}
+            onEdit={(value) => handleEdit('formats', value)}
+            value={editedValues.formats}
+            style={boxStyle}
+            className="h-full"
+            darkMode={true}
+          >
+            {formats || "No format recommendations available."}
+          </MarkdownBox>
         </div>
         
-        {/* Third row - Creators/Influencers only */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="flex flex-col px-6">
-            <h3 className="text-md font-semibold mb-4 flex items-center">
-              <Users className="h-4 w-4 mr-2 text-black" />
-              Creators / Influencers
-            </h3>
-            <CampaignMarkdownBox 
-              isEditing={isEditing}
-              onEdit={(value) => handleEdit('creators_influencers', value)}
-              value={editedValues.creators_influencers}
-              style={boxStyle}
-              className="h-full"
-              darkMode={true}
-            >
-              {creators_influencers || "No creator or influencer recommendations available."}
-            </CampaignMarkdownBox>
-          </div>
+        <div className="flex flex-col">
+          <h3 className="text-md font-semibold mb-4 flex items-center">
+            <Target className="h-4 w-4 mr-2 text-black" />
+            Targeting
+          </h3>
+          <MarkdownBox 
+            isEditing={isEditing}
+            onEdit={(value) => handleEdit('targeting', value)}
+            value={editedValues.targeting}
+            style={boxStyle}
+            className="h-full"
+          >
+            {targeting || "No targeting information available."}
+          </MarkdownBox>
         </div>
+      </div>
+      
+      {/* Third row - Creators/Influencers only (Video section removed) */}
+      <div className="grid md:grid-cols-2 gap-12 pt-6">
+        <div className="flex flex-col">
+          <h3 className="text-md font-semibold mb-4 flex items-center">
+            <Users className="h-4 w-4 mr-2 text-black" />
+            Creators / Influencers
+          </h3>
+          <MarkdownBox 
+            isEditing={isEditing}
+            onEdit={(value) => handleEdit('creators_influencers', value)}
+            value={editedValues.creators_influencers}
+            style={boxStyle}
+            className="h-full"
+            darkMode={true}
+          >
+            {creators_influencers || "No creator or influencer recommendations available."}
+          </MarkdownBox>
+        </div>
+        
+        {/* Video section has been removed */}
       </div>
     </div>
   );

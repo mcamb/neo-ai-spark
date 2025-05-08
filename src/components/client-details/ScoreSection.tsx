@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { ScoreBar } from './ScoreBar';
 import { ScoreEditor } from './ScoreEditor';
@@ -95,37 +96,39 @@ export const ScoreSection: React.FC<ScoreSectionProps> = ({ socialMediaScores, c
   };
 
   return (
-    <div className="w-full bg-white rounded-lg">
-      <SectionHeader
-        title="Relevance Score"
-        isEditing={isEditing}
-        onEdit={startEditing}
-        onSave={saveScoresChanges}
-      />
-      
-      <div className="grid md:grid-cols-2 gap-6 w-full">
-        <div className="w-full">
-          {isEditing ? (
-            <ScoreEditor
-              scores={editedScores}
-              onScoreChange={handleScoreChange}
-              onSelectPlatform={handleSelectPlatform}
-              selectedPlatform={selectedPlatform}
-            />
-          ) : (
-            <ScoreBar data={sortedData} onBarClick={handleBarClick} />
-          )}
-        </div>
+    <div className="space-y-6 bg-white shadow-sm rounded-lg">
+      <div className="p-6">
+        <SectionHeader
+          title="Relevance Score"
+          isEditing={isEditing}
+          onEdit={startEditing}
+          onSave={saveScoresChanges}
+        />
         
-        <div className="h-full w-full">
-          {selectedRationale && (
-            <ScoreRationale
-              platform={selectedPlatform}
-              rationale={selectedRationale}
-              isEditing={isEditing}
-              onRationaleChange={handleRationaleChange}
-            />
-          )}
+        <div className="grid md:grid-cols-2 gap-6">
+          <div>
+            {isEditing ? (
+              <ScoreEditor
+                scores={editedScores}
+                onScoreChange={handleScoreChange}
+                onSelectPlatform={handleSelectPlatform}
+                selectedPlatform={selectedPlatform}
+              />
+            ) : (
+              <ScoreBar data={sortedData} onBarClick={handleBarClick} />
+            )}
+          </div>
+          
+          <div className="h-full">
+            {selectedRationale && (
+              <ScoreRationale
+                platform={selectedPlatform}
+                rationale={selectedRationale}
+                isEditing={isEditing}
+                onRationaleChange={handleRationaleChange}
+              />
+            )}
+          </div>
         </div>
       </div>
     </div>

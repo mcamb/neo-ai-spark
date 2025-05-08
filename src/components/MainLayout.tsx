@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import Sidebar from './Sidebar';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -8,6 +7,7 @@ import {
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
+  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger 
 } from '@/components/ui/dropdown-menu';
@@ -93,7 +93,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
       
       <main className="flex-1">
         <header className="border-b border-gray-100 p-4">
-          <div className="flex items-center justify-end w-full max-w-[1280px] mx-auto px-6">
+          <div className="flex items-center justify-end max-w-5xl w-full mx-auto">
             <DropdownMenu>
               <DropdownMenuTrigger className="flex items-center gap-2 px-3 py-1 rounded-md hover:bg-gray-100 outline-none">
                 <span className="text-sm font-medium">Account</span>
@@ -115,6 +115,10 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
                 </div>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
+                  <DropdownMenuItem className="cursor-pointer" onClick={() => navigate('/account')}>
+                    <User className="mr-2 h-4 w-4" />
+                    <span>My Account</span>
+                  </DropdownMenuItem>
                   <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer text-red-600">
                     <LogOut className="mr-2 h-4 w-4" />
                     <span>Sign out</span>
@@ -126,9 +130,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
         </header>
         
         <div className="p-6">
-          <div className="max-w-[1280px] w-full mx-auto bg-white rounded-lg shadow-sm p-6">
-            {children}
-          </div>
+          {children}
         </div>
       </main>
     </div>

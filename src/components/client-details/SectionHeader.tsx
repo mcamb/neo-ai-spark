@@ -17,9 +17,10 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
   onSave
 }) => {
   return (
-    <div className="flex items-center justify-between mb-6 w-full">
-      <h2 className="section-title">
+    <div className="flex items-center justify-between mb-6">
+      <h2 className="text-xl font-semibold text-black relative pb-2">
         {title}
+        <span className="absolute bottom-0 left-0 h-1 bg-[#FF4B4F]" style={{ width: '100%' }}></span>
       </h2>
       
       <Button 
