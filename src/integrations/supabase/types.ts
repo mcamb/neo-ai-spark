@@ -88,6 +88,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "campaigns_channel_id_fkey"
+            columns: ["channel_id"]
+            isOneToOne: false
+            referencedRelation: "video_context_n8n_agents"
+            referencedColumns: ["channel_id"]
+          },
+          {
             foreignKeyName: "campaigns_client_id_fkey"
             columns: ["client_id"]
             isOneToOne: false
@@ -95,11 +102,25 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "campaigns_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "video_context_n8n_agents"
+            referencedColumns: ["client_id"]
+          },
+          {
             foreignKeyName: "campaigns_objective_id_fkey"
             columns: ["objective_id"]
             isOneToOne: false
             referencedRelation: "objectives"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "campaigns_objective_id_fkey"
+            columns: ["objective_id"]
+            isOneToOne: false
+            referencedRelation: "video_context_n8n_agents"
+            referencedColumns: ["objective_id"]
           },
         ]
       }
@@ -177,6 +198,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "countries"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "clients_country_id_fkey"
+            columns: ["country_id"]
+            isOneToOne: false
+            referencedRelation: "video_context_n8n_agents"
+            referencedColumns: ["country_id"]
           },
         ]
       }
@@ -282,43 +310,99 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "relevance_scores_channel_id_fkey"
+            columns: ["channel_id"]
+            isOneToOne: false
+            referencedRelation: "video_context_n8n_agents"
+            referencedColumns: ["channel_id"]
+          },
+          {
             foreignKeyName: "relevance_scores_client_id_fkey"
             columns: ["client_id"]
             isOneToOne: false
             referencedRelation: "clients"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "relevance_scores_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "video_context_n8n_agents"
+            referencedColumns: ["client_id"]
+          },
         ]
       }
       videos: {
         Row: {
+          audience_fit_description: string | null
+          audience_fit_score: number | null
+          brand_fit_description: string | null
+          brand_fit_score: number | null
           campaign_id: string | null
           craft: string
           created_at: string
+          creative_impact_description: string | null
+          creative_impact_score: number | null
           description: string | null
           file: string
           format: string
           id: string
+          message_clarity_description: string | null
+          message_clarity_score: number | null
+          objective_fit_description: string | null
+          objective_fit_score: number | null
+          overall_assessment: string | null
+          platform_fit_description: string | null
+          platform_fit_score: number | null
+          recommendations: string | null
           titel: string
         }
         Insert: {
+          audience_fit_description?: string | null
+          audience_fit_score?: number | null
+          brand_fit_description?: string | null
+          brand_fit_score?: number | null
           campaign_id?: string | null
           craft: string
           created_at?: string
+          creative_impact_description?: string | null
+          creative_impact_score?: number | null
           description?: string | null
           file: string
           format: string
           id?: string
+          message_clarity_description?: string | null
+          message_clarity_score?: number | null
+          objective_fit_description?: string | null
+          objective_fit_score?: number | null
+          overall_assessment?: string | null
+          platform_fit_description?: string | null
+          platform_fit_score?: number | null
+          recommendations?: string | null
           titel: string
         }
         Update: {
+          audience_fit_description?: string | null
+          audience_fit_score?: number | null
+          brand_fit_description?: string | null
+          brand_fit_score?: number | null
           campaign_id?: string | null
           craft?: string
           created_at?: string
+          creative_impact_description?: string | null
+          creative_impact_score?: number | null
           description?: string | null
           file?: string
           format?: string
           id?: string
+          message_clarity_description?: string | null
+          message_clarity_score?: number | null
+          objective_fit_description?: string | null
+          objective_fit_score?: number | null
+          overall_assessment?: string | null
+          platform_fit_description?: string | null
+          platform_fit_score?: number | null
+          recommendations?: string | null
           titel?: string
         }
         Relationships: [
@@ -335,6 +419,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "campaigns"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "videos_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "video_context_n8n_agents"
+            referencedColumns: ["campaign_id"]
           },
         ]
       }
@@ -376,11 +467,25 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "campaigns_channel_id_fkey"
+            columns: ["channel_id"]
+            isOneToOne: false
+            referencedRelation: "video_context_n8n_agents"
+            referencedColumns: ["channel_id"]
+          },
+          {
             foreignKeyName: "campaigns_client_id_fkey"
             columns: ["client_id"]
             isOneToOne: false
             referencedRelation: "clients"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "campaigns_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "video_context_n8n_agents"
+            referencedColumns: ["client_id"]
           },
           {
             foreignKeyName: "campaigns_objective_id_fkey"
@@ -389,7 +494,55 @@ export type Database = {
             referencedRelation: "objectives"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "campaigns_objective_id_fkey"
+            columns: ["objective_id"]
+            isOneToOne: false
+            referencedRelation: "video_context_n8n_agents"
+            referencedColumns: ["objective_id"]
+          },
         ]
+      }
+      video_context_n8n_agents: {
+        Row: {
+          audience_fit_description: string | null
+          audience_fit_score: number | null
+          brand: string | null
+          brand_challenge: string | null
+          brand_fit_description: string | null
+          brand_fit_score: number | null
+          brand_promise: string | null
+          campaign_id: string | null
+          channel: string | null
+          channel_id: string | null
+          client_id: string | null
+          country: string | null
+          country_id: string | null
+          creative_impact_description: string | null
+          creative_impact_score: number | null
+          creators_influencers: string | null
+          message_clarity_description: string | null
+          message_clarity_score: number | null
+          message_hook: string | null
+          objective: string | null
+          objective_fit_description: string | null
+          objective_fit_score: number | null
+          objective_id: string | null
+          overall_assessment: string | null
+          platform_fit_description: string | null
+          platform_fit_score: number | null
+          profile: string | null
+          recommendations: string | null
+          target_audience: string | null
+          target_audience_summary: string | null
+          tone_style: string | null
+          video_craft: string | null
+          video_description: string | null
+          video_format: string | null
+          video_id: string | null
+          video_title: string | null
+        }
+        Relationships: []
       }
     }
     Functions: {

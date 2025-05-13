@@ -4,7 +4,6 @@ import { FileVideo, Upload, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import { 
   Select, 
   SelectContent, 
@@ -31,7 +30,6 @@ const VideoUploadForm: React.FC<VideoFormProps> = ({ onSuccess }) => {
   const [videoTitle, setVideoTitle] = useState<string>('');
   const [videoCraft, setVideoCraft] = useState<string>('Brand');
   const [videoFormat, setVideoFormat] = useState<string>('16:9');
-  const [videoDescription, setVideoDescription] = useState<string>('');
 
   // Handle file selection
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -127,7 +125,7 @@ const VideoUploadForm: React.FC<VideoFormProps> = ({ onSuccess }) => {
           craft: videoCraft,
           format: videoFormat,
           file: publicUrl,
-          description: videoDescription
+          description: '' // Empty description since we're removing this field
         });
         
       if (dbError) throw dbError;
@@ -141,7 +139,6 @@ const VideoUploadForm: React.FC<VideoFormProps> = ({ onSuccess }) => {
       setSelectedFile(null);
       setPreviewUrl(null);
       setVideoTitle('');
-      setVideoDescription('');
       setVideoFormat('16:9');
       setVideoCraft('Brand');
       
@@ -177,6 +174,7 @@ const VideoUploadForm: React.FC<VideoFormProps> = ({ onSuccess }) => {
         selectedClientId={selectedClientId} 
         setSelectedClientId={setSelectedClientId}
         disabled={isUploading}
+        required={true}
       />
 
       <CampaignSelector
@@ -184,26 +182,29 @@ const VideoUploadForm: React.FC<VideoFormProps> = ({ onSuccess }) => {
         selectedCampaignId={selectedCampaignId}
         setSelectedCampaignId={setSelectedCampaignId}
         disabled={isUploading}
+        required={true}
       />
 
       <div className="space-y-2">
-        <Label htmlFor="video-title">Video Title</Label>
+        <Label htmlFor="video-title">Video Title<span className="text-red-500">*</span></Label>
         <Input
           id="video-title"
           value={videoTitle}
           onChange={(e) => setVideoTitle(e.target.value)}
           placeholder="Enter video title"
           disabled={isUploading}
+          required
         />
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
-          <Label htmlFor="video-craft">Video Craft</Label>
+          <Label htmlFor="video-craft">Video Craft<span className="text-red-500">*</span></Label>
           <Select 
             value={videoCraft} 
             onValueChange={setVideoCraft}
             disabled={isUploading}
+            required
           >
             <SelectTrigger id="video-craft">
               <SelectValue />
@@ -216,11 +217,12 @@ const VideoUploadForm: React.FC<VideoFormProps> = ({ onSuccess }) => {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="video-format">Video Format</Label>
+          <Label htmlFor="video-format">Video Format<span className="text-red-500">*</span></Label>
           <Select 
             value={videoFormat} 
             onValueChange={setVideoFormat}
             disabled={isUploading}
+            required
           >
             <SelectTrigger id="video-format">
               <SelectValue />
@@ -241,19 +243,8 @@ const VideoUploadForm: React.FC<VideoFormProps> = ({ onSuccess }) => {
         previewUrl={previewUrl}
         handleFileChange={handleFileChange}
         isUploading={isUploading}
+        required={true}
       />
-
-      <div className="space-y-2">
-        <Label htmlFor="video-description">Description (optional)</Label>
-        <Textarea
-          id="video-description"
-          value={videoDescription}
-          onChange={(e) => setVideoDescription(e.target.value)}
-          placeholder="Add a description for this video"
-          rows={3}
-          disabled={isUploading}
-        />
-      </div>
 
       <Button 
         type="submit" 

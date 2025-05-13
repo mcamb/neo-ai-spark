@@ -9,17 +9,22 @@ type VideoPreviewProps = {
   previewUrl: string | null;
   handleFileChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   isUploading: boolean;
+  required?: boolean;
 };
 
 const VideoPreview: React.FC<VideoPreviewProps> = ({
   selectedFile,
   previewUrl,
   handleFileChange,
-  isUploading
+  isUploading,
+  required = false
 }) => {
   return (
     <div className="space-y-2">
-      <Label htmlFor="video-upload">Upload Video</Label>
+      <Label htmlFor="video-upload">
+        Upload Video
+        {required && <span className="text-red-500">*</span>}
+      </Label>
       <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:bg-gray-50 transition-colors">
         <Input
           id="video-upload"
@@ -28,6 +33,7 @@ const VideoPreview: React.FC<VideoPreviewProps> = ({
           onChange={handleFileChange}
           className="hidden"
           disabled={isUploading}
+          required={required}
         />
         
         {!previewUrl ? (

@@ -23,13 +23,15 @@ type CampaignSelectorProps = {
   selectedCampaignId: string;
   setSelectedCampaignId: (id: string) => void;
   disabled?: boolean;
+  required?: boolean;
 };
 
 const CampaignSelector: React.FC<CampaignSelectorProps> = ({ 
   selectedClientId, 
   selectedCampaignId, 
   setSelectedCampaignId,
-  disabled = false
+  disabled = false,
+  required = false
 }) => {
   // Fetch campaigns based on selected client - using 'titel' instead of 'name'
   const { data: campaigns = [] } = useQuery<Campaign[]>({
@@ -51,11 +53,15 @@ const CampaignSelector: React.FC<CampaignSelectorProps> = ({
 
   return (
     <div className="space-y-2">
-      <Label htmlFor="campaign">Campaign</Label>
+      <Label htmlFor="campaign">
+        Campaign
+        {required && <span className="text-red-500">*</span>}
+      </Label>
       <Select 
         value={selectedCampaignId} 
         onValueChange={setSelectedCampaignId}
         disabled={!selectedClientId || campaigns.length === 0 || disabled}
+        required={required}
       >
         <SelectTrigger id="campaign">
           <SelectValue placeholder={

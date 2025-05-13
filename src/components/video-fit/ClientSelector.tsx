@@ -21,12 +21,14 @@ type ClientSelectorProps = {
   selectedClientId: string;
   setSelectedClientId: (id: string) => void;
   disabled?: boolean;
+  required?: boolean;
 };
 
 const ClientSelector: React.FC<ClientSelectorProps> = ({ 
   selectedClientId, 
   setSelectedClientId,
-  disabled = false
+  disabled = false,
+  required = false
 }) => {
   // Fetch clients - using 'brand' instead of 'name'
   const { data: clients = [] } = useQuery<Client[]>({
@@ -44,11 +46,15 @@ const ClientSelector: React.FC<ClientSelectorProps> = ({
 
   return (
     <div className="space-y-2">
-      <Label htmlFor="client">Client</Label>
+      <Label htmlFor="client">
+        Client
+        {required && <span className="text-red-500">*</span>}
+      </Label>
       <Select 
         value={selectedClientId} 
         onValueChange={setSelectedClientId}
         disabled={disabled}
+        required={required}
       >
         <SelectTrigger id="client">
           <SelectValue placeholder="Select a client" />
