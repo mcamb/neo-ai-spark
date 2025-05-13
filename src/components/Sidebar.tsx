@@ -1,41 +1,58 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Home, Users, Rocket, FlaskConical } from 'lucide-react';
+import { Home, Users, Rocket, FlaskConical, ChevronDown, ChevronUp, FileVideo } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import LogoIcon from './LogoIcon';
 
 const Sidebar = () => {
   const location = useLocation();
+  const [isLabExpanded, setIsLabExpanded] = useState(false);
   
   const isActive = (path: string) => {
     return location.pathname === path;
   };
 
+  const toggleLabMenu = () => {
+    setIsLabExpanded(!isLabExpanded);
+  };
+
   const NavItem = ({ 
     to, 
     icon: Icon, 
-    label 
+    label,
+    hasSubmenu = false,
+    isExpanded = false,
+    onClick
   }: { 
     to: string; 
     icon: React.ElementType; 
-    label: string 
+    label: string;
+    hasSubmenu?: boolean;
+    isExpanded?: boolean;
+    onClick?: () => void;
   }) => {
     const active = isActive(to);
     
     return (
-      <Link
-        to={to}
-        className={cn(
-          "flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-md transition-colors",
-          active 
-            ? "text-white bg-neo-red" 
-            : "text-black hover:bg-neo-lightgray"
-        )}
-      >
-        <Icon size={18} />
-        <span>{label}</span>
-      </Link>
+      <div className="relative">
+        <Link
+          to={to}
+          className={cn(
+            "flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-md transition-colors",
+            active 
+              ? "text-white bg-neo-red" 
+              : "text-black hover:bg-neo-lightgray"
+          )}
+          onClick={onClick}
+        >
+          <Icon size={18} />
+          <span>{label}</span>
+          {hasSubmenu && (
+            isExpanded ? <ChevronUp size={16} className="ml-auto" /> : <ChevronDown size={16} className="ml-auto" />
+          )}
+        </Link>
+      </div>
     );
   };
 
@@ -50,7 +67,32 @@ const Sidebar = () => {
         <NavItem to="/home" icon={Home} label="Home" />
         <NavItem to="/clients" icon={Users} label="Clients" />
         <NavItem to="/campaigns" icon={Rocket} label="Campaigns" />
-        <NavItem to="/lab" icon={FlaskConical} label="Lab" />
+        <NavItem 
+          to="/lab" 
+          icon={FlaskConical} 
+          label="Lab" 
+          hasSubmenu={true}
+          isExpanded={isLabExpanded}
+          onClick={toggleLabMenu}
+        />
+        
+        {/* Submenu for Lab */}
+        {isLabExpanded && (
+          <div className="ml-6 pl-4 border-l border-gray-200">
+            <Link
+              to="/lab/video-fit"
+              className={cn(
+                "flex items-center gap-3 px-4 py-2 text-sm font-medium rounded-md transition-colors",
+                isActive("/lab/video-fit") 
+                  ? "text-white bg-neo-red" 
+                  : "text-black hover:bg-neo-lightgray"
+              )}
+            >
+              <FileVideo size={16} />
+              <span>Video Fit</span>
+            </Link>
+          </div>
+        )}
       </nav>
     </aside>
   );

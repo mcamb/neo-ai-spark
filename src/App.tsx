@@ -13,6 +13,7 @@ import ClientDetails from "./pages/ClientDetails";
 import Campaigns from "./pages/Campaigns";
 import CampaignDetails from "./pages/CampaignDetails";
 import Lab from "./pages/Lab";
+import VideoFit from "./pages/VideoFit";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -87,6 +88,10 @@ const App = () => {
             <Route 
               path="/lab" 
               element={isAuthenticated ? <Lab /> : <Navigate to="/" />} 
+            />
+            <Route 
+              path="/lab/video-fit" 
+              element={isAuthenticated ? <VideoFit /> : <Navigate to="/" />} 
             />
             <Route 
               path="/account" 
