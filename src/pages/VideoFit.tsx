@@ -15,16 +15,17 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
-import { toast } from 'sonner';
+import { toast } from '@/components/ui/use-toast';
 
+// Define proper types based on the database schema
 type Client = {
   id: string;
-  name: string;
+  brand: string;  // In the clients table, it's 'brand' not 'name'
 };
 
 type Campaign = {
   id: string;
-  name: string;
+  titel: string;  // In the campaigns table, it's 'titel' not 'name'
   client_id: string;
 };
 
@@ -34,21 +35,21 @@ const VideoFit = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
-  // Fetch clients
+  // Fetch clients - using 'brand' instead of 'name'
   const { data: clients = [] } = useQuery<Client[]>({
     queryKey: ['clients'],
     queryFn: async () => {
       const { data, error } = await supabase
         .from('clients')
-        .select('id, name')
-        .order('name');
+        .select('id, brand')  // Select brand instead of name
+        .order('brand');      // Order by brand
       
       if (error) throw error;
       return data || [];
     }
   });
 
-  // Fetch campaigns based on selected client
+  // Fetch campaigns based on selected client - using 'titel' instead of 'name'
   const { data: campaigns = [] } = useQuery<Campaign[]>({
     queryKey: ['campaigns', selectedClientId],
     queryFn: async () => {
@@ -56,9 +57,9 @@ const VideoFit = () => {
       
       const { data, error } = await supabase
         .from('campaigns')
-        .select('id, name, client_id')
+        .select('id, titel, client_id')  // Select titel instead of name
         .eq('client_id', selectedClientId)
-        .order('name');
+        .order('titel');                 // Order by titel
       
       if (error) throw error;
       return data || [];
@@ -90,22 +91,37 @@ const VideoFit = () => {
     e.preventDefault();
     
     if (!selectedClientId) {
-      toast.error('Please select a client');
+      toast({
+        title: "Error",
+        description: "Please select a client",
+        variant: "destructive"
+      });
       return;
     }
     
     if (!selectedCampaignId) {
-      toast.error('Please select a campaign');
+      toast({
+        title: "Error",
+        description: "Please select a campaign",
+        variant: "destructive"
+      });
       return;
     }
     
     if (!selectedFile) {
-      toast.error('Please upload a video');
+      toast({
+        title: "Error",
+        description: "Please upload a video",
+        variant: "destructive"
+      });
       return;
     }
     
     // Add your video upload and analysis logic here
-    toast.success('Video uploaded for analysis');
+    toast({
+      title: "Success",
+      description: "Video uploaded for analysis"
+    });
     
     // For demonstration purposes only:
     console.log({
@@ -150,7 +166,7 @@ const VideoFit = () => {
                   <SelectContent>
                     {clients.map((client) => (
                       <SelectItem key={client.id} value={client.id}>
-                        {client.name}
+                        {client.brand}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -176,7 +192,7 @@ const VideoFit = () => {
                   <SelectContent>
                     {campaigns.map((campaign) => (
                       <SelectItem key={campaign.id} value={campaign.id}>
-                        {campaign.name}
+                        {campaign.titel}
                       </SelectItem>
                     ))}
                   </SelectContent>
