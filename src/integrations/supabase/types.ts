@@ -290,6 +290,54 @@ export type Database = {
           },
         ]
       }
+      videos: {
+        Row: {
+          campaign_id: string | null
+          craft: string
+          created_at: string
+          description: string | null
+          file: string
+          format: string
+          id: string
+          titel: string
+        }
+        Insert: {
+          campaign_id?: string | null
+          craft: string
+          created_at?: string
+          description?: string | null
+          file: string
+          format: string
+          id?: string
+          titel: string
+        }
+        Update: {
+          campaign_id?: string | null
+          craft?: string
+          created_at?: string
+          description?: string | null
+          file?: string
+          format?: string
+          id?: string
+          titel?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "videos_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "campaign_context_n8n_agents"
+            referencedColumns: ["campaign_id"]
+          },
+          {
+            foreignKeyName: "videos_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "campaigns"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       campaign_context_n8n_agents: {
