@@ -6,17 +6,17 @@ import { Card, CardContent } from '@/components/ui/card';
 import { supabase } from '@/integrations/supabase/client';
 import { Loader2 } from 'lucide-react';
 import { MarkdownBox } from '@/components/client-details/MarkdownBox';
+import { toast } from '@/components/ui/use-toast';
 
 type VideoAnalysisData = {
   video_id: string;
-  video_title: string;
-  video_craft: string;
-  video_format: string;
-  video_file: string;
-  brand: string;
-  country: string;
-  campaign: string;
-  channel: string;
+  video_title?: string;
+  video_craft?: string;
+  video_format?: string;
+  brand?: string;
+  country?: string;
+  campaign_id?: string;
+  channel?: string;
   audience_fit_description?: string;
   brand_fit_description?: string;
   objective_fit_description?: string;
@@ -41,24 +41,71 @@ const VideoAnalysis = () => {
       }
 
       try {
-        const { data, error } = await supabase
-          .from('video_analysis')
+        // First get the video basic info
+        const { data: videoData, error: videoError } = await supabase
+          .from('videos')
+          .select('*')
+          .eq('id', videoId)
+          .maybeSingle();
+
+        if (videoError) {
+          throw videoError;
+        }
+        
+        if (!videoData) {
+          console.error('No video found with ID:', videoId);
+          setLoading(false);
+          toast({
+            title: "Video not found",
+            description: "The requested video could not be found",
+            variant: "destructive"
+          });
+          return;
+        }
+
+        // Get additional context from video_context_n8n_agents view
+        const { data: contextData, error: contextError } = await supabase
+          .from('video_context_n8n_agents')
           .select('*')
           .eq('video_id', videoId)
           .maybeSingle();
 
-        if (error) {
-          throw error;
+        if (contextError) {
+          console.warn('Error fetching video context:', contextError);
+          // Continue with just video data
         }
 
-        if (data) {
-          setAnalysis(data);
-        } else {
-          // No analysis found for this video
-          console.error('No analysis found for video ID:', videoId);
-        }
+        // Combine data
+        const analysisData: VideoAnalysisData = {
+          video_id: videoId,
+          video_title: videoData.titel,
+          video_craft: videoData.craft,
+          video_format: videoData.format,
+          audience_fit_description: videoData.audience_fit_description,
+          brand_fit_description: videoData.brand_fit_description,
+          objective_fit_description: videoData.objective_fit_description,
+          platform_fit_description: videoData.platform_fit_description,
+          message_clarity_description: videoData.message_clarity_description,
+          creative_impact_description: videoData.creative_impact_description,
+          overall_assessment: videoData.overall_assessment,
+          recommendations: videoData.recommendations,
+          // Add context data if available
+          ...(contextData && {
+            brand: contextData.brand,
+            country: contextData.country,
+            channel: contextData.channel,
+            campaign_id: contextData.campaign_id
+          })
+        };
+
+        setAnalysis(analysisData);
       } catch (error) {
         console.error('Error fetching video analysis:', error);
+        toast({
+          title: "Error",
+          description: "Failed to load video analysis data",
+          variant: "destructive"
+        });
       } finally {
         setLoading(false);
       }
@@ -107,15 +154,15 @@ const VideoAnalysis = () => {
             <h2 className="text-xl font-semibold mb-4">Overview</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <p className="mb-2"><span className="font-medium">Brand:</span> {analysis.brand}</p>
-                <p className="mb-2"><span className="font-medium">Country:</span> {analysis.country}</p>
-                <p className="mb-2"><span className="font-medium">Campaign:</span> {analysis.campaign}</p>
-                <p className="mb-2"><span className="font-medium">Channel:</span> {analysis.channel}</p>
+                <p className="mb-2"><span className="font-medium">Brand:</span> {analysis.brand || 'Not available'}</p>
+                <p className="mb-2"><span className="font-medium">Country:</span> {analysis.country || 'Not available'}</p>
+                <p className="mb-2"><span className="font-medium">Campaign:</span> {analysis.campaign_id || 'Not available'}</p>
+                <p className="mb-2"><span className="font-medium">Channel:</span> {analysis.channel || 'Not available'}</p>
               </div>
               <div>
-                <p className="mb-2"><span className="font-medium">Video Title:</span> {analysis.video_title}</p>
-                <p className="mb-2"><span className="font-medium">Video Craft:</span> {analysis.video_craft}</p>
-                <p className="mb-2"><span className="font-medium">Video Format:</span> {analysis.video_format}</p>
+                <p className="mb-2"><span className="font-medium">Video Title:</span> {analysis.video_title || 'Untitled'}</p>
+                <p className="mb-2"><span className="font-medium">Video Craft:</span> {analysis.video_craft || 'Not specified'}</p>
+                <p className="mb-2"><span className="font-medium">Video Format:</span> {analysis.video_format || 'Not specified'}</p>
               </div>
             </div>
           </CardContent>
