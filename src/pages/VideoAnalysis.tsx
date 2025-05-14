@@ -2,30 +2,14 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import MainLayout from '@/components/MainLayout';
-import { Card, CardContent } from '@/components/ui/card';
 import { supabase } from '@/integrations/supabase/client';
-import { Loader2 } from 'lucide-react';
-import { MarkdownBox } from '@/components/client-details/MarkdownBox';
 import { toast } from '@/components/ui/use-toast';
-
-type VideoAnalysisData = {
-  video_id: string;
-  video_title?: string;
-  video_craft?: string;
-  video_format?: string;
-  brand?: string;
-  country?: string;
-  channel?: string;
-  video_description?: string;
-  audience_fit_description?: string;
-  brand_fit_description?: string;
-  objective_fit_description?: string;
-  platform_fit_description?: string;
-  message_clarity_description?: string;
-  creative_impact_description?: string;
-  overall_assessment?: string;
-  recommendations?: string;
-}
+import { VideoAnalysisData } from '@/types/video';
+import VideoOverview from '@/components/video-analysis/VideoOverview';
+import VideoDescription from '@/components/video-analysis/VideoDescription';
+import AnalysisSection from '@/components/video-analysis/AnalysisSection';
+import LoadingState from '@/components/video-analysis/LoadingState';
+import NotFoundState from '@/components/video-analysis/NotFoundState';
 
 const VideoAnalysis = () => {
   const { videoId } = useParams<{ videoId: string }>();
@@ -117,9 +101,7 @@ const VideoAnalysis = () => {
   if (loading) {
     return (
       <MainLayout>
-        <div className="flex items-center justify-center h-64">
-          <Loader2 className="h-8 w-8 animate-spin text-neo-red" />
-        </div>
+        <LoadingState />
       </MainLayout>
     );
   }
@@ -127,14 +109,7 @@ const VideoAnalysis = () => {
   if (!analysis) {
     return (
       <MainLayout>
-        <div className="space-y-6">
-          <h1 className="text-3xl font-bold">Video Analysis</h1>
-          <Card>
-            <CardContent className="pt-6">
-              <p>No analysis found for this video. The analysis might still be processing.</p>
-            </CardContent>
-          </Card>
-        </div>
+        <NotFoundState />
       </MainLayout>
     );
   }
@@ -149,106 +124,45 @@ const VideoAnalysis = () => {
           </p>
         </div>
 
-        <Card className="mb-6">
-          <CardContent className="pt-6">
-            <h2 className="text-xl font-semibold mb-4">Overview</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <p className="mb-2"><span className="font-medium">Brand:</span> {analysis.brand || 'Not available'}</p>
-                <p className="mb-2"><span className="font-medium">Country:</span> {analysis.country || 'Not available'}</p>
-                <p className="mb-2"><span className="font-medium">Channel:</span> {analysis.channel || 'Not available'}</p>
-              </div>
-              <div>
-                <p className="mb-2"><span className="font-medium">Video Title:</span> {analysis.video_title || 'Untitled'}</p>
-                <p className="mb-2"><span className="font-medium">Video Craft:</span> {analysis.video_craft || 'Not specified'}</p>
-                <p className="mb-2"><span className="font-medium">Video Format:</span> {analysis.video_format || 'Not specified'}</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+        <VideoOverview analysis={analysis} />
 
         {/* Video Description Section */}
-        {analysis.video_description && (
-          <div className="mb-6">
-            <h2 className="text-xl font-semibold mb-4">Video Description</h2>
-            <MarkdownBox>{analysis.video_description}</MarkdownBox>
-          </div>
-        )}
+        <VideoDescription description={analysis.video_description || ''} />
 
         {/* Analysis Content */}
         <div className="space-y-6">
-          {analysis.overall_assessment && (
-            <Card className="mb-6">
-              <CardContent className="pt-6">
-                <h2 className="text-xl font-semibold mb-4">Overall Assessment</h2>
-                <MarkdownBox>{analysis.overall_assessment}</MarkdownBox>
-              </CardContent>
-            </Card>
-          )}
-
-          {/* Individual Analysis Sections */}
-          {analysis.audience_fit_description && (
-            <Card className="mb-6">
-              <CardContent className="pt-6">
-                <h2 className="text-xl font-semibold mb-4">Audience Fit</h2>
-                <MarkdownBox>{analysis.audience_fit_description}</MarkdownBox>
-              </CardContent>
-            </Card>
-          )}
-
-          {analysis.brand_fit_description && (
-            <Card className="mb-6">
-              <CardContent className="pt-6">
-                <h2 className="text-xl font-semibold mb-4">Brand Fit</h2>
-                <MarkdownBox>{analysis.brand_fit_description}</MarkdownBox>
-              </CardContent>
-            </Card>
-          )}
-
-          {analysis.objective_fit_description && (
-            <Card className="mb-6">
-              <CardContent className="pt-6">
-                <h2 className="text-xl font-semibold mb-4">Objective Fit</h2>
-                <MarkdownBox>{analysis.objective_fit_description}</MarkdownBox>
-              </CardContent>
-            </Card>
-          )}
-
-          {analysis.platform_fit_description && (
-            <Card className="mb-6">
-              <CardContent className="pt-6">
-                <h2 className="text-xl font-semibold mb-4">Platform Fit</h2>
-                <MarkdownBox>{analysis.platform_fit_description}</MarkdownBox>
-              </CardContent>
-            </Card>
-          )}
-
-          {analysis.message_clarity_description && (
-            <Card className="mb-6">
-              <CardContent className="pt-6">
-                <h2 className="text-xl font-semibold mb-4">Message Clarity</h2>
-                <MarkdownBox>{analysis.message_clarity_description}</MarkdownBox>
-              </CardContent>
-            </Card>
-          )}
-
-          {analysis.creative_impact_description && (
-            <Card className="mb-6">
-              <CardContent className="pt-6">
-                <h2 className="text-xl font-semibold mb-4">Creative Impact</h2>
-                <MarkdownBox>{analysis.creative_impact_description}</MarkdownBox>
-              </CardContent>
-            </Card>
-          )}
-
-          {analysis.recommendations && (
-            <Card className="mb-6">
-              <CardContent className="pt-6">
-                <h2 className="text-xl font-semibold mb-4">Recommendations</h2>
-                <MarkdownBox>{analysis.recommendations}</MarkdownBox>
-              </CardContent>
-            </Card>
-          )}
+          <AnalysisSection 
+            title="Overall Assessment" 
+            content={analysis.overall_assessment} 
+          />
+          <AnalysisSection 
+            title="Audience Fit" 
+            content={analysis.audience_fit_description} 
+          />
+          <AnalysisSection 
+            title="Brand Fit" 
+            content={analysis.brand_fit_description} 
+          />
+          <AnalysisSection 
+            title="Objective Fit" 
+            content={analysis.objective_fit_description} 
+          />
+          <AnalysisSection 
+            title="Platform Fit" 
+            content={analysis.platform_fit_description} 
+          />
+          <AnalysisSection 
+            title="Message Clarity" 
+            content={analysis.message_clarity_description} 
+          />
+          <AnalysisSection 
+            title="Creative Impact" 
+            content={analysis.creative_impact_description} 
+          />
+          <AnalysisSection 
+            title="Recommendations" 
+            content={analysis.recommendations} 
+          />
         </div>
       </div>
     </MainLayout>
