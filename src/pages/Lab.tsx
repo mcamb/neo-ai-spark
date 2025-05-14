@@ -1,6 +1,9 @@
 
 import React from 'react';
 import MainLayout from '@/components/MainLayout';
+import { Card, CardContent } from '@/components/ui/card';
+import { FileVideo } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Lab = () => {
   return (
@@ -13,13 +16,22 @@ const Lab = () => {
           </p>
         </div>
         
-        <div className="flex items-center justify-center h-64 border border-dashed rounded-lg">
-          <div className="text-center">
-            <p className="text-gray-500">No experiments running yet.</p>
-            <p className="text-sm text-gray-400 mt-1">
-              Start experimenting with the AI lab.
-            </p>
-          </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <Link to="/lab/video-fit" className="block">
+            <Card className="h-full transition-all hover:shadow-md">
+              <CardContent className="pt-6">
+                <div className="flex flex-col h-full">
+                  <div className="mb-4 bg-neo-lightgray p-3 rounded-full w-fit">
+                    <FileVideo className="h-6 w-6 text-neo-red" />
+                  </div>
+                  <h3 className="text-xl font-semibold mb-2">Video Fit</h3>
+                  <p className="text-gray-600">
+                    Upload a video and analyze whether it aligns with your campaign.
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          </Link>
         </div>
       </div>
     </MainLayout>
