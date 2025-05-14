@@ -1,0 +1,172 @@
+
+import { useState } from 'react';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from '@/hooks/use-toast';
+
+interface UseVideoUploadProps {
+  onSuccess?: () => void;
+}
+
+export const useVideoUpload = ({ onSuccess }: UseVideoUploadProps) => {
+  const [selectedClientId, setSelectedClientId] = useState<string>('');
+  const [selectedCampaignId, setSelectedCampaignId] = useState<string>('');
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [isUploading, setIsUploading] = useState<boolean>(false);
+  const [videoTitle, setVideoTitle] = useState<string>('');
+  const [videoCraft, setVideoCraft] = useState<string>('Brand');
+  const [videoFormat, setVideoFormat] = useState<string>('16:9');
+
+  // Handle file selection
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0] || null;
+    setSelectedFile(file);
+    
+    // Create preview URL for video
+    if (file) {
+      const url = URL.createObjectURL(file);
+      setPreviewUrl(url);
+      // Use file name as default title if no title is set
+      if (!videoTitle) {
+        setVideoTitle(file.name.split('.')[0]);
+      }
+    } else {
+      setPreviewUrl(null);
+    }
+  };
+
+  // Reset campaign selection when client changes
+  const resetCampaignOnClientChange = () => {
+    setSelectedCampaignId('');
+  };
+
+  // Handle form submission
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!selectedClientId) {
+      toast({
+        title: "Error",
+        description: "Please select a client",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    if (!selectedCampaignId) {
+      toast({
+        title: "Error",
+        description: "Please select a campaign",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    if (!selectedFile) {
+      toast({
+        title: "Error",
+        description: "Please upload a video",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    if (!videoTitle) {
+      toast({
+        title: "Error",
+        description: "Please enter a video title",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    setIsUploading(true);
+    
+    try {
+      // Upload video to Supabase Storage
+      const fileExt = selectedFile.name.split('.').pop();
+      const filePath = `${Date.now()}_${Math.random().toString(36).substring(2, 15)}.${fileExt}`;
+      
+      const { data: uploadData, error: uploadError } = await supabase
+        .storage
+        .from('videos')
+        .upload(filePath, selectedFile);
+        
+      if (uploadError) throw uploadError;
+      
+      // Get the public URL for the uploaded video
+      const { data: publicUrlData } = supabase
+        .storage
+        .from('videos')
+        .getPublicUrl(filePath);
+      
+      const publicUrl = publicUrlData.publicUrl;
+      
+      // Save video metadata to the database
+      const { data: videoData, error: dbError } = await supabase
+        .from('videos')
+        .insert({
+          campaign_id: selectedCampaignId,
+          titel: videoTitle,
+          craft: videoCraft,
+          format: videoFormat,
+          file: publicUrl
+        })
+        .select('id')
+        .single();
+        
+      if (dbError) throw dbError;
+      
+      toast({
+        title: "Success",
+        description: "Video uploaded successfully"
+      });
+      
+      // Reset form after successful upload
+      setSelectedFile(null);
+      setPreviewUrl(null);
+      setVideoTitle('');
+      setVideoFormat('16:9');
+      setVideoCraft('Brand');
+      
+      // Call the onSuccess callback if provided to close the modal and refresh the videos list
+      if (onSuccess) {
+        onSuccess();
+      }
+    } catch (error) {
+      console.error('Error uploading video:', error);
+      toast({
+        title: "Error",
+        description: "Failed to upload video",
+        variant: "destructive"
+      });
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  // Form validity check
+  const isFormValid = !!selectedClientId && !!selectedCampaignId && !!selectedFile && !!videoTitle;
+
+  return {
+    selectedClientId,
+    setSelectedClientId,
+    selectedCampaignId,
+    setSelectedCampaignId,
+    selectedFile,
+    setSelectedFile,
+    previewUrl,
+    setPreviewUrl,
+    isUploading,
+    videoTitle,
+    setVideoTitle,
+    videoCraft,
+    setVideoCraft,
+    videoFormat,
+    setVideoFormat,
+    handleFileChange,
+    resetCampaignOnClientChange,
+    handleSubmit,
+    isFormValid
+  };
+};
