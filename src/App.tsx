@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -14,6 +13,7 @@ import Campaigns from "./pages/Campaigns";
 import CampaignDetails from "./pages/CampaignDetails";
 import Lab from "./pages/Lab";
 import VideoFit from "./pages/VideoFit";
+import VideoAnalysis from "./pages/VideoAnalysis";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -92,6 +92,10 @@ const App = () => {
             <Route 
               path="/lab/video-fit" 
               element={isAuthenticated ? <VideoFit /> : <Navigate to="/" />} 
+            />
+            <Route 
+              path="/lab/video-fit/analysis/:videoId" 
+              element={isAuthenticated ? <VideoAnalysis /> : <Navigate to="/" />} 
             />
             <Route 
               path="/account" 

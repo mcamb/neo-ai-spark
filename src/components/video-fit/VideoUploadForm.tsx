@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { FileVideo, Upload, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -13,6 +12,7 @@ import {
 } from '@/components/ui/select';
 import { toast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
+import { useNavigate } from 'react-router-dom';
 import ClientSelector from './ClientSelector';
 import CampaignSelector from './CampaignSelector';
 import VideoPreview from './VideoPreview';
@@ -22,6 +22,7 @@ type VideoFormProps = {
 };
 
 const VideoUploadForm: React.FC<VideoFormProps> = ({ onSuccess }) => {
+  const navigate = useNavigate();
   const [selectedClientId, setSelectedClientId] = useState<string>('');
   const [selectedCampaignId, setSelectedCampaignId] = useState<string>('');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -117,16 +118,17 @@ const VideoUploadForm: React.FC<VideoFormProps> = ({ onSuccess }) => {
       const publicUrl = publicUrlData.publicUrl;
       
       // Save video metadata to the database
-      const { error: dbError } = await supabase
+      const { data: videoData, error: dbError } = await supabase
         .from('videos')
         .insert({
           campaign_id: selectedCampaignId,
           titel: videoTitle,
           craft: videoCraft,
           format: videoFormat,
-          file: publicUrl,
-          description: '' // Empty description since we're removing this field
-        });
+          file: publicUrl
+        })
+        .select('id')
+        .single();
         
       if (dbError) throw dbError;
       
@@ -145,6 +147,11 @@ const VideoUploadForm: React.FC<VideoFormProps> = ({ onSuccess }) => {
       // Call the onSuccess callback if provided
       if (onSuccess) {
         onSuccess();
+      }
+
+      // Navigate to the video analysis page
+      if (videoData?.id) {
+        navigate(`/lab/video-fit/analysis/${videoData.id}`);
       }
       
     } catch (error) {
