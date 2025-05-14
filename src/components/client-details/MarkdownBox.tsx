@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Textarea } from "@/components/ui/textarea";
 import ReactMarkdown from 'react-markdown';
@@ -32,7 +31,7 @@ export const MarkdownBox: React.FC<MarkdownBoxProps> = ({
           style={{...style, backgroundColor: "#FFFFFF", height: '100%'}}
         />
         <div className="text-xs text-black mt-2">
-          Supports Markdown: **bold**, *italic*, - bullets, 1. numbered lists
+          Supports Markdown: # Heading, ## Subheading, **bold**, *italic*, - bullets, 1. numbered lists
         </div>
       </div>
     );
@@ -55,16 +54,16 @@ export const MarkdownBox: React.FC<MarkdownBoxProps> = ({
     >
       <ReactMarkdown
         components={{
-          h1: ({node, ...props}) => <h1 className="font-bold text-black" {...props} />,
-          h2: ({node, ...props}) => <h2 className="font-bold text-black" {...props} />,
-          h3: ({node, ...props}) => <h3 className="font-bold text-black" {...props} />,
-          h4: ({node, ...props}) => <h4 className="font-bold text-black" {...props} />,
-          h5: ({node, ...props}) => <h5 className="font-bold text-black" {...props} />,
-          h6: ({node, ...props}) => <h6 className="font-bold text-black" {...props} />,
-          p: ({node, ...props}) => <p className="text-black" {...props} />,
-          ul: ({node, ...props}) => <ul className="text-black list-disc pl-6" {...props} />,
-          ol: ({node, ...props}) => <ol className="text-black list-decimal pl-6" {...props} />,
-          li: ({node, ...props}) => <li className="text-black" {...props} />,
+          h1: ({node, ...props}) => <h1 className="font-bold text-2xl text-black mb-4 mt-2" {...props} />,
+          h2: ({node, ...props}) => <h2 className="font-bold text-xl text-black mb-3 mt-4" {...props} />,
+          h3: ({node, ...props}) => <h3 className="font-bold text-lg text-black mb-2 mt-3" {...props} />,
+          h4: ({node, ...props}) => <h4 className="font-bold text-base text-black mb-2 mt-3" {...props} />,
+          h5: ({node, ...props}) => <h5 className="font-bold text-sm text-black mb-1 mt-2" {...props} />,
+          h6: ({node, ...props}) => <h6 className="font-bold text-xs text-black mb-1 mt-2" {...props} />,
+          p: ({node, ...props}) => <p className="text-black mb-4" {...props} />,
+          ul: ({node, ...props}) => <ul className="text-black list-disc pl-6 mb-4" {...props} />,
+          ol: ({node, ...props}) => <ol className="text-black list-decimal pl-6 mb-4" {...props} />,
+          li: ({node, ...props}) => <li className="text-black mb-1" {...props} />,
           strong: ({node, ...props}) => <strong className="text-black font-bold" {...props} />,
           em: ({node, ...props}) => <em className="text-black italic" {...props} />
         }}

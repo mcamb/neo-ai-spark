@@ -12,7 +12,7 @@ const VideoDescription: React.FC<VideoDescriptionProps> = ({ description }) => {
   return (
     <div className="mb-6">
       <h2 className="text-xl font-semibold mb-4">Video Description</h2>
-      <MarkdownBox>{description}</MarkdownBox>
+      <MarkdownBox className="video-description-markdown">{description}</MarkdownBox>
     </div>
   );
 };
