@@ -53,7 +53,7 @@ const VideoFit = () => {
     navigate(`/lab/video-fit/analysis/${id}`);
   };
 
-  const handleDeleteVideo = (id: string, video: Video) => {
+  const handleInitiateDeleteVideo = (id: string, video: Video) => {
     handleDeletePrompt(id, video);
   };
   
@@ -82,7 +82,7 @@ const VideoFit = () => {
           isLoading={isPageLoading}
           error={error}
           searchQuery={searchQuery}
-          onDeleteVideo={handleDeleteVideo}
+          onDeleteVideo={handleInitiateDeleteVideo}
           onEditVideo={() => {}} // Empty function since we removed the edit button
           onViewVideo={handleViewVideo}
           refetch={refetch}
