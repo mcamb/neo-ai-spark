@@ -2,8 +2,7 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
-import { Eye, Pencil, Trash2 } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Eye, Trash2 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
@@ -29,13 +28,13 @@ interface VideoCardProps {
   onView: (id: string) => void;
 }
 
-const VideoCard: React.FC<VideoCardProps> = ({ video, onDelete, onEdit, onView }) => {
+const VideoCard: React.FC<VideoCardProps> = ({ video, onDelete, onView }) => {
   // Create a placeholder URL if no video file is available
   const videoUrl = video.file || '';
 
   return (
     <Card className="overflow-hidden border border-[#E8E5DE] bg-white rounded-lg shadow-[0_2px_8px_rgba(0,0,0,0.05)] transition-shadow hover:shadow-[0_4px_12px_rgba(0,0,0,0.1)] flex flex-col">
-      {/* Video Preview Section */}
+      {/* Video Preview Section - Enhanced size with aspect ratio maintained */}
       <div className="relative">
         <AspectRatio ratio={16/9} className="bg-gray-100">
           {videoUrl ? (
@@ -58,18 +57,18 @@ const VideoCard: React.FC<VideoCardProps> = ({ video, onDelete, onEdit, onView }
       </div>
       
       {/* Content Section */}
-      <CardContent className="p-4 flex-grow">
+      <CardContent className="p-5 flex-grow">
         <div className="flex flex-col h-full">
-          <h3 className="font-medium text-lg mb-1 line-clamp-2" title={video.title}>
+          <h3 className="font-medium text-xl mb-2 line-clamp-2" title={video.title}>
             {video.title}
           </h3>
           
-          <div className="text-gray-600 text-sm space-y-1 mb-3">
+          <div className="text-gray-600 text-sm space-y-2 mb-4">
             <p className="line-clamp-1" title={video.campaignTitle}>
               Campaign: {video.campaignTitle}
             </p>
             <p className="line-clamp-1" title={`${video.clientName} - ${video.country}`}>
-              {video.clientName} - {video.country}
+              <span className="font-bold">{video.clientName}</span> - {video.country}
             </p>
           </div>
           
@@ -94,8 +93,8 @@ const VideoCard: React.FC<VideoCardProps> = ({ video, onDelete, onEdit, onView }
       <Separator />
       
       {/* Actions Footer */}
-      <CardFooter className="p-2 justify-end bg-gray-50">
-        <div className="flex items-center gap-1">
+      <CardFooter className="p-3 justify-end bg-gray-50">
+        <div className="flex items-center gap-2">
           <Button 
             variant="ghost" 
             size="icon" 
@@ -103,16 +102,7 @@ const VideoCard: React.FC<VideoCardProps> = ({ video, onDelete, onEdit, onView }
             onClick={() => onView(video.id)}
             title="View analysis"
           >
-            <Eye className="h-4 w-4" />
-          </Button>
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            className="hover:bg-gray-100"
-            onClick={() => onEdit(video.id)}
-            title="Edit video"
-          >
-            <Pencil className="h-4 w-4" />
+            <Eye className="h-5 w-5" />
           </Button>
           <Button 
             variant="ghost" 
@@ -121,7 +111,7 @@ const VideoCard: React.FC<VideoCardProps> = ({ video, onDelete, onEdit, onView }
             onClick={() => onDelete(video.id)}
             title="Delete video"
           >
-            <Trash2 className="h-4 w-4" />
+            <Trash2 className="h-5 w-5" />
           </Button>
         </div>
       </CardFooter>
