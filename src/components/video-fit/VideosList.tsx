@@ -1,11 +1,10 @@
-
 import React from 'react';
 import VideoCard, { Video } from './VideoCard';
 
 interface VideosListProps {
   videos: Video[];
   searchQuery: string;
-  onDeleteVideo: (id: string) => void;
+  onDeleteVideo: (id: string, video: Video) => void;
   onEditVideo: (id: string) => void;
   onViewVideo: (id: string) => void;
 }

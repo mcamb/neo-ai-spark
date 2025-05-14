@@ -23,7 +23,7 @@ export interface Video {
 
 interface VideoCardProps {
   video: Video;
-  onDelete: (id: string) => void;
+  onDelete: (id: string, video: Video) => void;
   onEdit: (id: string) => void;
   onView: (id: string) => void;
 }
@@ -108,7 +108,7 @@ const VideoCard: React.FC<VideoCardProps> = ({ video, onDelete, onView }) => {
             variant="ghost" 
             size="icon"
             className="hover:bg-gray-100 text-gray-600 hover:text-red-600"
-            onClick={() => onDelete(video.id)}
+            onClick={() => onDelete(video.id, video)}
             title="Delete video"
           >
             <Trash2 className="h-5 w-5" />

@@ -10,7 +10,7 @@ interface VideosContentProps {
   isLoading: boolean;
   error: Error | null;
   searchQuery: string;
-  onDeleteVideo: (id: string) => void;
+  onDeleteVideo: (id: string, video: Video) => void;
   onEditVideo: (id: string) => void;
   onViewVideo: (id: string) => void;
   refetch: () => void;

@@ -31,7 +31,7 @@ const DeleteVideoDialog: React.FC<DeleteVideoDialogProps> = ({
         <AlertDialogHeader>
           <AlertDialogTitle>Delete Video</AlertDialogTitle>
           <AlertDialogDescription>
-            Are you sure you want to delete this video? This action cannot be undone.
+            Are you sure you want to delete this video? This action will remove both the video file and its data permanently. This action cannot be undone.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

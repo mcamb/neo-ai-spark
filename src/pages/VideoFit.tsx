@@ -9,6 +9,7 @@ import { useVideoDeletion } from '@/hooks/useVideoDeletion';
 import DeleteVideoDialog from '@/components/video-fit/DeleteVideoDialog';
 import { useNavigate } from 'react-router-dom';
 import { toast } from '@/hooks/use-toast';
+import { Video } from '@/components/video-fit/VideoCard';
 
 const VideoFit = () => {
   const navigate = useNavigate();
@@ -51,6 +52,10 @@ const VideoFit = () => {
   const handleViewVideo = (id: string) => {
     navigate(`/lab/video-fit/analysis/${id}`);
   };
+
+  const handleDeleteVideo = (id: string, video: Video) => {
+    handleDeletePrompt(id, video);
+  };
   
   // Combine loading states for better UX
   const isPageLoading = isLoading || isDeleting;
@@ -77,7 +82,7 @@ const VideoFit = () => {
           isLoading={isPageLoading}
           error={error}
           searchQuery={searchQuery}
-          onDeleteVideo={handleDeletePrompt}
+          onDeleteVideo={handleDeleteVideo}
           onEditVideo={() => {}} // Empty function since we removed the edit button
           onViewVideo={handleViewVideo}
           refetch={refetch}
