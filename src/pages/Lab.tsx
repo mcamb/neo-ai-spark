@@ -19,16 +19,14 @@ const Lab = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <Link to="/lab/video-fit" className="block">
             <Card className="h-full transition-all hover:shadow-md">
-              <CardContent className="pt-6">
-                <div className="flex flex-col h-full">
-                  <div className="mb-4 bg-neo-lightgray p-3 rounded-full w-fit">
-                    <FileVideo className="h-6 w-6 text-neo-red" />
-                  </div>
-                  <h3 className="text-xl font-semibold mb-2">Video Fit</h3>
-                  <p className="text-gray-600">
-                    Upload a video and analyze whether it aligns with your campaign.
-                  </p>
+              <CardContent className="pt-6 flex flex-col items-center text-center">
+                <div className="mb-4 bg-neo-lightgray p-3 rounded-full">
+                  <FileVideo className="h-6 w-6 text-neo-red" />
                 </div>
+                <h3 className="text-xl font-semibold mb-2 text-black">Video Fit</h3>
+                <p className="text-black">
+                  Upload a video and analyze whether it aligns with your campaign.
+                </p>
               </CardContent>
             </Card>
           </Link>
