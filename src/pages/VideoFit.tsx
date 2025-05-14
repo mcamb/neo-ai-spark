@@ -8,6 +8,7 @@ import VideosToolbar from '@/components/video-fit/VideosToolbar';
 import { useVideoDeletion } from '@/hooks/useVideoDeletion';
 import DeleteVideoDialog from '@/components/video-fit/DeleteVideoDialog';
 import { useNavigate } from 'react-router-dom';
+import { toast } from '@/hooks/use-toast';
 
 const VideoFit = () => {
   const navigate = useNavigate();
@@ -39,13 +40,16 @@ const VideoFit = () => {
     setIsUploadModalOpen(false);
   };
   
-  const handleViewVideo = (id: string) => {
-    navigate(`/lab/video-fit/analysis/${id}`);
+  const handleUploadSuccess = () => {
+    refetch();
+    toast({
+      title: "Video Added",
+      description: "Your video has been added and is ready for analysis",
+    });
   };
   
-  const handleEditVideo = (id: string) => {
-    // For future implementation
-    console.log("Edit video:", id);
+  const handleViewVideo = (id: string) => {
+    navigate(`/lab/video-fit/analysis/${id}`);
   };
   
   // Combine loading states for better UX
@@ -74,7 +78,7 @@ const VideoFit = () => {
           error={error}
           searchQuery={searchQuery}
           onDeleteVideo={handleDeletePrompt}
-          onEditVideo={handleEditVideo}
+          onEditVideo={() => {}} // Empty function since we removed the edit button
           onViewVideo={handleViewVideo}
           refetch={refetch}
           onAddVideo={handleOpenUploadModal}
@@ -83,7 +87,7 @@ const VideoFit = () => {
         <VideoUploadModal 
           isOpen={isUploadModalOpen} 
           onClose={handleCloseUploadModal} 
-          onSuccess={refetch}
+          onSuccess={handleUploadSuccess}
         />
         
         <DeleteVideoDialog

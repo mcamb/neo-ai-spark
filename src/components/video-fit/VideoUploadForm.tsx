@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { FileVideo, Upload, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -12,7 +13,6 @@ import {
 } from '@/components/ui/select';
 import { toast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
-import { useNavigate } from 'react-router-dom';
 import ClientSelector from './ClientSelector';
 import CampaignSelector from './CampaignSelector';
 import VideoPreview from './VideoPreview';
@@ -22,7 +22,6 @@ type VideoFormProps = {
 };
 
 const VideoUploadForm: React.FC<VideoFormProps> = ({ onSuccess }) => {
-  const navigate = useNavigate();
   const [selectedClientId, setSelectedClientId] = useState<string>('');
   const [selectedCampaignId, setSelectedCampaignId] = useState<string>('');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -134,7 +133,7 @@ const VideoUploadForm: React.FC<VideoFormProps> = ({ onSuccess }) => {
       
       toast({
         title: "Success",
-        description: "Video uploaded for analysis"
+        description: "Video uploaded successfully"
       });
       
       // Reset form after successful upload
@@ -144,16 +143,10 @@ const VideoUploadForm: React.FC<VideoFormProps> = ({ onSuccess }) => {
       setVideoFormat('16:9');
       setVideoCraft('Brand');
       
-      // Call the onSuccess callback if provided
+      // Call the onSuccess callback if provided to close the modal and refresh the videos list
       if (onSuccess) {
         onSuccess();
       }
-
-      // Navigate to the video analysis page
-      if (videoData?.id) {
-        navigate(`/lab/video-fit/analysis/${videoData.id}`);
-      }
-      
     } catch (error) {
       console.error('Error uploading video:', error);
       toast({
