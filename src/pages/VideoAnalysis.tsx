@@ -15,8 +15,8 @@ type VideoAnalysisData = {
   video_format?: string;
   brand?: string;
   country?: string;
-  campaign_id?: string;
   channel?: string;
+  video_description?: string;
   audience_fit_description?: string;
   brand_fit_description?: string;
   objective_fit_description?: string;
@@ -81,6 +81,7 @@ const VideoAnalysis = () => {
           video_title: videoData.titel,
           video_craft: videoData.craft,
           video_format: videoData.format,
+          video_description: videoData.description,
           audience_fit_description: videoData.audience_fit_description,
           brand_fit_description: videoData.brand_fit_description,
           objective_fit_description: videoData.objective_fit_description,
@@ -93,8 +94,7 @@ const VideoAnalysis = () => {
           ...(contextData && {
             brand: contextData.brand,
             country: contextData.country,
-            channel: contextData.channel,
-            campaign_id: contextData.campaign_id
+            channel: contextData.channel
           })
         };
 
@@ -156,7 +156,6 @@ const VideoAnalysis = () => {
               <div>
                 <p className="mb-2"><span className="font-medium">Brand:</span> {analysis.brand || 'Not available'}</p>
                 <p className="mb-2"><span className="font-medium">Country:</span> {analysis.country || 'Not available'}</p>
-                <p className="mb-2"><span className="font-medium">Campaign:</span> {analysis.campaign_id || 'Not available'}</p>
                 <p className="mb-2"><span className="font-medium">Channel:</span> {analysis.channel || 'Not available'}</p>
               </div>
               <div>
@@ -167,6 +166,14 @@ const VideoAnalysis = () => {
             </div>
           </CardContent>
         </Card>
+
+        {/* Video Description Section */}
+        {analysis.video_description && (
+          <div className="mb-6">
+            <h2 className="text-xl font-semibold mb-4">Video Description</h2>
+            <MarkdownBox>{analysis.video_description}</MarkdownBox>
+          </div>
+        )}
 
         {/* Analysis Content */}
         <div className="space-y-6">
