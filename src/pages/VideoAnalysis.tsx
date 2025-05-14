@@ -10,6 +10,8 @@ import VideoDescription from '@/components/video-analysis/VideoDescription';
 import AnalysisSection from '@/components/video-analysis/AnalysisSection';
 import LoadingState from '@/components/video-analysis/LoadingState';
 import NotFoundState from '@/components/video-analysis/NotFoundState';
+import { Button } from '@/components/ui/button';
+import { ArrowLeft } from 'lucide-react';
 
 const VideoAnalysis = () => {
   const { videoId } = useParams<{ videoId: string }>();
@@ -117,6 +119,14 @@ const VideoAnalysis = () => {
   return (
     <MainLayout>
       <div className="space-y-6">
+        {/* Navigation */}
+        <div className="flex items-center gap-2 mb-6">
+          <Button variant="ghost" onClick={() => navigate('/lab/video-fit')}>
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Back to Video Fit Overview
+          </Button>
+        </div>
+
         <div>
           <h1 className="text-3xl font-bold">Video Analysis</h1>
           <p className="text-gray-600 mt-1">
