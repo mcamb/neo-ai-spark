@@ -77,55 +77,6 @@ export const useVideos = () => {
 // Delete video function
 export const deleteVideo = async (videoId: string) => {
   try {
-    // First, get the video data to find the file path
-    const { data: videoData, error: fetchError } = await supabase
-      .from('videos')
-      .select('file')
-      .eq('id', videoId)
-      .single();
-    
-    if (fetchError) {
-      console.error("Error fetching video data:", fetchError);
-      return { 
-        success: false, 
-        error: fetchError.message
-      };
-    }
-    
-    // Extract the file path from the URL
-    // The storage URL format is typically: https://[project-id].supabase.co/storage/v1/object/public/[bucket]/[filepath]
-    if (videoData.file) {
-      // Parse file path from the URL
-      const url = new URL(videoData.file);
-      const pathSegments = url.pathname.split('/');
-      const bucketIndex = pathSegments.indexOf('public') + 1;
-      
-      if (bucketIndex > 0 && bucketIndex < pathSegments.length) {
-        // The bucket name is the next segment after 'public'
-        const bucket = pathSegments[bucketIndex];
-        
-        // The file path is everything after the bucket name
-        const filePath = pathSegments.slice(bucketIndex + 1).join('/');
-        
-        if (bucket && filePath) {
-          console.log(`Attempting to delete file from bucket: ${bucket}, path: ${filePath}`);
-          
-          // Delete the file from storage
-          const { error: storageError } = await supabase
-            .storage
-            .from(bucket)
-            .remove([filePath]);
-          
-          if (storageError) {
-            console.error("Error deleting file from storage:", storageError);
-            // Continue with DB deletion even if storage deletion fails
-          } else {
-            console.log("File successfully deleted from storage");
-          }
-        }
-      }
-    }
-    
     // Delete the video from the database
     const { error } = await supabase
       .from('videos')
