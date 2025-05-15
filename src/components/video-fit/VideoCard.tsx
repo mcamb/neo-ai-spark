@@ -18,6 +18,7 @@ export interface Video {
   file?: string;
   format?: string;
   craft?: string;
+  creator?: string;
   created_at?: string;
 }
 
@@ -70,6 +71,11 @@ const VideoCard: React.FC<VideoCardProps> = ({ video, onDelete, onView }) => {
             <p className="line-clamp-1" title={`${video.clientName} - ${video.country}`}>
               <span className="font-bold">{video.clientName}</span> - {video.country}
             </p>
+            {video.creator && (
+              <p className="line-clamp-1" title={video.creator}>
+                Creator: {video.creator}
+              </p>
+            )}
           </div>
           
           {video.craft && (

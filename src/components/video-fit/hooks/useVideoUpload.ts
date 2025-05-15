@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
 
@@ -16,6 +16,17 @@ export const useVideoUpload = ({ onSuccess }: UseVideoUploadProps) => {
   const [videoTitle, setVideoTitle] = useState<string>('');
   const [videoCraft, setVideoCraft] = useState<string>('Brand');
   const [videoFormat, setVideoFormat] = useState<string>('16:9');
+  const [creatorName, setCreatorName] = useState<string>('');
+  const [showCreatorField, setShowCreatorField] = useState<boolean>(false);
+
+  // Update showCreatorField when videoCraft changes
+  useEffect(() => {
+    setShowCreatorField(videoCraft === 'Creator');
+    // Clear creator name if not showing the field
+    if (videoCraft !== 'Creator') {
+      setCreatorName('');
+    }
+  }, [videoCraft]);
 
   // Handle file selection
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -79,6 +90,15 @@ export const useVideoUpload = ({ onSuccess }: UseVideoUploadProps) => {
       });
       return;
     }
+
+    if (showCreatorField && !creatorName) {
+      toast({
+        title: "Error",
+        description: "Please enter creator name",
+        variant: "destructive"
+      });
+      return;
+    }
     
     setIsUploading(true);
     
@@ -103,15 +123,22 @@ export const useVideoUpload = ({ onSuccess }: UseVideoUploadProps) => {
       const publicUrl = publicUrlData.publicUrl;
       
       // Save video metadata to the database
-      const { data: videoData, error: dbError } = await supabase
+      const videoData = {
+        campaign_id: selectedCampaignId,
+        titel: videoTitle,
+        crafted_by: videoCraft,
+        format: videoFormat,
+        file: publicUrl
+      };
+
+      // Add creator field if applicable
+      if (showCreatorField && creatorName) {
+        Object.assign(videoData, { creator: creatorName });
+      }
+
+      const { data, error: dbError } = await supabase
         .from('videos')
-        .insert({
-          campaign_id: selectedCampaignId,
-          titel: videoTitle,
-          craft: videoCraft,
-          format: videoFormat,
-          file: publicUrl
-        })
+        .insert(videoData)
         .select('id')
         .single();
         
@@ -128,6 +155,7 @@ export const useVideoUpload = ({ onSuccess }: UseVideoUploadProps) => {
       setVideoTitle('');
       setVideoFormat('16:9');
       setVideoCraft('Brand');
+      setCreatorName('');
       
       // Call the onSuccess callback if provided to close the modal and refresh the videos list
       if (onSuccess) {
@@ -146,7 +174,8 @@ export const useVideoUpload = ({ onSuccess }: UseVideoUploadProps) => {
   };
 
   // Form validity check
-  const isFormValid = !!selectedClientId && !!selectedCampaignId && !!selectedFile && !!videoTitle;
+  const isFormValid = !!selectedClientId && !!selectedCampaignId && !!selectedFile && !!videoTitle && 
+    (!showCreatorField || (showCreatorField && !!creatorName));
 
   return {
     selectedClientId,
@@ -164,6 +193,9 @@ export const useVideoUpload = ({ onSuccess }: UseVideoUploadProps) => {
     setVideoCraft,
     videoFormat,
     setVideoFormat,
+    creatorName,
+    setCreatorName,
+    showCreatorField,
     handleFileChange,
     resetCampaignOnClientChange,
     handleSubmit,

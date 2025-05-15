@@ -15,7 +15,8 @@ export const useVideos = () => {
         titel, 
         file,
         format,
-        craft,
+        crafted_by,
+        creator,
         created_at,
         campaign_id,
         campaigns (
@@ -46,7 +47,8 @@ export const useVideos = () => {
       country: video.campaigns?.clients?.country || 'Unknown Country',
       file: video.file,
       format: video.format,
-      craft: video.craft,
+      craft: video.crafted_by,
+      creator: video.creator,
       created_at: video.created_at
     }));
     

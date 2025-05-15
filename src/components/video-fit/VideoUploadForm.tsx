@@ -26,6 +26,9 @@ const VideoUploadForm: React.FC<VideoFormProps> = ({ onSuccess }) => {
     setVideoCraft,
     videoFormat,
     setVideoFormat,
+    creatorName,
+    setCreatorName,
+    showCreatorField,
     handleFileChange,
     resetCampaignOnClientChange,
     handleSubmit,
@@ -71,6 +74,9 @@ const VideoUploadForm: React.FC<VideoFormProps> = ({ onSuccess }) => {
         videoFormat={videoFormat}
         setVideoFormat={setVideoFormat}
         isUploading={isUploading}
+        showCreatorField={showCreatorField}
+        creatorName={creatorName}
+        setCreatorName={setCreatorName}
       />
 
       <VideoPreview 

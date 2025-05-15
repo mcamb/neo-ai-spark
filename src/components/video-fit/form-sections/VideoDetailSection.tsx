@@ -18,6 +18,9 @@ interface VideoDetailProps {
   videoFormat: string;
   setVideoFormat: (format: string) => void;
   isUploading: boolean;
+  showCreatorField: boolean;
+  creatorName: string;
+  setCreatorName: (name: string) => void;
 }
 
 const VideoDetailSection: React.FC<VideoDetailProps> = ({
@@ -27,7 +30,10 @@ const VideoDetailSection: React.FC<VideoDetailProps> = ({
   setVideoCraft,
   videoFormat,
   setVideoFormat,
-  isUploading
+  isUploading,
+  showCreatorField,
+  creatorName,
+  setCreatorName
 }) => {
   return (
     <>
@@ -45,7 +51,7 @@ const VideoDetailSection: React.FC<VideoDetailProps> = ({
 
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
-          <Label htmlFor="video-craft">Video Craft<span className="text-red-500">*</span></Label>
+          <Label htmlFor="video-craft">Video Crafted By<span className="text-red-500">*</span></Label>
           <Select 
             value={videoCraft} 
             onValueChange={setVideoCraft}
@@ -83,6 +89,20 @@ const VideoDetailSection: React.FC<VideoDetailProps> = ({
           </Select>
         </div>
       </div>
+
+      {showCreatorField && (
+        <div className="space-y-2">
+          <Label htmlFor="creator-name">Creator<span className="text-red-500">*</span></Label>
+          <Input
+            id="creator-name"
+            value={creatorName}
+            onChange={(e) => setCreatorName(e.target.value)}
+            placeholder="Enter creator name"
+            disabled={isUploading}
+            required={showCreatorField}
+          />
+        </div>
+      )}
     </>
   );
 };
