@@ -50,13 +50,15 @@ export const useVideoAnalysis = (videoId: string | undefined) => {
           return;
         }
 
+        console.log("Video data loaded:", videoData); // Debugging: Video-Daten in der Konsole ausgeben
+
         // Construct analysis data from the video information
         const analysisData: VideoAnalysisData = {
           video_id: videoId,
           video_title: videoData.titel,
           video_craft: videoData.crafted_by,
           video_format: videoData.format,
-          video_description: videoData.description,
+          video_description: videoData.description || null,
           overall_assessment: videoData.assessment || null,
           recommendations: videoData.recommendations || null,
           creator: videoData.creator || null,
@@ -73,6 +75,8 @@ export const useVideoAnalysis = (videoId: string | undefined) => {
         if (videoData.campaigns?.channels) {
           analysisData.channel = videoData.campaigns.channels.channel || null;
         }
+
+        console.log("Processed analysis data:", analysisData); // Debugging: Die aufbereiteten Daten in der Konsole ausgeben
 
         setAnalysis(analysisData);
       } catch (error) {

@@ -14,8 +14,8 @@ const VideoAnalysisContent: React.FC<VideoAnalysisContentProps> = ({ analysis })
     <div className="space-y-6">
       <VideoOverview analysis={analysis} />
 
-      {/* Video Description Section */}
-      <VideoDescription description={analysis.video_description || ''} />
+      {/* Video Description Section - Verbesserte Integration */}
+      <VideoDescription description={analysis.video_description} />
 
       {/* Analysis Content */}
       <div className="space-y-6">
