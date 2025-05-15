@@ -8,6 +8,7 @@ export type VideoAnalysisData = {
   country?: string | null;
   channel?: string | null;
   creator?: string | null;
+  campaign_title?: string | null;
   video_description?: string;
   audience_fit_description?: string | null;
   brand_fit_description?: string | null;

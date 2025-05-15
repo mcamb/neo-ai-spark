@@ -36,6 +36,9 @@ const VideoAnalysis = () => {
               *,
               clients (
                 *
+              ),
+              channels (
+                *
               )
             )
           `)
@@ -58,22 +61,16 @@ const VideoAnalysis = () => {
         }
 
         // Construct analysis data from the video information
-        // Ensuring we use the correct field names
         const analysisData: VideoAnalysisData = {
           video_id: videoId,
           video_title: videoData.titel,
           video_craft: videoData.crafted_by,
           video_format: videoData.format,
           video_description: videoData.description,
-          // Use the assessment field directly
-          audience_fit_description: videoData.audience_fit_description || null,
-          brand_fit_description: videoData.brand_fit_description || null,
-          objective_fit_description: videoData.objective_fit_description || null,
-          platform_fit_description: videoData.platform_fit_description || null,
-          message_clarity_description: videoData.message_clarity_description || null,
-          creative_impact_description: videoData.creative_impact_description || null,
           overall_assessment: videoData.assessment || null,
-          recommendations: videoData.recommendations || null
+          recommendations: videoData.recommendations || null,
+          creator: videoData.creator || null,
+          campaign_title: videoData.campaigns?.titel || null,
         };
 
         // Add campaign and client context data if available
@@ -81,10 +78,10 @@ const VideoAnalysis = () => {
           analysisData.brand = videoData.campaigns.clients.brand || null;
           analysisData.country = videoData.campaigns.clients.country || null;
         }
-
-        // Add the creator field if available
-        if (videoData.creator) {
-          analysisData.creator = videoData.creator;
+        
+        // Add channel data if available
+        if (videoData.campaigns?.channels) {
+          analysisData.channel = videoData.campaigns.channels.channel || null;
         }
 
         setAnalysis(analysisData);
@@ -148,42 +145,6 @@ const VideoAnalysis = () => {
             <AnalysisSection 
               title="Overall Assessment" 
               content={analysis.overall_assessment} 
-            />
-          )}
-          {analysis.audience_fit_description && (
-            <AnalysisSection 
-              title="Audience Fit" 
-              content={analysis.audience_fit_description} 
-            />
-          )}
-          {analysis.brand_fit_description && (
-            <AnalysisSection 
-              title="Brand Fit" 
-              content={analysis.brand_fit_description} 
-            />
-          )}
-          {analysis.objective_fit_description && (
-            <AnalysisSection 
-              title="Objective Fit" 
-              content={analysis.objective_fit_description} 
-            />
-          )}
-          {analysis.platform_fit_description && (
-            <AnalysisSection 
-              title="Platform Fit" 
-              content={analysis.platform_fit_description} 
-            />
-          )}
-          {analysis.message_clarity_description && (
-            <AnalysisSection 
-              title="Message Clarity" 
-              content={analysis.message_clarity_description} 
-            />
-          )}
-          {analysis.creative_impact_description && (
-            <AnalysisSection 
-              title="Creative Impact" 
-              content={analysis.creative_impact_description} 
             />
           )}
           {analysis.recommendations && (

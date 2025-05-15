@@ -88,6 +88,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "campaigns_channel_id_fkey"
+            columns: ["channel_id"]
+            isOneToOne: false
+            referencedRelation: "video_context_n8n_agents"
+            referencedColumns: ["channel_id"]
+          },
+          {
             foreignKeyName: "campaigns_client_id_fkey"
             columns: ["client_id"]
             isOneToOne: false
@@ -95,11 +102,25 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "campaigns_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "video_context_n8n_agents"
+            referencedColumns: ["client_id"]
+          },
+          {
             foreignKeyName: "campaigns_objective_id_fkey"
             columns: ["objective_id"]
             isOneToOne: false
             referencedRelation: "objectives"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "campaigns_objective_id_fkey"
+            columns: ["objective_id"]
+            isOneToOne: false
+            referencedRelation: "video_context_n8n_agents"
+            referencedColumns: ["objective_id"]
           },
         ]
       }
@@ -178,6 +199,13 @@ export type Database = {
             referencedRelation: "countries"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "clients_country_id_fkey"
+            columns: ["country_id"]
+            isOneToOne: false
+            referencedRelation: "video_context_n8n_agents"
+            referencedColumns: ["country_id"]
+          },
         ]
       }
       colleagues: {
@@ -231,22 +259,68 @@ export type Database = {
         Row: {
           category: string
           description: string
-          id: string
+          id: number
           indicator: string
         }
         Insert: {
           category: string
           description: string
-          id?: string
+          id?: number
           indicator: string
         }
         Update: {
           category?: string
           description?: string
-          id?: string
+          id?: number
           indicator?: string
         }
         Relationships: []
+      }
+      impact_scores: {
+        Row: {
+          id: number
+          impact_indicators_id: number | null
+          rationale: string | null
+          score: number | null
+          video_id: string | null
+        }
+        Insert: {
+          id?: number
+          impact_indicators_id?: number | null
+          rationale?: string | null
+          score?: number | null
+          video_id?: string | null
+        }
+        Update: {
+          id?: number
+          impact_indicators_id?: number | null
+          rationale?: string | null
+          score?: number | null
+          video_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "impact_scores_impact_indicators_id_fkey"
+            columns: ["impact_indicators_id"]
+            isOneToOne: false
+            referencedRelation: "impact_indicators"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "impact_scores_video_id_fkey"
+            columns: ["video_id"]
+            isOneToOne: false
+            referencedRelation: "video_context_n8n_agents"
+            referencedColumns: ["video_id"]
+          },
+          {
+            foreignKeyName: "impact_scores_video_id_fkey"
+            columns: ["video_id"]
+            isOneToOne: false
+            referencedRelation: "videos"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       objectives: {
         Row: {
@@ -303,11 +377,25 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "relevance_scores_channel_id_fkey"
+            columns: ["channel_id"]
+            isOneToOne: false
+            referencedRelation: "video_context_n8n_agents"
+            referencedColumns: ["channel_id"]
+          },
+          {
             foreignKeyName: "relevance_scores_client_id_fkey"
             columns: ["client_id"]
             isOneToOne: false
             referencedRelation: "clients"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "relevance_scores_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "video_context_n8n_agents"
+            referencedColumns: ["client_id"]
           },
         ]
       }
@@ -366,6 +454,13 @@ export type Database = {
             referencedRelation: "campaigns"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "videos_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "video_context_n8n_agents"
+            referencedColumns: ["campaign_id"]
+          },
         ]
       }
     }
@@ -406,11 +501,25 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "campaigns_channel_id_fkey"
+            columns: ["channel_id"]
+            isOneToOne: false
+            referencedRelation: "video_context_n8n_agents"
+            referencedColumns: ["channel_id"]
+          },
+          {
             foreignKeyName: "campaigns_client_id_fkey"
             columns: ["client_id"]
             isOneToOne: false
             referencedRelation: "clients"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "campaigns_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "video_context_n8n_agents"
+            referencedColumns: ["client_id"]
           },
           {
             foreignKeyName: "campaigns_objective_id_fkey"
@@ -419,7 +528,45 @@ export type Database = {
             referencedRelation: "objectives"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "campaigns_objective_id_fkey"
+            columns: ["objective_id"]
+            isOneToOne: false
+            referencedRelation: "video_context_n8n_agents"
+            referencedColumns: ["objective_id"]
+          },
         ]
+      }
+      video_context_n8n_agents: {
+        Row: {
+          assessment: string | null
+          brand: string | null
+          brand_challenge: string | null
+          brand_promise: string | null
+          campaign_id: string | null
+          campaign_name: string | null
+          channel: string | null
+          channel_id: string | null
+          client_id: string | null
+          country: string | null
+          country_id: string | null
+          creators_influencers: string | null
+          message_hook: string | null
+          objective: string | null
+          objective_id: string | null
+          profile: string | null
+          recommendations: string | null
+          target_audience: string | null
+          target_audience_summary: string | null
+          tone_style: string | null
+          video_crafted_by: string | null
+          video_creator_name: string | null
+          video_description: string | null
+          video_format: string | null
+          video_id: string | null
+          video_title: string | null
+        }
+        Relationships: []
       }
     }
     Functions: {

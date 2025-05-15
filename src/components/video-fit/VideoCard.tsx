@@ -71,28 +71,33 @@ const VideoCard: React.FC<VideoCardProps> = ({ video, onDelete, onView }) => {
             <p className="line-clamp-1" title={`${video.clientName} - ${video.country}`}>
               <span className="font-bold">{video.clientName}</span> - {video.country}
             </p>
-            {video.creator && (
-              <p className="line-clamp-1" title={video.creator}>
-                Creator: {video.creator}
-              </p>
-            )}
           </div>
           
-          {video.craft && (
-            <div className="mt-auto">
+          <div className="mt-auto space-y-2">
+            {/* Display the craft as a badge first */}
+            {video.craft && (
               <Badge 
                 variant="outline" 
                 className={cn(
                   "bg-gray-50 text-gray-700 border border-gray-200 font-normal",
                   video.craft?.toLowerCase() === "video" && "bg-blue-50 text-blue-700 border-blue-200",
                   video.craft?.toLowerCase() === "image" && "bg-purple-50 text-purple-700 border-purple-200",
-                  video.craft?.toLowerCase() === "audio" && "bg-green-50 text-green-700 border-green-200"
+                  video.craft?.toLowerCase() === "audio" && "bg-green-50 text-green-700 border-green-200",
+                  video.craft?.toLowerCase() === "brand" && "bg-amber-50 text-amber-700 border-amber-200",
+                  video.craft?.toLowerCase() === "creator" && "bg-emerald-50 text-emerald-700 border-emerald-200"
                 )}
               >
                 {video.craft}
               </Badge>
-            </div>
-          )}
+            )}
+            
+            {/* Then display creator name if available, with bold value */}
+            {video.creator && (
+              <p className="line-clamp-1 text-sm" title={video.creator}>
+                Creator: <span className="font-bold">{video.creator}</span>
+              </p>
+            )}
+          </div>
         </div>
       </CardContent>
       
