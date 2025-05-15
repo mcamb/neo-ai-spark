@@ -30,7 +30,15 @@ const VideoAnalysis = () => {
         // First get the video basic info
         const { data: videoData, error: videoError } = await supabase
           .from('videos')
-          .select('*')
+          .select(`
+            *,
+            campaigns (
+              *,
+              clients (
+                *
+              )
+            )
+          `)
           .eq('id', videoId)
           .maybeSingle();
 
@@ -49,40 +57,35 @@ const VideoAnalysis = () => {
           return;
         }
 
-        // Get additional context from video_context_n8n_agents view
-        const { data: contextData, error: contextError } = await supabase
-          .from('video_context_n8n_agents')
-          .select('*')
-          .eq('video_id', videoId)
-          .maybeSingle();
-
-        if (contextError) {
-          console.warn('Error fetching video context:', contextError);
-          // Continue with just video data
-        }
-
-        // Combine data
+        // Construct analysis data from the video information
+        // Ensuring we use the correct field names
         const analysisData: VideoAnalysisData = {
           video_id: videoId,
           video_title: videoData.titel,
-          video_craft: videoData.craft,
+          video_craft: videoData.crafted_by,
           video_format: videoData.format,
           video_description: videoData.description,
-          audience_fit_description: videoData.audience_fit_description,
-          brand_fit_description: videoData.brand_fit_description,
-          objective_fit_description: videoData.objective_fit_description,
-          platform_fit_description: videoData.platform_fit_description,
-          message_clarity_description: videoData.message_clarity_description,
-          creative_impact_description: videoData.creative_impact_description,
-          overall_assessment: videoData.overall_assessment,
-          recommendations: videoData.recommendations,
-          // Add context data if available
-          ...(contextData && {
-            brand: contextData.brand,
-            country: contextData.country,
-            channel: contextData.channel
-          })
+          // Use the assessment field directly
+          audience_fit_description: videoData.audience_fit_description || null,
+          brand_fit_description: videoData.brand_fit_description || null,
+          objective_fit_description: videoData.objective_fit_description || null,
+          platform_fit_description: videoData.platform_fit_description || null,
+          message_clarity_description: videoData.message_clarity_description || null,
+          creative_impact_description: videoData.creative_impact_description || null,
+          overall_assessment: videoData.assessment || null,
+          recommendations: videoData.recommendations || null
         };
+
+        // Add campaign and client context data if available
+        if (videoData.campaigns?.clients) {
+          analysisData.brand = videoData.campaigns.clients.brand || null;
+          analysisData.country = videoData.campaigns.clients.country || null;
+        }
+
+        // Add the creator field if available
+        if (videoData.creator) {
+          analysisData.creator = videoData.creator;
+        }
 
         setAnalysis(analysisData);
       } catch (error) {
@@ -141,38 +144,54 @@ const VideoAnalysis = () => {
 
         {/* Analysis Content */}
         <div className="space-y-6">
-          <AnalysisSection 
-            title="Overall Assessment" 
-            content={analysis.overall_assessment} 
-          />
-          <AnalysisSection 
-            title="Audience Fit" 
-            content={analysis.audience_fit_description} 
-          />
-          <AnalysisSection 
-            title="Brand Fit" 
-            content={analysis.brand_fit_description} 
-          />
-          <AnalysisSection 
-            title="Objective Fit" 
-            content={analysis.objective_fit_description} 
-          />
-          <AnalysisSection 
-            title="Platform Fit" 
-            content={analysis.platform_fit_description} 
-          />
-          <AnalysisSection 
-            title="Message Clarity" 
-            content={analysis.message_clarity_description} 
-          />
-          <AnalysisSection 
-            title="Creative Impact" 
-            content={analysis.creative_impact_description} 
-          />
-          <AnalysisSection 
-            title="Recommendations" 
-            content={analysis.recommendations} 
-          />
+          {analysis.overall_assessment && (
+            <AnalysisSection 
+              title="Overall Assessment" 
+              content={analysis.overall_assessment} 
+            />
+          )}
+          {analysis.audience_fit_description && (
+            <AnalysisSection 
+              title="Audience Fit" 
+              content={analysis.audience_fit_description} 
+            />
+          )}
+          {analysis.brand_fit_description && (
+            <AnalysisSection 
+              title="Brand Fit" 
+              content={analysis.brand_fit_description} 
+            />
+          )}
+          {analysis.objective_fit_description && (
+            <AnalysisSection 
+              title="Objective Fit" 
+              content={analysis.objective_fit_description} 
+            />
+          )}
+          {analysis.platform_fit_description && (
+            <AnalysisSection 
+              title="Platform Fit" 
+              content={analysis.platform_fit_description} 
+            />
+          )}
+          {analysis.message_clarity_description && (
+            <AnalysisSection 
+              title="Message Clarity" 
+              content={analysis.message_clarity_description} 
+            />
+          )}
+          {analysis.creative_impact_description && (
+            <AnalysisSection 
+              title="Creative Impact" 
+              content={analysis.creative_impact_description} 
+            />
+          )}
+          {analysis.recommendations && (
+            <AnalysisSection 
+              title="Recommendations" 
+              content={analysis.recommendations} 
+            />
+          )}
         </div>
       </div>
     </MainLayout>
