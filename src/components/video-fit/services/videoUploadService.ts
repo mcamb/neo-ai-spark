@@ -19,6 +19,11 @@ export interface UploadResult {
 
 export const uploadVideo = async (file: File, videoData: VideoData): Promise<UploadResult> => {
   try {
+    // Validate the campaign ID to ensure it's a valid UUID before proceeding
+    if (!videoData.campaignId || videoData.campaignId.trim() === '' || videoData.campaignId === 'undefined') {
+      throw new Error('Missing or invalid campaign ID. Please select a valid campaign.');
+    }
+    
     // Upload video to Supabase Storage
     const fileExt = file.name.split('.').pop();
     const filePath = `${Date.now()}_${Math.random().toString(36).substring(2, 15)}.${fileExt}`;
@@ -46,7 +51,7 @@ export const uploadVideo = async (file: File, videoData: VideoData): Promise<Upl
       file: publicUrl,
       format: videoData.format,
       crafted_by: videoData.craft,
-      campaign_id: videoData.campaignId, // Komma hinzugefügt
+      campaign_id: videoData.campaignId, // Ensure this is a valid UUID
     };
     
     // Only add creator field if craft is 'Creator'
