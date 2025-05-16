@@ -40,20 +40,30 @@ export const uploadVideo = async (file: File, videoData: VideoData): Promise<Upl
     
     const publicUrl = publicUrlData.publicUrl;
     
-    // Create database entry
+    // Create a properly formatted object for database insertion
+    const videoRecord = {
+      titel: videoData.title,
+      file: publicUrl,
+      format: videoData.format,
+      crafted_by: videoData.craft,
+      campaign_id: videoData.campaignId
+    };
+    
+    // Only add creator if it's needed
+    if (videoData.craft === 'Creator' && videoData.creatorName) {
+      videoRecord.creator = videoData.creatorName;
+    }
+    
+    console.log('Inserting video record:', videoRecord);
+    
+    // Insert data into videos table
     const { data, error: dbError } = await supabase
       .from('videos')
-      .insert({
-        titel: videoData.title,
-        file: publicUrl,
-        format: videoData.format,
-        crafted_by: videoData.craft,
-        campaign_id: videoData.campaignId,
-        creator: videoData.craft === 'Creator' ? videoData.creatorName : null
-      })
+      .insert(videoRecord)
       .select();
     
     if (dbError) {
+      console.error('Database error:', dbError);
       throw dbError;
     }
     
