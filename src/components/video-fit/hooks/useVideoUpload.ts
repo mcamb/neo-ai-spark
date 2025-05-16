@@ -136,9 +136,10 @@ export const useVideoUpload = ({ onSuccess }: UseVideoUploadProps) => {
         Object.assign(videoData, { creator: creatorName });
       }
 
+      // Create simpler insert query with explicit columns
       const { data, error: dbError } = await supabase
         .from('videos')
-        .insert(videoData)
+        .insert([videoData])
         .select('id')
         .single();
         
