@@ -17,6 +17,16 @@ export interface UploadResult {
   videoId?: string;
 }
 
+// Define the video record interface to include all possible fields
+interface VideoRecord {
+  titel: string;
+  file: string;
+  format: string;
+  crafted_by: string;
+  campaign_id: string;
+  creator?: string; // Make creator optional since it's conditionally added
+}
+
 export const uploadVideo = async (file: File, videoData: VideoData): Promise<UploadResult> => {
   try {
     // Upload video to Supabase Storage
@@ -41,7 +51,7 @@ export const uploadVideo = async (file: File, videoData: VideoData): Promise<Upl
     const publicUrl = publicUrlData.publicUrl;
     
     // Create a properly formatted object for database insertion
-    const videoRecord = {
+    const videoRecord: VideoRecord = {
       titel: videoData.title,
       file: publicUrl,
       format: videoData.format,
