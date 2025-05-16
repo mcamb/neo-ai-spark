@@ -46,8 +46,19 @@ export const uploadVideo = async (file: File, videoData: VideoData): Promise<Upl
     const publicUrl = publicUrlData.publicUrl;
     console.log('Public URL generated:', publicUrl);
     
-    // Create database entry with the correct column names for the videos table
-    // Based on the debugging information and console logs we've seen
+    // First, fetch the structure of the videos table to make sure we match column names exactly
+    const { data: columns, error: columnsError } = await supabase
+      .from('videos')
+      .select()
+      .limit(1);
+      
+    if (columnsError) {
+      console.error('Error fetching videos table structure:', columnsError);
+    } else {
+      console.log('Videos table structure example:', columns);
+    }
+    
+    // Create database entry with the correct column names
     const insertData = {
       titel: videoData.title,
       file: publicUrl,
@@ -66,7 +77,7 @@ export const uploadVideo = async (file: File, videoData: VideoData): Promise<Upl
     // Insert data into the videos table
     const { data, error: dbError } = await supabase
       .from('videos')
-      .insert(insertData)
+      .insert([insertData]) // Note: Explicitly wrapping in an array
       .select();
     
     if (dbError) {
