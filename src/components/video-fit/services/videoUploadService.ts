@@ -62,10 +62,10 @@ export const uploadVideo = async (file: File, videoData: VideoData): Promise<Upl
     console.log("DEBUG: videoRecord", videoRecord);
     console.log("DEBUG: JSON payload", JSON.stringify(videoRecord, null, 2));
     
-    // Insert data into videos table without using the returning option
+    // Insert data into videos table with the simplest approach, no options and no select
     const { error: dbError } = await supabase
       .from('videos')
-      .insert(videoRecord);
+      .insert([videoRecord]);
     
     console.log("Fertig"); // ✅ indicating completion
     
