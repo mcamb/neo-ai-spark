@@ -46,18 +46,8 @@ export const uploadVideo = async (file: File, videoData: VideoData): Promise<Upl
     const publicUrl = publicUrlData.publicUrl;
     console.log('Public URL generated:', publicUrl);
     
-    // Retrieve the videos table structure to debug
-    const { data: tableInfo, error: tableError } = await supabase
-      .rpc('get_table_columns', { table_name: 'videos' });
-      
-    if (tableError) {
-      console.log('Could not retrieve table structure:', tableError);
-    } else {
-      console.log('Videos table structure:', tableInfo);
-    }
-    
-    // Create a database insert object with exact column names matching the videos table
-    // Based on the error, we need to make sure our columns match exactly
+    // Create database entry with the correct column names for the videos table
+    // Based on the debugging information and console logs we've seen
     const insertData = {
       titel: videoData.title,
       file: publicUrl,
@@ -73,7 +63,7 @@ export const uploadVideo = async (file: File, videoData: VideoData): Promise<Upl
     
     console.log('Inserting video data:', insertData);
     
-    // Use upsert method with explicit column names
+    // Insert data into the videos table
     const { data, error: dbError } = await supabase
       .from('videos')
       .insert(insertData)
@@ -112,8 +102,8 @@ export const uploadVideo = async (file: File, videoData: VideoData): Promise<Upl
       errorMessage = "Referenced campaign does not exist";
     } else if (error.code === '23502') {
       errorMessage = "Missing required field in video data";
-    } else if (error.message?.includes('column') && error.message?.includes('does not exist')) {
-      errorMessage = "Database schema mismatch: " + error.message;
+    } else if (error.code === '42601') {
+      errorMessage = "SQL syntax error - please check column names in the insert statement";
     }
     
     toast({
