@@ -40,8 +40,8 @@ export const uploadVideo = async (file: File, videoData: VideoData): Promise<Upl
     
     const publicUrl = publicUrlData.publicUrl;
     
-    // Create a base record object with required fields
-    const videoRecord: Record<string, any> = {
+    // Create a record object with required fields
+    const videoRecord = {
       titel: videoData.title,
       file: publicUrl,
       format: videoData.format,
@@ -51,7 +51,8 @@ export const uploadVideo = async (file: File, videoData: VideoData): Promise<Upl
     
     // Only add creator field if craft is 'Creator'
     if (videoData.craft === 'Creator' && videoData.creatorName) {
-      videoRecord.creator = videoData.creatorName;
+      // Add creator field to the videoRecord object
+      (videoRecord as any).creator = videoData.creatorName;
     }
     
     console.log('Inserting video record:', videoRecord);
@@ -59,7 +60,7 @@ export const uploadVideo = async (file: File, videoData: VideoData): Promise<Upl
     // Insert data into videos table
     const { data, error: dbError } = await supabase
       .from('videos')
-      .insert([videoRecord])
+      .insert(videoRecord)
       .select();
     
     if (dbError) {
