@@ -62,12 +62,12 @@ export const uploadVideo = async (file: File, videoData: VideoData): Promise<Upl
     console.log("DEBUG: videoRecord", videoRecord);
     console.log("DEBUG: JSON payload", JSON.stringify(videoRecord, null, 2));
     
-    // Insert data into videos table with the minimal returning option
+    // Insert data into videos table without using the returning option
     const { error: dbError } = await supabase
       .from('videos')
-      .insert([videoRecord], { returning: 'minimal' });
+      .insert(videoRecord);
     
-    console.log("Fertig"); // ✅ indicating completion without data object
+    console.log("Fertig"); // ✅ indicating completion
     
     if (dbError) {
       console.error('Database error:', dbError);
@@ -82,7 +82,7 @@ export const uploadVideo = async (file: File, videoData: VideoData): Promise<Upl
     return {
       success: true, 
       message: "Video uploaded successfully"
-      // No videoId returned since we're using returning: 'minimal'
+      // No videoId returned since we're not fetching it
     };
   } catch (error) {
     console.error('Error uploading video:', error);
