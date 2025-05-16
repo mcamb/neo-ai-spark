@@ -58,7 +58,7 @@ export const uploadVideo = async (file: File, videoData: VideoData): Promise<Upl
       console.log('Videos table structure example:', columns);
     }
     
-    // Create database entry with the correct column names
+    // Create database entry with the correct column names and ensuring correct format
     const insertData = {
       titel: videoData.title,
       file: publicUrl,
@@ -74,10 +74,10 @@ export const uploadVideo = async (file: File, videoData: VideoData): Promise<Upl
     
     console.log('Inserting video data:', insertData);
     
-    // Insert data into the videos table
+    // Insert data into the videos table - ensuring to wrap in array as required by Supabase
     const { data, error: dbError } = await supabase
       .from('videos')
-      .insert([insertData]) // Note: Explicitly wrapping in an array
+      .insert([insertData])
       .select();
     
     if (dbError) {
