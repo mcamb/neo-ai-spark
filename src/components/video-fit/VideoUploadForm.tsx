@@ -5,6 +5,7 @@ import CampaignSelector from './CampaignSelector';
 import VideoPreview from './VideoPreview';
 import VideoDetailSection from './form-sections/VideoDetailSection';
 import FormSubmitButton from './form-sections/FormSubmitButton';
+import UploadFeedback from './form-sections/UploadFeedback';
 import { useVideoUpload } from './hooks/useVideoUpload';
 
 type VideoFormProps = {
@@ -20,6 +21,9 @@ const VideoUploadForm: React.FC<VideoFormProps> = ({ onSuccess }) => {
     selectedFile,
     previewUrl,
     isUploading,
+    uploadProgress,
+    uploadError,
+    lastUploadResult,
     videoTitle,
     setVideoTitle,
     videoCraft,
@@ -85,6 +89,13 @@ const VideoUploadForm: React.FC<VideoFormProps> = ({ onSuccess }) => {
         handleFileChange={handleFileChange}
         isUploading={isUploading}
         required={true}
+      />
+
+      <UploadFeedback
+        isUploading={isUploading}
+        uploadProgress={uploadProgress}
+        uploadError={uploadError}
+        lastUploadResult={lastUploadResult}
       />
 
       <FormSubmitButton 

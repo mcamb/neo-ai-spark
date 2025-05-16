@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { FileVideo, Loader2 } from 'lucide-react';
+import { FileVideo, Loader2, Upload } from 'lucide-react';
 
 interface FormSubmitButtonProps {
   isUploading: boolean;
@@ -25,7 +25,7 @@ const FormSubmitButton: React.FC<FormSubmitButtonProps> = ({
         </>
       ) : (
         <>
-          <FileVideo className="mr-2 h-4 w-4" />
+          <Upload className="mr-2 h-4 w-4" />
           Upload and Analyze Video
         </>
       )}

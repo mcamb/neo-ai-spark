@@ -1,9 +1,10 @@
 
 import { useState } from 'react';
-import { uploadVideo } from '../services/videoUploadService';
+import { uploadVideo, UploadResult } from '../services/videoUploadService';
 import { validateVideoForm } from '../utils/formValidation';
 import { createVideoPreview, getVideoTitleFromFileName } from '../utils/videoFileUtils';
 import { VideoFormState } from './useVideoFormState';
+import { toast } from '@/hooks/use-toast';
 
 interface VideoHandlersProps {
   formState: VideoFormState;
@@ -12,6 +13,10 @@ interface VideoHandlersProps {
 
 export const useVideoHandlers = ({ formState, onSuccess }: VideoHandlersProps) => {
   const [isUploading, setIsUploading] = useState<boolean>(false);
+  const [uploadProgress, setUploadProgress] = useState<number>(0);
+  const [lastUploadResult, setLastUploadResult] = useState<UploadResult | null>(null);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+  
   const {
     selectedClientId,
     selectedCampaignId,
@@ -31,6 +36,10 @@ export const useVideoHandlers = ({ formState, onSuccess }: VideoHandlersProps) =
     const file = event.target.files?.[0] || null;
     setSelectedFile(file);
     
+    // Reset previous errors when selecting a new file
+    setUploadError(null);
+    setLastUploadResult(null);
+    
     // Create preview URL for video
     if (file) {
       const url = createVideoPreview(file);
@@ -39,6 +48,12 @@ export const useVideoHandlers = ({ formState, onSuccess }: VideoHandlersProps) =
       if (!videoTitle) {
         setVideoTitle(getVideoTitleFromFileName(file));
       }
+      
+      // Show a toast for file selection
+      toast({
+        title: "File Selected",
+        description: `Selected ${file.name} (${(file.size / (1024 * 1024)).toFixed(2)} MB)`
+      });
     } else {
       setPreviewUrl(null);
     }
@@ -54,6 +69,10 @@ export const useVideoHandlers = ({ formState, onSuccess }: VideoHandlersProps) =
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    // Reset previous results
+    setLastUploadResult(null);
+    setUploadError(null);
+    
     // Validate form data
     const isValid = validateVideoForm({
       selectedClientId,
@@ -64,13 +83,27 @@ export const useVideoHandlers = ({ formState, onSuccess }: VideoHandlersProps) =
       creatorName
     });
     
-    if (!isValid) return;
+    if (!isValid) {
+      setUploadError("Form validation failed");
+      return;
+    }
     
     setIsUploading(true);
     
+    // Simulate upload progress
+    const progressInterval = setInterval(() => {
+      setUploadProgress(prev => {
+        if (prev >= 90) {
+          clearInterval(progressInterval);
+          return 90; // Hold at 90% until actual completion
+        }
+        return prev + 10;
+      });
+    }, 500);
+    
     try {
       // Upload video and save to database
-      const uploadSuccess = await uploadVideo(
+      const result = await uploadVideo(
         selectedFile as File,
         {
           title: videoTitle,
@@ -81,7 +114,9 @@ export const useVideoHandlers = ({ formState, onSuccess }: VideoHandlersProps) =
         }
       );
       
-      if (uploadSuccess) {
+      setLastUploadResult(result);
+      
+      if (result.success) {
         // Reset form
         setSelectedFile(null);
         setPreviewUrl(null);
@@ -91,14 +126,34 @@ export const useVideoHandlers = ({ formState, onSuccess }: VideoHandlersProps) =
         if (onSuccess) {
           onSuccess();
         }
+      } else {
+        setUploadError(result.message || "Unknown error occurred");
       }
+    } catch (error) {
+      console.error("Unexpected error during upload:", error);
+      setUploadError("An unexpected error occurred");
+      setLastUploadResult({
+        success: false,
+        message: "Unexpected error",
+        error: error
+      });
     } finally {
-      setIsUploading(false);
+      clearInterval(progressInterval);
+      setUploadProgress(100); // Complete the progress bar
+      
+      // Give time for progress bar to show completion
+      setTimeout(() => {
+        setIsUploading(false);
+        setUploadProgress(0);
+      }, 500);
     }
   };
 
   return {
     isUploading,
+    uploadProgress,
+    uploadError,
+    lastUploadResult,
     handleFileChange,
     resetCampaignOnClientChange,
     handleSubmit
