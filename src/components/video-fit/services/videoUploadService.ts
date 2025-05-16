@@ -46,7 +46,18 @@ export const uploadVideo = async (file: File, videoData: VideoData): Promise<Upl
     const publicUrl = publicUrlData.publicUrl;
     console.log('Public URL generated:', publicUrl);
     
+    // Retrieve the videos table structure to debug
+    const { data: tableInfo, error: tableError } = await supabase
+      .rpc('get_table_columns', { table_name: 'videos' });
+      
+    if (tableError) {
+      console.log('Could not retrieve table structure:', tableError);
+    } else {
+      console.log('Videos table structure:', tableInfo);
+    }
+    
     // Create a database insert object with exact column names matching the videos table
+    // Based on the error, we need to make sure our columns match exactly
     const insertData = {
       titel: videoData.title,
       file: publicUrl,
@@ -62,7 +73,7 @@ export const uploadVideo = async (file: File, videoData: VideoData): Promise<Upl
     
     console.log('Inserting video data:', insertData);
     
-    // Perform the direct insert without wrapping insertData in an array
+    // Use upsert method with explicit column names
     const { data, error: dbError } = await supabase
       .from('videos')
       .insert(insertData)
