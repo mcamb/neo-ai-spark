@@ -122,24 +122,25 @@ export const useVideoUpload = ({ onSuccess }: UseVideoUploadProps) => {
       
       const publicUrl = publicUrlData.publicUrl;
       
-      // Save video metadata to the database
-      const videoData = {
-        campaign_id: selectedCampaignId,
+      // Explicitly define which columns we're inserting data into
+      const insertData = {
         titel: videoTitle,
-        crafted_by: videoCraft,
+        campaign_id: selectedCampaignId,
+        file: publicUrl,
         format: videoFormat,
-        file: publicUrl
+        crafted_by: videoCraft
       };
-
-      // Add creator field if applicable
-      if (showCreatorField && creatorName) {
-        Object.assign(videoData, { creator: creatorName });
+      
+      // Only add creator if it's a Creator-crafted video
+      if (videoCraft === 'Creator' && creatorName) {
+        Object.assign(insertData, { creator: creatorName });
       }
-
-      // Create simpler insert query with explicit columns
+      
+      console.log('Inserting video data:', insertData);
+      
       const { data, error: dbError } = await supabase
         .from('videos')
-        .insert([videoData])
+        .insert([insertData])
         .select('id')
         .single();
         
