@@ -122,29 +122,32 @@ export const useVideoUpload = ({ onSuccess }: UseVideoUploadProps) => {
       
       const publicUrl = publicUrlData.publicUrl;
       
-      // Create a basic insert object with only the required fields
+      // Create a database insert object with exact column names matching the videos table
       const insertData = {
         titel: videoTitle,
-        campaign_id: selectedCampaignId,
         file: publicUrl,
         format: videoFormat,
-        crafted_by: videoCraft
+        crafted_by: videoCraft,
+        campaign_id: selectedCampaignId
       };
       
-      // Only add creator if it's a Creator-crafted video and the name exists
+      // Only add creator field if it's a Creator-crafted video with a name
       if (videoCraft === 'Creator' && creatorName) {
         insertData['creator'] = creatorName;
       }
       
       console.log('Inserting video data:', insertData);
       
-      // Perform the database insert
+      // Perform the direct insert without wrapping insertData in an array
       const { data, error: dbError } = await supabase
         .from('videos')
         .insert(insertData)
-        .select('id');
+        .select();
       
-      if (dbError) throw dbError;
+      if (dbError) {
+        console.error('Database insertion error:', dbError);
+        throw dbError;
+      }
       
       toast({
         title: "Success",
