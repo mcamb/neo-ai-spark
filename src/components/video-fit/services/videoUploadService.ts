@@ -46,19 +46,7 @@ export const uploadVideo = async (file: File, videoData: VideoData): Promise<Upl
     const publicUrl = publicUrlData.publicUrl;
     console.log('Public URL generated:', publicUrl);
     
-    // First, fetch the structure of the videos table to make sure we match column names exactly
-    const { data: columns, error: columnsError } = await supabase
-      .from('videos')
-      .select()
-      .limit(1);
-      
-    if (columnsError) {
-      console.error('Error fetching videos table structure:', columnsError);
-    } else {
-      console.log('Videos table structure example:', columns);
-    }
-    
-    // Create database entry with the correct column names and ensuring correct format
+    // Create database entry
     const insertData = {
       titel: videoData.title,
       file: publicUrl,
@@ -74,10 +62,10 @@ export const uploadVideo = async (file: File, videoData: VideoData): Promise<Upl
     
     console.log('Inserting video data:', insertData);
     
-    // Insert data into the videos table - ensuring to wrap in array as required by Supabase
+    // Insert data into the videos table
     const { data, error: dbError } = await supabase
       .from('videos')
-      .insert([insertData])
+      .insert(insertData)
       .select();
     
     if (dbError) {
