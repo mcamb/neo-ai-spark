@@ -40,24 +40,24 @@ export const uploadVideo = async (file: File, videoData: VideoData): Promise<Upl
     
     const publicUrl = publicUrlData.publicUrl;
     
-    // Create a record object with ONLY the required fields
+    // Create a record object with the correct field names matching the database schema
     const videoRecord = {
-      titel: videoData.title,
-      file: publicUrl,
-      format: videoData.format,
-      crafted_by: videoData.craft,
-      campaign_id: videoData.campaignId,
-      created_at: new Date().toISOString()
+      titel: videoData.title,      // 'titel' is the column name in the database
+      file: publicUrl,             // 'file' is the column name
+      format: videoData.format,    // 'format' is the column name
+      crafted_by: videoData.craft, // 'crafted_by' is the column name
+      campaign_id: videoData.campaignId, // 'campaign_id' is the column name
+      created_at: new Date().toISOString() // 'created_at' is required
     };
     
     // Only add creator field if craft is 'Creator'
     if (videoData.craft === 'Creator' && videoData.creatorName) {
-      videoRecord['creator'] = videoData.creatorName; // Correctly mapping to 'creator' field
+      videoRecord['creator'] = videoData.creatorName; // 'creator' is the correct column name
     }
     
     console.log('Inserting video record:', videoRecord);
     
-    // Insert data into videos table
+    // Insert data into videos table with the correct field mappings
     const { data, error: dbError } = await supabase
       .from('videos')
       .insert(videoRecord)
