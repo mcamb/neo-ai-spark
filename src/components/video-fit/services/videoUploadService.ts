@@ -63,11 +63,11 @@ export const uploadVideo = async (file: File, videoData: VideoData): Promise<Upl
     console.log("DEBUG: JSON payload", JSON.stringify(videoRecord, null, 2));
     
     // Insert data into videos table with the correct field mappings
-    // Explicitly specify which columns to insert into
+    // Using select('*') properly to avoid the SQL error
     const { data, error: dbError } = await supabase
       .from('videos')
       .insert([videoRecord])
-      .select();
+      .select('*');
     
     if (dbError) {
       console.error('Database error:', dbError);
