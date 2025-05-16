@@ -47,8 +47,8 @@ export const uploadVideo = async (file: File, videoData: VideoData): Promise<Upl
       file: publicUrl,
       format: videoData.format,
       crafted_by: videoData.craft,
-      campaign_id: videoData.campaignId,
-      created_at: new Date().toISOString()
+      campaign_id: videoData.campaignId
+      // removed created_at as Supabase handles this automatically
     };
     
     // Only add creator field if craft is 'Creator'
