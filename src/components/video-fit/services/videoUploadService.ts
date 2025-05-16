@@ -46,7 +46,7 @@ export const uploadVideo = async (file: File, videoData: VideoData): Promise<Upl
     const publicUrl = publicUrlData.publicUrl;
     console.log('Public URL generated:', publicUrl);
     
-    // Create database entry
+    // Create database entry with proper column structure
     const insertData = {
       titel: videoData.title,
       file: publicUrl,
@@ -62,7 +62,7 @@ export const uploadVideo = async (file: File, videoData: VideoData): Promise<Upl
     
     console.log('Inserting video data:', insertData);
     
-    // Insert data into the videos table
+    // Insert data into the videos table using the proper format expected by Supabase
     const { data, error: dbError } = await supabase
       .from('videos')
       .insert(insertData)
