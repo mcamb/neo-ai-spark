@@ -59,7 +59,7 @@ export const uploadVideo = async (file: File, videoData: VideoData): Promise<Upl
       campaign_id: videoData.campaignId
     };
     
-    // Only add creator if it's needed
+    // Only add creator if it's needed (when craft is 'Creator')
     if (videoData.craft === 'Creator' && videoData.creatorName) {
       videoRecord.creator = videoData.creatorName;
     }
