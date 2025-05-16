@@ -66,7 +66,7 @@ export const uploadVideo = async (file: File, videoData: VideoData): Promise<Upl
     const { data, error: dbError } = await supabase
       .from('videos')
       .insert([videoRecord])
-      .select(); // Use default select without parameters
+      .select('*'); // ✅ Using explicit select('*') to avoid SQL errors
     
     if (dbError) {
       console.error('Database error:', dbError);
