@@ -59,7 +59,8 @@ export const uploadVideo = async (file: File, videoData: VideoData): Promise<Upl
       videoRecord['creator'] = videoData.creatorName;
     }
     
-    console.log('Inserting video record:', videoRecord);
+    console.log("DEBUG: videoRecord", videoRecord);
+    console.log("DEBUG: JSON payload", JSON.stringify(videoRecord, null, 2));
     
     // Insert data into videos table with the correct field mappings
     const { data, error: dbError } = await supabase
