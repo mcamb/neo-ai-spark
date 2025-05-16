@@ -10,11 +10,6 @@ interface VideoUploadModalProps {
 }
 
 const VideoUploadModal: React.FC<VideoUploadModalProps> = ({ isOpen, onClose, onSuccess }) => {
-  const handleSuccess = () => {
-    onSuccess();
-    onClose();
-  };
-  
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
@@ -24,7 +19,7 @@ const VideoUploadModal: React.FC<VideoUploadModalProps> = ({ isOpen, onClose, on
             Add a new video to analyze its fit with your campaign.
           </DialogDescription>
         </DialogHeader>
-        <VideoUploadForm onSuccess={handleSuccess} />
+        <VideoUploadForm onSuccess={onSuccess} onClose={onClose} />
       </DialogContent>
     </Dialog>
   );
