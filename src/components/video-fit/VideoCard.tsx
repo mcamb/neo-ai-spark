@@ -42,6 +42,7 @@ const VideoCard: React.FC<VideoCardProps> = ({ video, onDelete, onView }) => {
             <video 
               className="object-cover w-full h-full" 
               src={videoUrl}
+              preload="metadata"
               muted 
               onMouseOver={(e) => (e.target as HTMLVideoElement).play()}
               onMouseOut={(e) => {

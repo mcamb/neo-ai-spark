@@ -41,7 +41,6 @@ export const uploadVideo = async (file: File, videoData: VideoData): Promise<Upl
     const publicUrl = publicUrlData.publicUrl;
     
     // Create a record object with the correct field names matching the database schema
-    // Make sure we only include columns that exist in the database
     const videoRecord = {
       titel: videoData.title,
       file: publicUrl,
