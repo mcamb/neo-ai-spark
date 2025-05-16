@@ -51,7 +51,7 @@ export const uploadVideo = async (file: File, videoData: VideoData): Promise<Upl
       file: publicUrl,
       format: videoData.format,
       crafted_by: videoData.craft,
-      campaign_id: videoData.campaignId, // Ensure this is a valid UUID
+      campaign_id: videoData.campaignId
     };
     
     // Only add creator field if craft is 'Creator'
@@ -63,6 +63,7 @@ export const uploadVideo = async (file: File, videoData: VideoData): Promise<Upl
     console.log("DEBUG: JSON payload", JSON.stringify(videoRecord, null, 2));
     
     // Insert data into videos table with the correct field mappings
+    // Explicitly specify which columns to insert into
     const { data, error: dbError } = await supabase
       .from('videos')
       .insert([videoRecord])
