@@ -62,32 +62,30 @@ export const uploadVideo = async (file: File, videoData: VideoData): Promise<Upl
     console.log("DEBUG: videoRecord", videoRecord);
     console.log("DEBUG: JSON payload", JSON.stringify(videoRecord, null, 2));
     
-    // Insert data into videos table and retrieve the inserted row
-    const { data: insertedData, error: dbError } = await supabase
+    // Insert data into videos table - simple insert without select or columns
+    const { error: dbError } = await supabase
       .from('videos')
-      .insert([videoRecord])
-      .select('*');
+      .insert([videoRecord]);
     
-    console.log("Fertig"); // ✅ indicating completion
-    
+    // Log success or failure
     if (dbError) {
       console.error('Database error:', dbError);
       throw dbError;
+    } else {
+      console.log("✅ Insert successful");
     }
     
-    // Log the inserted data for debugging
-    console.log('Video inserted:', insertedData);
+    console.log("Fertig"); // ✅ indicating completion
     
     toast({
       title: "Success",
       description: "Video uploaded successfully"
     });
     
-    // Return success with the inserted video ID if available
+    // Return success but without videoId since we're not fetching it
     return {
       success: true, 
-      message: "Video uploaded successfully",
-      videoId: insertedData?.[0]?.id
+      message: "Video uploaded successfully"
     };
   } catch (error) {
     console.error('Error uploading video:', error);
