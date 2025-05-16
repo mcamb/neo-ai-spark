@@ -23,19 +23,14 @@ export const uploadVideo = async (file: File, videoData: VideoData): Promise<Upl
     const fileExt = file.name.split('.').pop();
     const filePath = `${Date.now()}_${Math.random().toString(36).substring(2, 15)}.${fileExt}`;
     
-    console.log('Starting file upload to storage:', { filePath, fileSize: file.size });
-    
     const { data: uploadData, error: uploadError } = await supabase
       .storage
       .from('videos')
       .upload(filePath, file);
       
     if (uploadError) {
-      console.error('Storage upload error:', uploadError);
       throw uploadError;
     }
-    
-    console.log('File uploaded successfully:', uploadData);
     
     // Get the public URL for the uploaded video
     const { data: publicUrlData } = supabase
@@ -44,9 +39,8 @@ export const uploadVideo = async (file: File, videoData: VideoData): Promise<Upl
       .getPublicUrl(filePath);
     
     const publicUrl = publicUrlData.publicUrl;
-    console.log('Public URL generated:', publicUrl);
     
-    // Create database entry with proper column structure
+    // Create database entry
     const insertData = {
       titel: videoData.title,
       file: publicUrl,
@@ -60,20 +54,15 @@ export const uploadVideo = async (file: File, videoData: VideoData): Promise<Upl
       insertData['creator'] = videoData.creatorName;
     }
     
-    console.log('Inserting video data:', insertData);
-    
-    // Insert data into the videos table using the proper format expected by Supabase
+    // Insert data into the videos table
     const { data, error: dbError } = await supabase
       .from('videos')
       .insert(insertData)
       .select();
     
     if (dbError) {
-      console.error('Database insertion error:', dbError);
       throw dbError;
     }
-    
-    console.log('Video data inserted successfully:', data);
     
     toast({
       title: "Success",
