@@ -40,18 +40,18 @@ export const uploadVideo = async (file: File, videoData: VideoData): Promise<Upl
     
     const publicUrl = publicUrlData.publicUrl;
     
-    // Create a record object with required fields
+    // Create a record object with ONLY the required fields
     const videoRecord = {
       titel: videoData.title,
       file: publicUrl,
       format: videoData.format,
       crafted_by: videoData.craft,
-      campaign_id: videoData.campaignId,
+      campaign_id: videoData.campaignId
     };
     
     // Only add creator field if craft is 'Creator'
     if (videoData.craft === 'Creator' && videoData.creatorName) {
-      videoRecord["creator"] = videoData.creatorName;
+      videoRecord['creator'] = videoData.creatorName;
     }
     
     console.log('Inserting video record:', videoRecord);
