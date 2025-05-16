@@ -17,16 +17,6 @@ export interface UploadResult {
   videoId?: string;
 }
 
-// Define the video record interface to match the database table structure
-interface VideoRecord {
-  titel: string;
-  file: string;
-  format: string;
-  crafted_by: string;
-  campaign_id: string;
-  creator: string | null; // Make creator optional since it's conditionally added
-}
-
 export const uploadVideo = async (file: File, videoData: VideoData): Promise<UploadResult> => {
   try {
     // Upload video to Supabase Storage
@@ -50,27 +40,28 @@ export const uploadVideo = async (file: File, videoData: VideoData): Promise<Upl
     
     const publicUrl = publicUrlData.publicUrl;
     
-    // Create a properly formatted object for database insertion
-    const videoRecord: VideoRecord = {
+    // Create a record object that will be inserted into the database
+    // Using the specific column names from the videos table
+    const videoRecord = {
       titel: videoData.title,
       file: publicUrl,
       format: videoData.format,
       crafted_by: videoData.craft,
-      campaign_id: videoData.campaignId,
-      creator: null // Default to null
+      campaign_id: videoData.campaignId
     };
     
-    // If craft is 'Creator', add creator name, otherwise leave it null
+    // If craft is 'Creator', add creator name, otherwise it will be null by default
     if (videoData.craft === 'Creator' && videoData.creatorName) {
-      videoRecord.creator = videoData.creatorName;
+      // Add creator name to the record
+      videoRecord['creator'] = videoData.creatorName;
     }
     
     console.log('Inserting video record:', videoRecord);
     
-    // Insert data into videos table - make sure we specify all columns we're inserting into
+    // Insert data into videos table with all required columns
     const { data, error: dbError } = await supabase
       .from('videos')
-      .insert([videoRecord]) // Wrap in array as required by Supabase
+      .insert([videoRecord])
       .select();
     
     if (dbError) {

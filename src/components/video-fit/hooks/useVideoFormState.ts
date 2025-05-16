@@ -50,7 +50,7 @@ export const useVideoFormState = (): VideoFormState => {
     });
   }, [videoCraft, showCreatorField, creatorName]);
   
-  // Update showCreatorField when the craft changes
+  // Update showCreatorField and reset creatorName when the craft changes
   useEffect(() => {
     if (videoCraft !== 'Creator') {
       setCreatorName(''); // Reset creator name if craft is not Creator
