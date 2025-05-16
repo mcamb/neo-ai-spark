@@ -49,7 +49,7 @@ const VideoDetailSection: React.FC<VideoDetailProps> = ({
         />
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-2">
           <Label htmlFor="video-craft">Video Crafted By<span className="text-red-500">*</span></Label>
           <Select 
@@ -92,7 +92,7 @@ const VideoDetailSection: React.FC<VideoDetailProps> = ({
 
       {showCreatorField && (
         <div className="space-y-2">
-          <Label htmlFor="creator-name">Creator<span className="text-red-500">*</span></Label>
+          <Label htmlFor="creator-name">Creator Name<span className="text-red-500">*</span></Label>
           <Input
             id="creator-name"
             value={creatorName}

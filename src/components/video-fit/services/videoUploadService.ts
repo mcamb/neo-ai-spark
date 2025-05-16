@@ -40,25 +40,23 @@ export const uploadVideo = async (file: File, videoData: VideoData): Promise<Upl
     
     const publicUrl = publicUrlData.publicUrl;
     
-    // Create a record object that will be inserted into the database
-    // Using the specific column names from the videos table
-    const videoRecord = {
+    // Create a base record object with required fields
+    const videoRecord: Record<string, any> = {
       titel: videoData.title,
       file: publicUrl,
       format: videoData.format,
       crafted_by: videoData.craft,
-      campaign_id: videoData.campaignId
+      campaign_id: videoData.campaignId,
     };
     
-    // If craft is 'Creator', add creator name, otherwise it will be null by default
+    // Only add creator field if craft is 'Creator'
     if (videoData.craft === 'Creator' && videoData.creatorName) {
-      // Add creator name to the record
-      videoRecord['creator'] = videoData.creatorName;
+      videoRecord.creator = videoData.creatorName;
     }
     
     console.log('Inserting video record:', videoRecord);
     
-    // Insert data into videos table with all required columns
+    // Insert data into videos table
     const { data, error: dbError } = await supabase
       .from('videos')
       .insert([videoRecord])
@@ -87,16 +85,6 @@ export const uploadVideo = async (file: File, videoData: VideoData): Promise<Upl
     
     if (error.message) {
       errorMessage += `: ${error.message}`;
-    }
-    
-    if (error.code === '23505') {
-      errorMessage = "A video with this name already exists";
-    } else if (error.code === '23503') {
-      errorMessage = "Referenced campaign does not exist";
-    } else if (error.code === '23502') {
-      errorMessage = "Missing required field in video data";
-    } else if (error.code === '42601') {
-      errorMessage = "SQL syntax error - please check column names in the insert statement";
     }
     
     toast({

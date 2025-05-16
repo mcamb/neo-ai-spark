@@ -9,10 +9,12 @@ import DeleteVideoDialog from '@/components/video-fit/DeleteVideoDialog';
 import { useNavigate } from 'react-router-dom';
 import { toast } from '@/hooks/use-toast';
 import { Video } from '@/components/video-fit/VideoCard';
+import VideoUploadSheet from '@/components/video-fit/VideoUploadSheet';
 
 const VideoFit = () => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
+  const [isUploadSheetOpen, setIsUploadSheetOpen] = useState(false);
   
   const { 
     videos, 
@@ -31,10 +33,20 @@ const VideoFit = () => {
     selectedVideoId
   } = useVideoDeletion({ refetch });
   
-  // Handle empty button click (no functionality)
-  const handleAddVideoClick = () => {
-    // This is intentionally empty to disable the add video functionality
-    console.log('Add video button clicked - functionality removed');
+  const handleOpenUploadSheet = () => {
+    setIsUploadSheetOpen(true);
+  };
+  
+  const handleCloseUploadSheet = () => {
+    setIsUploadSheetOpen(false);
+  };
+  
+  const handleUploadSuccess = () => {
+    refetch();
+    toast({
+      title: "Video Added",
+      description: "Your video has been added and is ready for analysis",
+    });
   };
   
   const handleViewVideo = (id: string) => {
@@ -61,7 +73,7 @@ const VideoFit = () => {
         <VideosToolbar
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}
-          onAddVideo={handleAddVideoClick}
+          onAddVideo={handleOpenUploadSheet}
           isDisabled={isPageLoading}
         />
         
@@ -74,7 +86,13 @@ const VideoFit = () => {
           onEditVideo={() => {}} // Empty function since we removed the edit button
           onViewVideo={handleViewVideo}
           refetch={refetch}
-          onAddVideo={handleAddVideoClick}
+          onAddVideo={handleOpenUploadSheet}
+        />
+        
+        <VideoUploadSheet 
+          isOpen={isUploadSheetOpen} 
+          onClose={handleCloseUploadSheet} 
+          onSuccess={handleUploadSuccess}
         />
         
         <DeleteVideoDialog

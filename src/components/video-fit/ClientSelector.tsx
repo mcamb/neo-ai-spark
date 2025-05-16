@@ -15,6 +15,7 @@ import { Label } from '@/components/ui/label';
 type Client = {
   id: string;
   brand: string;
+  country: string;
 };
 
 type ClientSelectorProps = {
@@ -36,8 +37,8 @@ const ClientSelector: React.FC<ClientSelectorProps> = ({
     queryFn: async () => {
       const { data, error } = await supabase
         .from('clients')
-        .select('id, brand')  // Select brand instead of name
-        .order('brand');      // Order by brand
+        .select('id, brand, country')
+        .order('brand');
       
       if (error) throw error;
       return data || [];
@@ -62,7 +63,7 @@ const ClientSelector: React.FC<ClientSelectorProps> = ({
         <SelectContent>
           {clients.map((client) => (
             <SelectItem key={client.id} value={client.id}>
-              {client.brand}
+              {client.brand} - {client.country || "Global"}
             </SelectItem>
           ))}
         </SelectContent>

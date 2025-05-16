@@ -3,6 +3,7 @@ import React from 'react';
 import { Upload } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
 
 type VideoPreviewProps = {
   selectedFile: File | null;
@@ -25,7 +26,7 @@ const VideoPreview: React.FC<VideoPreviewProps> = ({
         Upload Video
         {required && <span className="text-red-500">*</span>}
       </Label>
-      <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:bg-gray-50 transition-colors">
+      <div className="border-2 border-gray-300 rounded-lg p-6 text-center bg-gray-50">
         <Input
           id="video-upload"
           type="file"
@@ -37,18 +38,23 @@ const VideoPreview: React.FC<VideoPreviewProps> = ({
         />
         
         {!previewUrl ? (
-          <label 
-            htmlFor="video-upload" 
-            className="flex flex-col items-center justify-center cursor-pointer space-y-2"
-          >
+          <div className="flex flex-col items-center justify-center space-y-4">
             <Upload className="h-8 w-8 text-gray-400" />
             <p className="text-sm text-gray-500">
-              Drag and drop a video file, or click to browse
+              Click below to select a video file
             </p>
             <p className="text-xs text-gray-400">
               MP4, MOV, or WebM files supported
             </p>
-          </label>
+            <Button 
+              variant="outline" 
+              onClick={() => document.getElementById('video-upload')?.click()}
+              disabled={isUploading}
+              type="button"
+            >
+              Select Video
+            </Button>
+          </div>
         ) : (
           <div className="space-y-4">
             <video
@@ -59,12 +65,15 @@ const VideoPreview: React.FC<VideoPreviewProps> = ({
             <p className="text-sm text-gray-500 mt-2">
               {selectedFile?.name} ({(selectedFile?.size / 1024 / 1024).toFixed(2)} MB)
             </p>
-            <label 
-              htmlFor="video-upload" 
-              className="text-sm text-blue-500 cursor-pointer"
+            <Button 
+              variant="outline" 
+              onClick={() => document.getElementById('video-upload')?.click()}
+              disabled={isUploading}
+              type="button"
+              size="sm"
             >
               Choose a different video
-            </label>
+            </Button>
           </div>
         )}
       </div>
