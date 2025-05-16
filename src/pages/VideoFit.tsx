@@ -1,7 +1,6 @@
 
 import React, { useState } from 'react';
 import MainLayout from '@/components/MainLayout';
-import VideoUploadModal from '@/components/video-fit/VideoUploadModal';
 import { useVideos } from '@/hooks/useVideos';
 import VideosContent from '@/components/video-fit/VideosContent';
 import VideosToolbar from '@/components/video-fit/VideosToolbar';
@@ -14,7 +13,6 @@ import { Video } from '@/components/video-fit/VideoCard';
 const VideoFit = () => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
-  const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
   
   const { 
     videos, 
@@ -33,20 +31,10 @@ const VideoFit = () => {
     selectedVideoId
   } = useVideoDeletion({ refetch });
   
-  const handleOpenUploadModal = () => {
-    setIsUploadModalOpen(true);
-  };
-  
-  const handleCloseUploadModal = () => {
-    setIsUploadModalOpen(false);
-  };
-  
-  const handleUploadSuccess = () => {
-    refetch();
-    toast({
-      title: "Video Added",
-      description: "Your video has been added and is ready for analysis",
-    });
+  // Handle empty button click (no functionality)
+  const handleAddVideoClick = () => {
+    // This is intentionally empty to disable the add video functionality
+    console.log('Add video button clicked - functionality removed');
   };
   
   const handleViewVideo = (id: string) => {
@@ -73,7 +61,7 @@ const VideoFit = () => {
         <VideosToolbar
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}
-          onAddVideo={handleOpenUploadModal}
+          onAddVideo={handleAddVideoClick}
           isDisabled={isPageLoading}
         />
         
@@ -86,13 +74,7 @@ const VideoFit = () => {
           onEditVideo={() => {}} // Empty function since we removed the edit button
           onViewVideo={handleViewVideo}
           refetch={refetch}
-          onAddVideo={handleOpenUploadModal}
-        />
-        
-        <VideoUploadModal 
-          isOpen={isUploadModalOpen} 
-          onClose={handleCloseUploadModal} 
-          onSuccess={handleUploadSuccess}
+          onAddVideo={handleAddVideoClick}
         />
         
         <DeleteVideoDialog

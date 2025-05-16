@@ -65,7 +65,7 @@ const VideosContent: React.FC<VideosContentProps> = ({
         <FileVideo className="h-12 w-12 mx-auto mb-4 text-gray-400" />
         <h3 className="text-lg font-medium text-gray-900">No videos found</h3>
         <p className="mt-2 text-sm text-gray-500">
-          Get started by uploading your first video for analysis.
+          No videos are currently available for analysis.
         </p>
         <Button 
           onClick={onAddVideo}
