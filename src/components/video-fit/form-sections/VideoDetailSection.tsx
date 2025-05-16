@@ -59,7 +59,7 @@ const VideoDetailSection: React.FC<VideoDetailProps> = ({
             required
           >
             <SelectTrigger id="video-craft">
-              <SelectValue />
+              <SelectValue placeholder="Select craft type" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="Brand">Brand</SelectItem>
@@ -77,7 +77,7 @@ const VideoDetailSection: React.FC<VideoDetailProps> = ({
             required
           >
             <SelectTrigger id="video-format">
-              <SelectValue />
+              <SelectValue placeholder="Select format" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="16:9">16:9</SelectItem>

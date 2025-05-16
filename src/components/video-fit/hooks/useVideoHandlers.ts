@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { uploadVideo, UploadResult } from '../services/videoUploadService';
 import { validateVideoForm } from '../utils/formValidation';
@@ -102,6 +103,8 @@ export const useVideoHandlers = ({ formState, onSuccess, onClose }: VideoHandler
     }, 500);
     
     try {
+      console.log('Uploading with craft:', videoCraft, 'creator name:', creatorName);
+      
       // Upload video and save to database
       const result = await uploadVideo(
         selectedFile as File,
@@ -110,7 +113,7 @@ export const useVideoHandlers = ({ formState, onSuccess, onClose }: VideoHandler
           format: videoFormat,
           craft: videoCraft,
           campaignId: selectedCampaignId,
-          creatorName: creatorName || undefined
+          creatorName: videoCraft === 'Creator' ? creatorName : undefined
         }
       );
       

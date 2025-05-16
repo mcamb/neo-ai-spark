@@ -24,7 +24,7 @@ interface VideoRecord {
   format: string;
   crafted_by: string;
   campaign_id: string;
-  creator?: string | null; // Make creator optional since it's conditionally added
+  creator: string | null; // Make creator optional since it's conditionally added
 }
 
 export const uploadVideo = async (file: File, videoData: VideoData): Promise<UploadResult> => {
@@ -56,18 +56,13 @@ export const uploadVideo = async (file: File, videoData: VideoData): Promise<Upl
       file: publicUrl,
       format: videoData.format,
       crafted_by: videoData.craft,
-      campaign_id: videoData.campaignId
+      campaign_id: videoData.campaignId,
+      creator: null // Default to null
     };
     
-    // If craft is 'Creator', add creator name, otherwise leave it out completely
-    if (videoData.craft === 'Creator') {
-      if (!videoData.creatorName) {
-        throw new Error("Creator name is required when 'Creator' is selected");
-      }
+    // If craft is 'Creator', add creator name, otherwise leave it null
+    if (videoData.craft === 'Creator' && videoData.creatorName) {
       videoRecord.creator = videoData.creatorName;
-    } else {
-      // Explicitly set creator to null for Brand videos
-      videoRecord.creator = null;
     }
     
     console.log('Inserting video record:', videoRecord);

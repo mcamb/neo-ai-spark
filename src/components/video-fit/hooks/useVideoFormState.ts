@@ -16,36 +16,47 @@ export interface VideoFormState {
   setVideoCraft: (craft: string) => void;
   videoFormat: string;
   setVideoFormat: (format: string) => void;
+  showCreatorField: boolean;
   creatorName: string;
   setCreatorName: (name: string) => void;
-  showCreatorField: boolean;
-  isFormValid: boolean;
 }
 
 export const useVideoFormState = (): VideoFormState => {
+  // Client and Campaign selection state
   const [selectedClientId, setSelectedClientId] = useState<string>('');
   const [selectedCampaignId, setSelectedCampaignId] = useState<string>('');
+  
+  // File upload state
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  
+  // Video details state
   const [videoTitle, setVideoTitle] = useState<string>('');
-  const [videoCraft, setVideoCraft] = useState<string>('Brand');
-  const [videoFormat, setVideoFormat] = useState<string>('16:9');
+  const [videoCraft, setVideoCraft] = useState<string>('Brand'); // Default to Brand
+  const [videoFormat, setVideoFormat] = useState<string>('16:9'); // Default to 16:9
+  
+  // Creator field state
   const [creatorName, setCreatorName] = useState<string>('');
-  const [showCreatorField, setShowCreatorField] = useState<boolean>(false);
-
-  // Update showCreatorField when videoCraft changes
+  
+  // Determine if the creator field should be shown
+  const showCreatorField = videoCraft === 'Creator';
+  
+  // Log state changes for debugging
   useEffect(() => {
-    setShowCreatorField(videoCraft === 'Creator');
-    // Clear creator name if not showing the field
+    console.log('Form state updated:', {
+      videoCraft,
+      showCreatorField,
+      creatorName
+    });
+  }, [videoCraft, showCreatorField, creatorName]);
+  
+  // Update showCreatorField when the craft changes
+  useEffect(() => {
     if (videoCraft !== 'Creator') {
-      setCreatorName('');
+      setCreatorName(''); // Reset creator name if craft is not Creator
     }
   }, [videoCraft]);
-
-  // Form validity check
-  const isFormValid = !!selectedClientId && !!selectedCampaignId && !!selectedFile && !!videoTitle && 
-    (!showCreatorField || (showCreatorField && !!creatorName));
-
+  
   return {
     selectedClientId,
     setSelectedClientId,
@@ -53,7 +64,7 @@ export const useVideoFormState = (): VideoFormState => {
     setSelectedCampaignId,
     selectedFile,
     setSelectedFile,
-    previewUrl,
+    previewUrl, 
     setPreviewUrl,
     videoTitle,
     setVideoTitle,
@@ -61,9 +72,8 @@ export const useVideoFormState = (): VideoFormState => {
     setVideoCraft,
     videoFormat,
     setVideoFormat,
-    creatorName,
-    setCreatorName,
     showCreatorField,
-    isFormValid
+    creatorName,
+    setCreatorName
   };
 };
