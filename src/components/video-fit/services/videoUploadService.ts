@@ -46,7 +46,8 @@ export const uploadVideo = async (file: File, videoData: VideoData): Promise<Upl
       file: publicUrl,
       format: videoData.format,
       crafted_by: videoData.craft,
-      campaign_id: videoData.campaignId
+      campaign_id: videoData.campaignId,
+      created_at: new Date().toISOString() // Add the current timestamp
     };
     
     // Only add creator field if craft is 'Creator'
