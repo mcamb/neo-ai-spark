@@ -47,12 +47,12 @@ export const uploadVideo = async (file: File, videoData: VideoData): Promise<Upl
       format: videoData.format,
       crafted_by: videoData.craft,
       campaign_id: videoData.campaignId,
-      created_at: new Date().toISOString() // Add the current timestamp
+      created_at: new Date().toISOString()
     };
     
     // Only add creator field if craft is 'Creator'
     if (videoData.craft === 'Creator' && videoData.creatorName) {
-      videoRecord['creator'] = videoData.creatorName;
+      videoRecord['creator'] = videoData.creatorName; // Correctly mapping to 'creator' field
     }
     
     console.log('Inserting video record:', videoRecord);
