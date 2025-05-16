@@ -4,9 +4,10 @@ import { useVideoHandlers } from './useVideoHandlers';
 
 interface UseVideoUploadProps {
   onSuccess?: () => void;
+  onClose?: () => void;
 }
 
-export const useVideoUpload = ({ onSuccess }: UseVideoUploadProps) => {
+export const useVideoUpload = ({ onSuccess, onClose }: UseVideoUploadProps) => {
   // Get form state
   const formState = useVideoFormState();
   
@@ -21,7 +22,8 @@ export const useVideoUpload = ({ onSuccess }: UseVideoUploadProps) => {
     handleSubmit
   } = useVideoHandlers({ 
     formState,
-    onSuccess
+    onSuccess,
+    onClose
   });
 
   // Calculate if form is valid for submit button state

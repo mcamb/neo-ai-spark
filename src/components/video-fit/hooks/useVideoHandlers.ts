@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { uploadVideo, UploadResult } from '../services/videoUploadService';
 import { validateVideoForm } from '../utils/formValidation';
@@ -9,9 +8,10 @@ import { toast } from '@/hooks/use-toast';
 interface VideoHandlersProps {
   formState: VideoFormState;
   onSuccess?: () => void;
+  onClose?: () => void;
 }
 
-export const useVideoHandlers = ({ formState, onSuccess }: VideoHandlersProps) => {
+export const useVideoHandlers = ({ formState, onSuccess, onClose }: VideoHandlersProps) => {
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
   const [lastUploadResult, setLastUploadResult] = useState<UploadResult | null>(null);
@@ -125,6 +125,11 @@ export const useVideoHandlers = ({ formState, onSuccess }: VideoHandlersProps) =
         // Call the onSuccess callback if provided
         if (onSuccess) {
           onSuccess();
+        }
+        
+        // Close the modal if onClose callback is provided
+        if (onClose) {
+          onClose();
         }
       } else {
         setUploadError(result.message || "Unknown error occurred");

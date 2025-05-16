@@ -1,13 +1,14 @@
 
-import React, { useState } from 'react';
-import { Button } from '@/components/ui/button';
+import React from 'react';
+import { useVideoUpload } from './hooks/useVideoUpload';
+import ClientSelector from './ClientSelector';
+import CampaignSelector from './CampaignSelector';
+import VideoPreview from './VideoPreview';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Loader2, Upload } from 'lucide-react';
-import { uploadVideo } from './services/videoUploadService';
-import { useQuery } from '@tanstack/react-query';
-import { supabase } from '@/integrations/supabase/client';
+import FormSubmitButton from './form-sections/FormSubmitButton';
+import UploadFeedback from './form-sections/UploadFeedback';
 
 interface VideoUploadFormProps {
   onSuccess?: () => void;
@@ -15,191 +16,59 @@ interface VideoUploadFormProps {
 }
 
 const VideoUploadForm: React.FC<VideoUploadFormProps> = ({ onSuccess, onClose }) => {
-  // Client state
-  const [selectedClientId, setSelectedClientId] = useState<string>('');
-  const [selectedCampaignId, setSelectedCampaignId] = useState<string>('');
-  
-  // Video details
-  const [videoTitle, setVideoTitle] = useState<string>('');
-  const [videoCraft, setVideoCraft] = useState<string>('Brand');
-  const [videoFormat, setVideoFormat] = useState<string>('16:9');
-  const [creatorName, setCreatorName] = useState<string>('');
-  
-  // File state
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  
-  // Upload state
-  const [isUploading, setIsUploading] = useState<boolean>(false);
-  const [uploadError, setUploadError] = useState<string | null>(null);
-  
-  // Fetch clients
-  const { data: clients = [] } = useQuery({
-    queryKey: ['clients'],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from('clients')
-        .select('id, brand')
-        .order('brand');
-      
-      if (error) throw error;
-      return data || [];
-    }
-  });
-  
-  // Fetch campaigns based on selected client
-  const { data: campaigns = [] } = useQuery({
-    queryKey: ['campaigns', selectedClientId],
-    queryFn: async () => {
-      if (!selectedClientId) return [];
-      
-      const { data, error } = await supabase
-        .from('campaigns')
-        .select('id, titel, client_id')
-        .eq('client_id', selectedClientId)
-        .order('titel');
-      
-      if (error) throw error;
-      return data || [];
-    },
-    enabled: !!selectedClientId
-  });
-  
-  // Handle client change - reset campaign selection
+  // Use our custom hook that provides all form state and handlers
+  const {
+    // Form state
+    selectedClientId,
+    setSelectedClientId,
+    selectedCampaignId,
+    setSelectedCampaignId,
+    selectedFile,
+    previewUrl,
+    videoTitle,
+    setVideoTitle,
+    videoCraft,
+    setVideoCraft,
+    videoFormat,
+    setVideoFormat,
+    creatorName,
+    setCreatorName,
+    showCreatorField,
+    // Upload state
+    isUploading,
+    uploadProgress,
+    uploadError,
+    lastUploadResult,
+    isFormValid,
+    // Handlers
+    handleFileChange,
+    resetCampaignOnClientChange,
+    handleSubmit
+  } = useVideoUpload({ onSuccess, onClose });
+
+  // Client change handler to reset campaign selection
   const handleClientChange = (clientId: string) => {
     setSelectedClientId(clientId);
-    setSelectedCampaignId('');
+    resetCampaignOnClientChange();
   };
-  
-  // Handle file selection
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0] || null;
-    setSelectedFile(file);
-    
-    // Reset previous errors
-    setUploadError(null);
-    
-    // Create preview URL for video
-    if (file) {
-      const url = URL.createObjectURL(file);
-      setPreviewUrl(url);
-      
-      // Use file name as default title if no title is set
-      if (!videoTitle) {
-        setVideoTitle(file.name.split('.')[0]);
-      }
-    } else {
-      setPreviewUrl(null);
-    }
-  };
-  
-  // Show creator field only when "Creator" is selected
-  const showCreatorField = videoCraft === 'Creator';
-  
-  // Form validation
-  const isFormValid = Boolean(
-    selectedClientId &&
-    selectedCampaignId &&
-    selectedFile &&
-    videoTitle &&
-    (!showCreatorField || (showCreatorField && creatorName))
-  );
-  
-  // Handle form submission
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!isFormValid || !selectedFile) return;
-    
-    setIsUploading(true);
-    setUploadError(null);
-    
-    try {
-      const result = await uploadVideo(
-        selectedFile,
-        {
-          title: videoTitle,
-          format: videoFormat,
-          craft: videoCraft,
-          campaignId: selectedCampaignId,
-          creatorName: creatorName || undefined
-        }
-      );
-      
-      if (result.success) {
-        if (onSuccess) onSuccess();
-        if (onClose) onClose();
-      } else {
-        setUploadError(result.message);
-      }
-    } catch (error) {
-      setUploadError("An unexpected error occurred");
-      console.error(error);
-    } finally {
-      setIsUploading(false);
-    }
-  };
-  
-  // Clean up preview URL when component unmounts
-  React.useEffect(() => {
-    return () => {
-      if (previewUrl) {
-        URL.revokeObjectURL(previewUrl);
-      }
-    };
-  }, [previewUrl]);
-  
+
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      {/* Client Selection */}
-      <div className="space-y-2">
-        <Label htmlFor="client">Client<span className="text-red-500">*</span></Label>
-        <Select 
-          value={selectedClientId} 
-          onValueChange={handleClientChange}
-          disabled={isUploading}
-          required
-        >
-          <SelectTrigger id="client">
-            <SelectValue placeholder="Select a client" />
-          </SelectTrigger>
-          <SelectContent>
-            {clients.map((client) => (
-              <SelectItem key={client.id} value={client.id}>
-                {client.brand}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
+      {/* Client and Campaign Selection */}
+      <ClientSelector 
+        selectedClientId={selectedClientId} 
+        setSelectedClientId={handleClientChange}
+        disabled={isUploading}
+        required
+      />
       
-      {/* Campaign Selection */}
-      <div className="space-y-2">
-        <Label htmlFor="campaign">Campaign<span className="text-red-500">*</span></Label>
-        <Select 
-          value={selectedCampaignId} 
-          onValueChange={setSelectedCampaignId}
-          disabled={!selectedClientId || campaigns.length === 0 || isUploading}
-          required
-        >
-          <SelectTrigger id="campaign">
-            <SelectValue placeholder={
-              !selectedClientId 
-                ? "Select a client first" 
-                : campaigns.length === 0 
-                  ? "No campaigns available" 
-                  : "Select a campaign"
-            } />
-          </SelectTrigger>
-          <SelectContent>
-            {campaigns.map((campaign) => (
-              <SelectItem key={campaign.id} value={campaign.id}>
-                {campaign.titel}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
+      <CampaignSelector 
+        selectedClientId={selectedClientId}
+        selectedCampaignId={selectedCampaignId}
+        setSelectedCampaignId={setSelectedCampaignId}
+        disabled={isUploading}
+        required
+      />
       
       {/* Video Title */}
       <div className="space-y-2">
@@ -272,78 +141,27 @@ const VideoUploadForm: React.FC<VideoUploadFormProps> = ({ onSuccess, onClose })
       )}
       
       {/* Video Upload */}
-      <div className="space-y-2">
-        <Label htmlFor="video-upload">Upload Video<span className="text-red-500">*</span></Label>
-        <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:bg-gray-50 transition-colors">
-          <Input
-            id="video-upload"
-            type="file"
-            accept="video/*"
-            onChange={handleFileChange}
-            className="hidden"
-            disabled={isUploading}
-            required
-          />
-          
-          {!previewUrl ? (
-            <label 
-              htmlFor="video-upload" 
-              className="flex flex-col items-center justify-center cursor-pointer space-y-2"
-            >
-              <Upload className="h-8 w-8 text-gray-400" />
-              <p className="text-sm text-gray-500">
-                Drag and drop a video file, or click to browse
-              </p>
-              <p className="text-xs text-gray-400">
-                MP4, MOV, or WebM files supported
-              </p>
-            </label>
-          ) : (
-            <div className="space-y-4">
-              <video
-                controls
-                src={previewUrl}
-                className="max-h-64 mx-auto rounded"
-              />
-              <p className="text-sm text-gray-500 mt-2">
-                {selectedFile?.name} ({(selectedFile?.size / 1024 / 1024).toFixed(2)} MB)
-              </p>
-              <label 
-                htmlFor="video-upload" 
-                className="text-sm text-blue-500 cursor-pointer"
-              >
-                Choose a different video
-              </label>
-            </div>
-          )}
-        </div>
-      </div>
+      <VideoPreview
+        selectedFile={selectedFile}
+        previewUrl={previewUrl}
+        handleFileChange={handleFileChange}
+        isUploading={isUploading}
+        required
+      />
       
-      {/* Error message */}
-      {uploadError && (
-        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
-          {uploadError}
-        </div>
-      )}
+      {/* Upload Feedback (errors, progress, etc.) */}
+      <UploadFeedback
+        isUploading={isUploading}
+        uploadProgress={uploadProgress}
+        uploadError={uploadError}
+        lastUploadResult={lastUploadResult}
+      />
       
       {/* Submit Button */}
-      <Button 
-        type="submit" 
-        className="w-full"
-        disabled={!isFormValid || isUploading}
-      >
-        {isUploading ? (
-          <>
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            Uploading Video...
-          </>
-        ) : (
-          <>
-            <Upload className="mr-2 h-4 w-4" />
-            Upload and Analyze Video
-          </>
-        )}
-      </Button>
+      <FormSubmitButton 
+        isUploading={isUploading} 
+        isFormValid={isFormValid} 
+      />
     </form>
   );
 };
