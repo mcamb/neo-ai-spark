@@ -63,10 +63,10 @@ export const uploadVideo = async (file: File, videoData: VideoData): Promise<Upl
     console.log("DEBUG: JSON payload", JSON.stringify(videoRecord, null, 2));
     
     // Insert data into videos table with the correct field mappings
-    // Using returning('representation') to get data back while avoiding SQL errors
     const { data, error: dbError } = await supabase
       .from('videos')
-      .insert([videoRecord], { returning: 'representation' });
+      .insert([videoRecord])
+      .select(); // Use default select without parameters
     
     if (dbError) {
       console.error('Database error:', dbError);
@@ -78,10 +78,13 @@ export const uploadVideo = async (file: File, videoData: VideoData): Promise<Upl
       description: "Video uploaded successfully"
     });
     
+    // Safely access the video ID, ensuring data is not null
+    const videoId = data && data.length > 0 ? data[0].id : undefined;
+    
     return {
       success: true, 
       message: "Video uploaded successfully",
-      videoId: data?.[0]?.id
+      videoId: videoId
     };
   } catch (error) {
     console.error('Error uploading video:', error);
