@@ -17,14 +17,14 @@ export interface UploadResult {
   videoId?: string;
 }
 
-// Define the video record interface to include all possible fields
+// Define the video record interface to match the database table structure
 interface VideoRecord {
   titel: string;
   file: string;
   format: string;
   crafted_by: string;
   campaign_id: string;
-  creator?: string; // Make creator optional since it's conditionally added
+  creator?: string | null; // Make creator optional since it's conditionally added
 }
 
 export const uploadVideo = async (file: File, videoData: VideoData): Promise<UploadResult> => {
@@ -59,17 +59,23 @@ export const uploadVideo = async (file: File, videoData: VideoData): Promise<Upl
       campaign_id: videoData.campaignId
     };
     
-    // Only add creator if it's needed (when craft is 'Creator')
-    if (videoData.craft === 'Creator' && videoData.creatorName) {
+    // If craft is 'Creator', add creator name, otherwise leave it out completely
+    if (videoData.craft === 'Creator') {
+      if (!videoData.creatorName) {
+        throw new Error("Creator name is required when 'Creator' is selected");
+      }
       videoRecord.creator = videoData.creatorName;
+    } else {
+      // Explicitly set creator to null for Brand videos
+      videoRecord.creator = null;
     }
     
     console.log('Inserting video record:', videoRecord);
     
-    // Insert data into videos table
+    // Insert data into videos table - make sure we specify all columns we're inserting into
     const { data, error: dbError } = await supabase
       .from('videos')
-      .insert(videoRecord)
+      .insert([videoRecord]) // Wrap in array as required by Supabase
       .select();
     
     if (dbError) {
