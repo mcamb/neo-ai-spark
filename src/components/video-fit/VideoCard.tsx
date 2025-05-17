@@ -108,16 +108,19 @@ const VideoCard: React.FC<VideoCardProps> = ({ video, onDelete, onView }) => {
       </CardHeader>
       
       <CardContent className="p-4 pt-2">
-        <div className="text-sm text-black space-y-2">
-          <p className="truncate font-medium">
-            Campaign: {video.campaignTitle || 'Not assigned'}
+        <div className="text-sm space-y-3">
+          <p className="truncate">
+            <span className="font-medium text-black">Campaign:</span>{" "}
+            <span className="text-black">{video.campaignTitle || 'Not assigned'}</span>
           </p>
-          <p className="truncate font-medium">
-            Client: {video.clientName || 'Unknown'}
+          <p className="truncate">
+            <span className="font-medium text-black">Client:</span>{" "}
+            <span className="text-black">{video.clientName || 'Unknown'}</span>
           </p>
           {video.creator && (
-            <p className="truncate font-medium">
-              Creator: {video.creator}
+            <p className="truncate">
+              <span className="font-medium text-black">Creator:</span>{" "}
+              <span className="text-black">{video.creator}</span>
             </p>
           )}
         </div>
