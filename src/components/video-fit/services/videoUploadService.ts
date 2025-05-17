@@ -59,14 +59,14 @@ export const uploadVideo = async (file: File | null, videoData: VideoData): Prom
     
     console.log('Preparing to insert video record with campaign_id:', videoData.campaignId);
     
-    // Define exact columns and values for the insert operation
+    // Fix: Explicitly specify columns and values for the insert operation
     const { data: insertedData, error: dbError } = await supabase
       .from('videos')
       .insert({
         title: videoData.title,
         format: videoData.format,
         created_by: videoData.created_by,
-        campaign_id: videoData.campaignId,
+        campaign_id: videoData.campaignId,  // Make sure this is passed as a valid UUID
         creator: videoData.creator || null,
         video_url: publicUrl || null
       })

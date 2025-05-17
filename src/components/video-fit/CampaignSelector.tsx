@@ -52,6 +52,14 @@ const CampaignSelector: React.FC<CampaignSelectorProps> = ({
     enabled: !!selectedClientId
   });
 
+  // Validate that we have a proper UUID for selectedCampaignId
+  React.useEffect(() => {
+    if (selectedCampaignId && !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(selectedCampaignId)) {
+      console.error('Invalid campaign ID format detected:', selectedCampaignId);
+      setSelectedCampaignId(''); // Reset to empty if invalid
+    }
+  }, [selectedCampaignId, setSelectedCampaignId]);
+
   return (
     <div className="space-y-2">
       <Label htmlFor="campaign">
@@ -78,7 +86,7 @@ const CampaignSelector: React.FC<CampaignSelectorProps> = ({
         <SelectContent>
           {campaigns.map((campaign) => (
             <SelectItem key={campaign.id} value={campaign.id}>
-              {campaign.titel} ({campaign.id})
+              {campaign.titel}
             </SelectItem>
           ))}
         </SelectContent>

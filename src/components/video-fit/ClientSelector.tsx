@@ -46,6 +46,14 @@ const ClientSelector: React.FC<ClientSelectorProps> = ({
     }
   });
 
+  // Validate that we have a proper UUID for selectedClientId
+  React.useEffect(() => {
+    if (selectedClientId && !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(selectedClientId)) {
+      console.error('Invalid client ID format detected:', selectedClientId);
+      setSelectedClientId(''); // Reset to empty if invalid
+    }
+  }, [selectedClientId, setSelectedClientId]);
+
   return (
     <div className="space-y-2">
       <Label htmlFor="client">
@@ -64,7 +72,7 @@ const ClientSelector: React.FC<ClientSelectorProps> = ({
         <SelectContent>
           {clients.map((client) => (
             <SelectItem key={client.id} value={client.id}>
-              {client.brand} - {client.country || "Global"} ({client.id})
+              {client.brand} - {client.country || "Global"}
             </SelectItem>
           ))}
         </SelectContent>
