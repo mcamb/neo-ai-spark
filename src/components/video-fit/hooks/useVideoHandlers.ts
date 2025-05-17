@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { uploadVideo, UploadResult } from '../services/videoUploadService';
 import { validateVideoForm } from '../utils/formValidation';
@@ -73,21 +72,16 @@ export const useVideoHandlers = ({ formState, onSuccess, onClose }: VideoHandler
     setLastUploadResult(null);
     setUploadError(null);
     
-    // Check if required fields are provided
-    const isValid = Boolean(
-      videoTitle && 
-      selectedCampaignId && 
-      selectedClientId && 
+    // Validate the form inputs including UUID format
+    const formData = {
+      selectedClientId,
+      selectedCampaignId,
+      selectedFile,
+      videoTitle,
       creatorName
-    );
+    };
     
-    if (!isValid) {
-      setUploadError("Please fill in all required fields");
-      toast({
-        title: "Validation Error",
-        description: "Please complete all required fields",
-        variant: "destructive"
-      });
+    if (!validateVideoForm(formData)) {
       return;
     }
     

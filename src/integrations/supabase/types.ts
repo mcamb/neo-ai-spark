@@ -402,10 +402,10 @@ export type Database = {
       videos: {
         Row: {
           assessment: string | null
-          campaign_id: string | null
+          campaign_id: string
           created_at: string
           created_by: string
-          creator: string | null
+          creator: string
           description: string | null
           format: string
           id: string
@@ -415,10 +415,10 @@ export type Database = {
         }
         Insert: {
           assessment?: string | null
-          campaign_id?: string | null
+          campaign_id: string
           created_at?: string
           created_by: string
-          creator?: string | null
+          creator: string
           description?: string | null
           format: string
           id?: string
@@ -428,10 +428,10 @@ export type Database = {
         }
         Update: {
           assessment?: string | null
-          campaign_id?: string | null
+          campaign_id?: string
           created_at?: string
           created_by?: string
-          creator?: string | null
+          creator?: string
           description?: string | null
           format?: string
           id?: string

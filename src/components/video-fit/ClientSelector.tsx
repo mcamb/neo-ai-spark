@@ -32,7 +32,7 @@ const ClientSelector: React.FC<ClientSelectorProps> = ({
   required = false
 }) => {
   // Fetch clients - using 'brand' instead of 'name'
-  const { data: clients = [] } = useQuery<Client[]>({
+  const { data: clients = [], isLoading } = useQuery<Client[]>({
     queryKey: ['clients'],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -41,6 +41,7 @@ const ClientSelector: React.FC<ClientSelectorProps> = ({
         .order('brand');
       
       if (error) throw error;
+      console.log('Fetched clients:', data); // Log clients to verify IDs
       return data || [];
     }
   });
@@ -54,16 +55,16 @@ const ClientSelector: React.FC<ClientSelectorProps> = ({
       <Select 
         value={selectedClientId} 
         onValueChange={setSelectedClientId}
-        disabled={disabled}
+        disabled={disabled || isLoading}
         required={required}
       >
         <SelectTrigger id="client">
-          <SelectValue placeholder="Select a client" />
+          <SelectValue placeholder={isLoading ? "Loading clients..." : "Select a client"} />
         </SelectTrigger>
         <SelectContent>
           {clients.map((client) => (
             <SelectItem key={client.id} value={client.id}>
-              {client.brand} - {client.country || "Global"}
+              {client.brand} - {client.country || "Global"} ({client.id})
             </SelectItem>
           ))}
         </SelectContent>

@@ -34,7 +34,7 @@ const CampaignSelector: React.FC<CampaignSelectorProps> = ({
   required = false
 }) => {
   // Fetch campaigns based on selected client - using 'titel' instead of 'name'
-  const { data: campaigns = [] } = useQuery<Campaign[]>({
+  const { data: campaigns = [], isLoading } = useQuery<Campaign[]>({
     queryKey: ['campaigns', selectedClientId],
     queryFn: async () => {
       if (!selectedClientId) return [];
@@ -46,6 +46,7 @@ const CampaignSelector: React.FC<CampaignSelectorProps> = ({
         .order('titel');                 // Order by titel
       
       if (error) throw error;
+      console.log('Fetched campaigns:', data); // Log campaigns to verify IDs
       return data || [];
     },
     enabled: !!selectedClientId
@@ -60,22 +61,24 @@ const CampaignSelector: React.FC<CampaignSelectorProps> = ({
       <Select 
         value={selectedCampaignId} 
         onValueChange={setSelectedCampaignId}
-        disabled={!selectedClientId || campaigns.length === 0 || disabled}
+        disabled={!selectedClientId || campaigns.length === 0 || disabled || isLoading}
         required={required}
       >
         <SelectTrigger id="campaign">
           <SelectValue placeholder={
             !selectedClientId 
               ? "Select a client first" 
-              : campaigns.length === 0 
-                ? "No campaigns available" 
-                : "Select a campaign"
+              : isLoading
+                ? "Loading campaigns..."
+                : campaigns.length === 0 
+                  ? "No campaigns available" 
+                  : "Select a campaign"
           } />
         </SelectTrigger>
         <SelectContent>
           {campaigns.map((campaign) => (
             <SelectItem key={campaign.id} value={campaign.id}>
-              {campaign.titel}
+              {campaign.titel} ({campaign.id})
             </SelectItem>
           ))}
         </SelectContent>
