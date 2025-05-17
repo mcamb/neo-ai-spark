@@ -403,41 +403,41 @@ export type Database = {
         Row: {
           assessment: string | null
           campaign_id: string | null
-          crafted_by: string
           created_at: string
+          created_by: string
           creator: string | null
           description: string | null
-          file: string
           format: string
           id: string
           recommendations: string | null
-          titel: string
+          title: string
+          video_url: string
         }
         Insert: {
           assessment?: string | null
           campaign_id?: string | null
-          crafted_by: string
           created_at?: string
+          created_by: string
           creator?: string | null
           description?: string | null
-          file: string
           format: string
           id?: string
           recommendations?: string | null
-          titel: string
+          title: string
+          video_url: string
         }
         Update: {
           assessment?: string | null
           campaign_id?: string | null
-          crafted_by?: string
           created_at?: string
+          created_by?: string
           creator?: string | null
           description?: string | null
-          file?: string
           format?: string
           id?: string
           recommendations?: string | null
-          titel?: string
+          title?: string
+          video_url?: string
         }
         Relationships: [
           {

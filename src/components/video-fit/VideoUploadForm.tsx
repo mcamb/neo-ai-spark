@@ -30,7 +30,6 @@ const VideoUploadForm: React.FC<VideoUploadFormProps> = ({ onSuccess, onClose })
     setVideoFormat,
     creatorName,
     setCreatorName,
-    showCreatorField,
     // Upload state
     isUploading,
     uploadProgress,
@@ -65,7 +64,6 @@ const VideoUploadForm: React.FC<VideoUploadFormProps> = ({ onSuccess, onClose })
         videoFormat={videoFormat}
         setVideoFormat={setVideoFormat}
         isUploading={isUploading}
-        showCreatorField={showCreatorField}
         creatorName={creatorName}
         setCreatorName={setCreatorName}
       />

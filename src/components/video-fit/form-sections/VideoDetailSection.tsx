@@ -18,7 +18,6 @@ interface VideoDetailProps {
   videoFormat: string;
   setVideoFormat: (format: string) => void;
   isUploading: boolean;
-  showCreatorField: boolean;
   creatorName: string;
   setCreatorName: (name: string) => void;
 }
@@ -31,7 +30,6 @@ const VideoDetailSection: React.FC<VideoDetailProps> = ({
   videoFormat,
   setVideoFormat,
   isUploading,
-  showCreatorField,
   creatorName,
   setCreatorName
 }) => {
@@ -51,7 +49,7 @@ const VideoDetailSection: React.FC<VideoDetailProps> = ({
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-2">
-          <Label htmlFor="video-craft">Video Crafted By<span className="text-red-500">*</span></Label>
+          <Label htmlFor="video-craft">Video Created By<span className="text-red-500">*</span></Label>
           <Select 
             value={videoCraft} 
             onValueChange={setVideoCraft}
@@ -59,11 +57,13 @@ const VideoDetailSection: React.FC<VideoDetailProps> = ({
             required
           >
             <SelectTrigger id="video-craft">
-              <SelectValue placeholder="Select craft type" />
+              <SelectValue placeholder="Select who created this video" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="Brand">Brand</SelectItem>
               <SelectItem value="Creator">Creator</SelectItem>
+              <SelectItem value="Agency">Agency</SelectItem>
+              <SelectItem value="In-house">In-house</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -90,19 +90,22 @@ const VideoDetailSection: React.FC<VideoDetailProps> = ({
         </div>
       </div>
 
-      {showCreatorField && (
-        <div className="space-y-2">
-          <Label htmlFor="creator-name">Creator Name<span className="text-red-500">*</span></Label>
-          <Input
-            id="creator-name"
-            value={creatorName}
-            onChange={(e) => setCreatorName(e.target.value)}
-            placeholder="Enter creator name"
-            disabled={isUploading}
-            required={showCreatorField}
-          />
-        </div>
-      )}
+      <div className="space-y-2">
+        <Label htmlFor="creator-name">
+          Creator Name<span className="text-red-500">*</span>
+        </Label>
+        <Input
+          id="creator-name"
+          value={creatorName}
+          onChange={(e) => setCreatorName(e.target.value)}
+          placeholder="Enter name of creator, agency, or in-house team"
+          disabled={isUploading}
+          required
+        />
+        <p className="text-sm text-gray-500">
+          Please specify who created this video: creator name, agency, or in-house team
+        </p>
+      </div>
     </>
   );
 };

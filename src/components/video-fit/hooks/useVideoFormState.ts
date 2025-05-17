@@ -16,7 +16,6 @@ export interface VideoFormState {
   setVideoCraft: (craft: string) => void;
   videoFormat: string;
   setVideoFormat: (format: string) => void;
-  showCreatorField: boolean;
   creatorName: string;
   setCreatorName: (name: string) => void;
 }
@@ -34,28 +33,15 @@ export const useVideoFormState = (): VideoFormState => {
   const [videoTitle, setVideoTitle] = useState<string>('');
   const [videoCraft, setVideoCraft] = useState<string>('Brand'); // Default to Brand
   const [videoFormat, setVideoFormat] = useState<string>('16:9'); // Default to 16:9
-  
-  // Creator field state
   const [creatorName, setCreatorName] = useState<string>('');
-  
-  // Determine if the creator field should be shown
-  const showCreatorField = videoCraft === 'Creator';
   
   // Log state changes for debugging
   useEffect(() => {
     console.log('Form state updated:', {
       videoCraft,
-      showCreatorField,
       creatorName
     });
-  }, [videoCraft, showCreatorField, creatorName]);
-  
-  // Update showCreatorField and reset creatorName when the craft changes
-  useEffect(() => {
-    if (videoCraft !== 'Creator') {
-      setCreatorName(''); // Reset creator name if craft is not Creator
-    }
-  }, [videoCraft]);
+  }, [videoCraft, creatorName]);
   
   return {
     selectedClientId,
@@ -72,7 +58,6 @@ export const useVideoFormState = (): VideoFormState => {
     setVideoCraft,
     videoFormat,
     setVideoFormat,
-    showCreatorField,
     creatorName,
     setCreatorName
   };

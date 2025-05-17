@@ -28,7 +28,6 @@ export const useVideoHandlers = ({ formState, onSuccess, onClose }: VideoHandler
     videoCraft,
     videoFormat,
     creatorName,
-    showCreatorField,
     setPreviewUrl,
   } = formState;
 
@@ -74,13 +73,12 @@ export const useVideoHandlers = ({ formState, onSuccess, onClose }: VideoHandler
     setLastUploadResult(null);
     setUploadError(null);
     
-    // Validate form data
+    // Validate form data - creator name is now always required
     const isValid = validateVideoForm({
       selectedClientId,
       selectedCampaignId,
       selectedFile,
       videoTitle,
-      showCreatorField,
       creatorName
     });
     
@@ -103,7 +101,7 @@ export const useVideoHandlers = ({ formState, onSuccess, onClose }: VideoHandler
     }, 500);
     
     try {
-      console.log('Uploading with craft:', videoCraft, 'creator name:', creatorName);
+      console.log('Uploading with created_by:', videoCraft, 'creator name:', creatorName);
       
       // Upload video and save to database
       const result = await uploadVideo(
@@ -111,9 +109,9 @@ export const useVideoHandlers = ({ formState, onSuccess, onClose }: VideoHandler
         {
           title: videoTitle,
           format: videoFormat,
-          craft: videoCraft,
+          created_by: videoCraft,
           campaignId: selectedCampaignId,
-          creatorName: videoCraft === 'Creator' ? creatorName : undefined
+          creator: creatorName // Now always include creator
         }
       );
       

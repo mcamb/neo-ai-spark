@@ -5,9 +5,9 @@ import { toast } from '@/hooks/use-toast';
 interface VideoData {
   title: string;
   format: string;
-  craft: string;
+  created_by: string;
   campaignId: string;
-  creatorName?: string;
+  creator?: string;
 }
 
 export interface UploadResult {
@@ -47,17 +47,13 @@ export const uploadVideo = async (file: File, videoData: VideoData): Promise<Upl
     
     // Create a record object with the correct field names matching the database schema
     const videoRecord = {
-      titel: videoData.title,
-      file: publicUrl,
+      title: videoData.title,
+      video_url: publicUrl,
       format: videoData.format,
-      crafted_by: videoData.craft,
-      campaign_id: videoData.campaignId
+      created_by: videoData.created_by,
+      campaign_id: videoData.campaignId,
+      creator: videoData.creator // Now we always include creator if provided
     };
-    
-    // Only add creator field if craft is 'Creator'
-    if (videoData.craft === 'Creator' && videoData.creatorName) {
-      videoRecord['creator'] = videoData.creatorName;
-    }
     
     console.log("DEBUG: videoRecord", videoRecord);
     console.log("DEBUG: JSON payload", JSON.stringify(videoRecord, null, 2));
