@@ -34,7 +34,14 @@ export const validateVideoForm = (data: ValidationData): boolean => {
     return false;
   }
   
-  // Video file is now optional - removed validation check
+  if (!data.selectedFile) {
+    toast({
+      title: "Error",
+      description: "Please select a video file",
+      variant: "destructive"
+    });
+    return false;
+  }
   
   if (!data.videoTitle) {
     toast({

@@ -411,7 +411,7 @@ export type Database = {
           id: string
           recommendations: string | null
           title: string
-          video_url: string | null
+          video_url: string
         }
         Insert: {
           assessment?: string | null
@@ -424,7 +424,7 @@ export type Database = {
           id?: string
           recommendations?: string | null
           title: string
-          video_url?: string | null
+          video_url: string
         }
         Update: {
           assessment?: string | null
@@ -437,7 +437,7 @@ export type Database = {
           id?: string
           recommendations?: string | null
           title?: string
-          video_url?: string | null
+          video_url?: string
         }
         Relationships: [
           {
@@ -575,6 +575,10 @@ export type Database = {
         Returns: Json
       }
       enable_realtime_for_clients: {
+        Args: Record<PropertyKey, never>
+        Returns: Json
+      }
+      get_complete_schema: {
         Args: Record<PropertyKey, never>
         Returns: Json
       }

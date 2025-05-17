@@ -31,31 +31,36 @@ export const uploadVideo = async (file: File | null, videoData: VideoData): Prom
       throw new Error('Invalid campaign ID format. Please select a valid campaign.');
     }
     
-    let publicUrl = '';
-    
-    // Only upload file if one was provided
-    if (file) {
-      // Upload video to Supabase Storage
-      const fileExt = file.name.split('.').pop();
-      const filePath = `${Date.now()}_${Math.random().toString(36).substring(2, 15)}.${fileExt}`;
-      
-      const { data: uploadData, error: uploadError } = await supabase
-        .storage
-        .from('videos')
-        .upload(filePath, file);
-        
-      if (uploadError) {
-        throw uploadError;
-      }
-      
-      // Get the public URL for the uploaded video
-      const { data: publicUrlData } = supabase
-        .storage
-        .from('videos')
-        .getPublicUrl(filePath);
-      
-      publicUrl = publicUrlData.publicUrl;
+    // Validate that a file was provided (now required)
+    if (!file) {
+      throw new Error('No video file selected. Please select a video file.');
     }
+    
+    // Upload video to Supabase Storage
+    const fileExt = file.name.split('.').pop();
+    const filePath = `${Date.now()}_${Math.random().toString(36).substring(2, 15)}.${fileExt}`;
+    
+    const { data: uploadData, error: uploadError } = await supabase
+      .storage
+      .from('videos')
+      .upload(filePath, file);
+      
+    if (uploadError) {
+      throw uploadError;
+    }
+    
+    // Get the public URL for the uploaded video
+    const { data: publicUrlData } = supabase
+      .storage
+      .from('videos')
+      .getPublicUrl(filePath);
+    
+    const publicUrl = publicUrlData.publicUrl;
+    
+    console.log('Video uploaded successfully with URL:', publicUrl);
+    
+    // Wait a small amount of time to ensure the URL is accessible
+    await new Promise(resolve => setTimeout(resolve, 1000));
     
     console.log('Preparing to insert video record with campaign_id:', videoData.campaignId);
     
@@ -68,7 +73,7 @@ export const uploadVideo = async (file: File | null, videoData: VideoData): Prom
         created_by: videoData.created_by,
         campaign_id: videoData.campaignId,  // Make sure this is passed as a valid UUID
         creator: videoData.creator || null,
-        video_url: publicUrl || null
+        video_url: publicUrl
       })
       .select('id')
       .single();

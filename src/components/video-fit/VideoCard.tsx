@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -37,6 +37,9 @@ const formatTimestamp = (timestamp: string): string => {
 };
 
 const VideoCard: React.FC<VideoCardProps> = ({ video, onDelete, onView }) => {
+  const [isHovering, setIsHovering] = useState(false);
+  const [videoLoaded, setVideoLoaded] = useState(false);
+  
   const handleDelete = (e: React.MouseEvent) => {
     e.stopPropagation();
     onDelete(video.id, video);
@@ -46,15 +49,32 @@ const VideoCard: React.FC<VideoCardProps> = ({ video, onDelete, onView }) => {
     onView(video.id);
   };
 
+  const handleMouseEnter = () => {
+    setIsHovering(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovering(false);
+  };
+
   return (
     <Card className="overflow-hidden transition-all hover:shadow-md">
-      <div className="aspect-video bg-gray-100 relative overflow-hidden">
+      <div 
+        className="aspect-video bg-gray-100 relative overflow-hidden"
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      >
         {video.video_url ? (
           <video 
             src={video.video_url} 
             className="object-cover w-full h-full cursor-pointer" 
             onClick={handleView}
             preload="metadata"
+            autoPlay={isHovering}
+            loop={isHovering}
+            muted
+            playsInline
+            onLoadedData={() => setVideoLoaded(true)}
           />
         ) : (
           <div className="flex items-center justify-center h-full bg-gray-200">
@@ -66,7 +86,7 @@ const VideoCard: React.FC<VideoCardProps> = ({ video, onDelete, onView }) => {
       <CardHeader className="p-4 pb-0">
         <div className="flex justify-between items-start">
           <CardTitle 
-            className="text-lg font-semibold truncate cursor-pointer" 
+            className="text-lg font-bold text-black cursor-pointer" 
             onClick={handleView}
           >
             {video.title || 'Untitled Video'}
@@ -88,15 +108,15 @@ const VideoCard: React.FC<VideoCardProps> = ({ video, onDelete, onView }) => {
       </CardHeader>
       
       <CardContent className="p-4 pt-2">
-        <div className="text-sm text-gray-500">
-          <p className="truncate">
+        <div className="text-sm text-black space-y-2">
+          <p className="truncate font-medium">
             Campaign: {video.campaignTitle || 'Not assigned'}
           </p>
-          <p className="truncate">
+          <p className="truncate font-medium">
             Client: {video.clientName || 'Unknown'}
           </p>
           {video.creator && (
-            <p className="truncate">
+            <p className="truncate font-medium">
               Creator: {video.creator}
             </p>
           )}
