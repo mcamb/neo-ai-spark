@@ -17,11 +17,18 @@ export interface UploadResult {
   videoId?: string;
 }
 
+// Helper function to validate if a string is a valid UUID
+const isValidUUID = (uuid: string) => {
+  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+  return uuidRegex.test(uuid);
+};
+
 export const uploadVideo = async (file: File | null, videoData: VideoData): Promise<UploadResult> => {
   try {
-    // Validate the campaign ID to ensure it's a valid UUID before proceeding
-    if (!videoData.campaignId || videoData.campaignId.trim() === '' || videoData.campaignId === 'undefined') {
-      throw new Error('Missing or invalid campaign ID. Please select a valid campaign.');
+    // Enhanced validation for campaign UUID - check if it's actually a valid UUID format
+    if (!videoData.campaignId || !isValidUUID(videoData.campaignId)) {
+      console.error('Invalid campaign ID format:', videoData.campaignId);
+      throw new Error('Invalid campaign ID format. Please select a valid campaign.');
     }
     
     let publicUrl = '';
@@ -50,8 +57,9 @@ export const uploadVideo = async (file: File | null, videoData: VideoData): Prom
       publicUrl = publicUrlData.publicUrl;
     }
     
+    console.log('Preparing to insert video record with campaign_id:', videoData.campaignId);
+    
     // Define exact columns and values for the insert operation
-    // This explicitly maps each column to its value to avoid column count mismatches
     const { data: insertedData, error: dbError } = await supabase
       .from('videos')
       .insert({
@@ -59,15 +67,17 @@ export const uploadVideo = async (file: File | null, videoData: VideoData): Prom
         format: videoData.format,
         created_by: videoData.created_by,
         campaign_id: videoData.campaignId,
-        creator: videoData.creator || null,  // Handle null explicitly
-        video_url: publicUrl || null  // Set to null if no URL exists
-      });
+        creator: videoData.creator || null,
+        video_url: publicUrl || null
+      })
+      .select('id')
+      .single();
     
     if (dbError) {
       console.error('Database error:', dbError);
       throw dbError;
     } else {
-      console.log("✅ Video record created successfully");
+      console.log("✅ Video record created successfully:", insertedData);
     }
     
     toast({
@@ -77,7 +87,8 @@ export const uploadVideo = async (file: File | null, videoData: VideoData): Prom
     
     return {
       success: true, 
-      message: "Video record created successfully"
+      message: "Video record created successfully",
+      videoId: insertedData?.id
     };
   } catch (error) {
     console.error('Error creating video record:', error);
