@@ -55,8 +55,8 @@ export const useVideoAnalysis = (videoId: string | undefined) => {
         // Construct analysis data from the video information
         const analysisData: VideoAnalysisData = {
           video_id: videoId,
-          video_title: videoData.titel,
-          video_craft: videoData.crafted_by,
+          video_title: videoData.title,
+          video_craft: videoData.created_by,
           video_format: videoData.format,
           video_description: videoData.description || null,
           overall_assessment: videoData.assessment || null,

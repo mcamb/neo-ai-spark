@@ -12,10 +12,10 @@ export const useVideos = () => {
       .from('videos')
       .select(`
         id, 
-        titel, 
-        file,
+        title, 
+        video_url,
         format,
-        crafted_by,
+        created_by,
         creator,
         created_at,
         campaign_id,
@@ -40,14 +40,14 @@ export const useVideos = () => {
     // Transform the data to match our Video interface
     const transformedVideos = data.map(video => ({
       id: video.id,
-      title: video.titel,
+      title: video.title,
       campaignId: video.campaign_id,
       campaignTitle: video.campaigns?.titel || 'Unknown Campaign',
       clientName: video.campaigns?.clients?.brand || 'Unknown Client',
       country: video.campaigns?.clients?.country || 'Unknown Country',
-      file: video.file,
+      video_url: video.video_url,
       format: video.format,
-      craft: video.crafted_by,
+      craft: video.created_by,
       creator: video.creator,
       created_at: video.created_at
     }));

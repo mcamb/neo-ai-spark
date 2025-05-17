@@ -32,7 +32,7 @@ export const useVideoUpload = ({ onSuccess, onClose }: UseVideoUploadProps) => {
     formState.selectedCampaignId &&
     formState.selectedFile &&
     formState.videoTitle &&
-    (!formState.showCreatorField || formState.creatorName)
+    formState.creatorName
   );
 
   // Return everything needed by the VideoUploadForm component

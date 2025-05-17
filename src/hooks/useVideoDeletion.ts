@@ -71,8 +71,8 @@ export const useVideoDeletion = ({ refetch }: UseVideoDeletionOptions) => {
     try {
       // Step 1: Delete the file from storage if a file URL exists
       let fileDeleted = true;
-      if (selectedVideo.file) {
-        fileDeleted = await deleteVideoFile(selectedVideo.file);
+      if (selectedVideo.video_url) {
+        fileDeleted = await deleteVideoFile(selectedVideo.video_url);
       }
       
       // Step 2: Delete the database record
@@ -128,15 +128,15 @@ export const deleteVideo = async (videoId: string) => {
     // First, get the video to find its file URL
     const { data: video, error: fetchError } = await supabase
       .from('videos')
-      .select('id, file')
+      .select('id, video_url')
       .eq('id', videoId)
       .single();
     
     if (fetchError) throw fetchError;
     
     // If the video has a file, delete it from storage
-    if (video.file) {
-      const urlParts = video.file.split('/');
+    if (video.video_url) {
+      const urlParts = video.video_url.split('/');
       const filePath = urlParts[urlParts.length - 1];
       
       const { error: storageError } = await supabase

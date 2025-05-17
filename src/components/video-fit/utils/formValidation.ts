@@ -6,7 +6,6 @@ export interface ValidationData {
   selectedCampaignId: string;
   selectedFile: File | null;
   videoTitle: string;
-  showCreatorField: boolean;
   creatorName: string;
 }
 
@@ -47,7 +46,7 @@ export const validateVideoForm = (data: ValidationData): boolean => {
     return false;
   }
 
-  if (data.showCreatorField && !data.creatorName) {
+  if (!data.creatorName) {
     toast({
       title: "Error",
       description: "Please enter creator name",
