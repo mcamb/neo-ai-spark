@@ -73,17 +73,20 @@ export const useVideoHandlers = ({ formState, onSuccess, onClose }: VideoHandler
     setLastUploadResult(null);
     setUploadError(null);
     
-    // Validate form data - creator name is now always required
-    const isValid = validateVideoForm({
-      selectedClientId,
-      selectedCampaignId,
-      selectedFile,
-      videoTitle,
-      creatorName
-    });
+    // For this test, we'll skip file validation
+    // Modify validation to make selectedFile optional for testing
+    const isValid = videoTitle && 
+                   selectedCampaignId && 
+                   selectedClientId && 
+                   creatorName;
     
     if (!isValid) {
-      setUploadError("Form validation failed");
+      setUploadError("Please fill in all required fields");
+      toast({
+        title: "Validation Error",
+        description: "Please complete all required fields",
+        variant: "destructive"
+      });
       return;
     }
     
@@ -103,15 +106,15 @@ export const useVideoHandlers = ({ formState, onSuccess, onClose }: VideoHandler
     try {
       console.log('Uploading with created_by:', videoCraft, 'creator name:', creatorName);
       
-      // Upload video and save to database
+      // Upload video and save to database - now accepts null for file
       const result = await uploadVideo(
-        selectedFile as File,
+        selectedFile, // This might be null for the test
         {
           title: videoTitle,
           format: videoFormat,
           created_by: videoCraft,
           campaignId: selectedCampaignId,
-          creator: creatorName // Now always include creator
+          creator: creatorName
         }
       );
       

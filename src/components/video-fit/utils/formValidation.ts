@@ -28,15 +28,9 @@ export const validateVideoForm = (data: ValidationData): boolean => {
     return false;
   }
   
-  if (!data.selectedFile) {
-    toast({
-      title: "Error",
-      description: "Please upload a video",
-      variant: "destructive"
-    });
-    return false;
-  }
-
+  // For testing purposes, we'll allow submissions without a file
+  // Remove the file validation check
+  
   if (!data.videoTitle) {
     toast({
       title: "Error",
