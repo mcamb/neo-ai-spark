@@ -52,16 +52,17 @@ export const uploadVideo = async (file: File, videoData: VideoData): Promise<Upl
       format: videoData.format,
       created_by: videoData.created_by,
       campaign_id: videoData.campaignId,
-      creator: videoData.creator // Now we always include creator if provided
+      creator: videoData.creator
     };
     
     console.log("DEBUG: videoRecord", videoRecord);
     console.log("DEBUG: JSON payload", JSON.stringify(videoRecord, null, 2));
     
-    // Insert data into videos table - simple insert without select or columns
+    // Insert data into videos table - explicitly specify columns to avoid mismatch
     const { error: dbError } = await supabase
       .from('videos')
-      .insert([videoRecord]);
+      .insert([videoRecord])
+      .select(); // Adding select to get the created record ID
     
     // Log success or failure
     if (dbError) {
