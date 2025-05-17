@@ -45,29 +45,26 @@ export const uploadVideo = async (file: File, videoData: VideoData): Promise<Upl
     
     const publicUrl = publicUrlData.publicUrl;
     
-    // Create a record with only the fields that exist in the database table
-    const videoRecord = {
+    // Prepare the data for insertion with exact column names
+    const insertData = {
       title: videoData.title,
       video_url: publicUrl,
       format: videoData.format,
       created_by: videoData.created_by,
       campaign_id: videoData.campaignId,
-      creator: videoData.creator
     };
+
+    // Only add creator if it exists and is not empty
+    if (videoData.creator && videoData.creator.trim() !== '') {
+      insertData['creator'] = videoData.creator;
+    }
     
-    console.log("DEBUG: videoRecord", videoRecord);
+    console.log("DEBUG: Insert data payload:", insertData);
     
-    // Insert data into videos table with explicitly specified columns
-    const { data: insertData, error: dbError } = await supabase
+    // Insert data using a simplified approach
+    const { error: dbError } = await supabase
       .from('videos')
-      .insert([{
-        title: videoData.title,
-        video_url: publicUrl,
-        format: videoData.format,
-        created_by: videoData.created_by,
-        campaign_id: videoData.campaignId,
-        creator: videoData.creator
-      }]);
+      .insert(insertData);
     
     // Log success or failure
     if (dbError) {
