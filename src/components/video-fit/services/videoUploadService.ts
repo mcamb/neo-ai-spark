@@ -48,34 +48,20 @@ export const uploadVideo = async (file: File | null, videoData: VideoData): Prom
         .getPublicUrl(filePath);
       
       publicUrl = publicUrlData.publicUrl;
-    } else {
-      // No file was uploaded, which is now allowed
-      console.log("No file uploaded, proceeding with video record creation without URL");
     }
     
-    // Create insert data with only required fields
-    const insertData: any = {
-      title: videoData.title,
-      format: videoData.format,
-      created_by: videoData.created_by,
-      campaign_id: videoData.campaignId
-    };
-    
-    // Only add optional fields if they're present
-    if (publicUrl) {
-      insertData.video_url = publicUrl;
-    }
-    
-    if (videoData.creator && videoData.creator.trim() !== '') {
-      insertData.creator = videoData.creator;
-    }
-    
-    console.log("DEBUG: Inserting video record with data:", JSON.stringify(insertData, null, 2));
-    
-    // Insert into database
+    // Define exact columns and values for the insert operation
+    // This explicitly maps each column to its value to avoid column count mismatches
     const { data: insertedData, error: dbError } = await supabase
       .from('videos')
-      .insert(insertData);
+      .insert({
+        title: videoData.title,
+        format: videoData.format,
+        created_by: videoData.created_by,
+        campaign_id: videoData.campaignId,
+        creator: videoData.creator || null,  // Handle null explicitly
+        video_url: publicUrl || null  // Set to null if no URL exists
+      });
     
     if (dbError) {
       console.error('Database error:', dbError);
