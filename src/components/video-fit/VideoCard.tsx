@@ -107,7 +107,7 @@ const VideoCard: React.FC<VideoCardProps> = ({ video, onDelete, onView }) => {
         </div>
       </CardHeader>
       
-      <CardContent className="p-4 pt-2">
+      <CardContent className="p-4 pt-2 mt-4">
         <div className="text-sm space-y-3">
           <p className="truncate">
             <span className="font-medium text-black">Campaign:</span>{" "}
