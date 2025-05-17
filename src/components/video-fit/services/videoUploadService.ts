@@ -45,7 +45,7 @@ export const uploadVideo = async (file: File, videoData: VideoData): Promise<Upl
     
     const publicUrl = publicUrlData.publicUrl;
     
-    // Create a record object with the correct field names matching the database schema
+    // Create a record with only the fields that exist in the database table
     const videoRecord = {
       title: videoData.title,
       video_url: publicUrl,
@@ -56,13 +56,18 @@ export const uploadVideo = async (file: File, videoData: VideoData): Promise<Upl
     };
     
     console.log("DEBUG: videoRecord", videoRecord);
-    console.log("DEBUG: JSON payload", JSON.stringify(videoRecord, null, 2));
     
-    // Insert data into videos table - explicitly specify columns to avoid mismatch
-    const { error: dbError } = await supabase
+    // Insert data into videos table with explicitly specified columns
+    const { data: insertData, error: dbError } = await supabase
       .from('videos')
-      .insert([videoRecord])
-      .select(); // Adding select to get the created record ID
+      .insert([{
+        title: videoData.title,
+        video_url: publicUrl,
+        format: videoData.format,
+        created_by: videoData.created_by,
+        campaign_id: videoData.campaignId,
+        creator: videoData.creator
+      }]);
     
     // Log success or failure
     if (dbError) {
