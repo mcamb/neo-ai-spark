@@ -74,7 +74,7 @@ const VideoUploadForm: React.FC<VideoUploadFormProps> = ({ onSuccess, onClose })
         previewUrl={previewUrl}
         handleFileChange={handleFileChange}
         isUploading={isUploading}
-        required
+        required={false}
       />
       
       {/* Upload Feedback (errors, progress, etc.) */}

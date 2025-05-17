@@ -28,8 +28,7 @@ export const validateVideoForm = (data: ValidationData): boolean => {
     return false;
   }
   
-  // For testing purposes, we'll allow submissions without a file
-  // Remove the file validation check
+  // Video file is now optional - removed validation check
   
   if (!data.videoTitle) {
     toast({

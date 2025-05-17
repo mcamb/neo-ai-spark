@@ -23,8 +23,7 @@ const VideoPreview: React.FC<VideoPreviewProps> = ({
   return (
     <div className="space-y-2">
       <Label htmlFor="video-upload">
-        Upload Video
-        {required && <span className="text-red-500">*</span>}
+        Upload Video (Optional)
       </Label>
       <div className="border-2 border-gray-300 rounded-lg p-6 text-center bg-gray-50">
         <Input
@@ -34,14 +33,14 @@ const VideoPreview: React.FC<VideoPreviewProps> = ({
           onChange={handleFileChange}
           className="hidden"
           disabled={isUploading}
-          required={required}
+          required={false}
         />
         
         {!previewUrl ? (
           <div className="flex flex-col items-center justify-center space-y-4">
             <Upload className="h-8 w-8 text-gray-400" />
             <p className="text-sm text-gray-500">
-              Click below to select a video file
+              Click below to select a video file (optional)
             </p>
             <p className="text-xs text-gray-400">
               MP4, MOV, or WebM files supported

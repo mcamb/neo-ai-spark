@@ -73,12 +73,13 @@ export const useVideoHandlers = ({ formState, onSuccess, onClose }: VideoHandler
     setLastUploadResult(null);
     setUploadError(null);
     
-    // For this test, we'll skip file validation
-    // Modify validation to make selectedFile optional for testing
-    const isValid = videoTitle && 
-                   selectedCampaignId && 
-                   selectedClientId && 
-                   creatorName;
+    // Check if required fields are provided
+    const isValid = Boolean(
+      videoTitle && 
+      selectedCampaignId && 
+      selectedClientId && 
+      creatorName
+    );
     
     if (!isValid) {
       setUploadError("Please fill in all required fields");

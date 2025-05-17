@@ -411,7 +411,7 @@ export type Database = {
           id: string
           recommendations: string | null
           title: string
-          video_url: string
+          video_url: string | null
         }
         Insert: {
           assessment?: string | null
@@ -424,7 +424,7 @@ export type Database = {
           id?: string
           recommendations?: string | null
           title: string
-          video_url: string
+          video_url?: string | null
         }
         Update: {
           assessment?: string | null
@@ -437,7 +437,7 @@ export type Database = {
           id?: string
           recommendations?: string | null
           title?: string
-          video_url?: string
+          video_url?: string | null
         }
         Relationships: [
           {

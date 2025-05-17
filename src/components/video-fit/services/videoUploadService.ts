@@ -49,28 +49,30 @@ export const uploadVideo = async (file: File | null, videoData: VideoData): Prom
       
       publicUrl = publicUrlData.publicUrl;
     } else {
-      // For testing: Use a placeholder URL when no file is provided
-      publicUrl = 'https://placeholder-for-testing.com/no-video-uploaded';
-      console.log("No file uploaded, using placeholder URL for testing");
+      // No file was uploaded, which is now allowed
+      console.log("No file uploaded, proceeding with video record creation without URL");
     }
     
-    // Prepare insert data
-    const insertData = {
+    // Create insert data with only required fields
+    const insertData: any = {
       title: videoData.title,
-      video_url: publicUrl,
       format: videoData.format,
       created_by: videoData.created_by,
       campaign_id: videoData.campaignId
     };
-
-    // Only add creator field if it's provided and not empty
-    if (videoData.creator && videoData.creator.trim() !== '') {
-      insertData['creator'] = videoData.creator;
+    
+    // Only add optional fields if they're present
+    if (publicUrl) {
+      insertData.video_url = publicUrl;
     }
     
-    console.log("DEBUG: Inserting with data:", JSON.stringify(insertData, null, 2));
+    if (videoData.creator && videoData.creator.trim() !== '') {
+      insertData.creator = videoData.creator;
+    }
     
-    // Explicitly list columns and values to ensure they match
+    console.log("DEBUG: Inserting video record with data:", JSON.stringify(insertData, null, 2));
+    
+    // Insert into database
     const { data: insertedData, error: dbError } = await supabase
       .from('videos')
       .insert(insertData);
@@ -79,7 +81,7 @@ export const uploadVideo = async (file: File | null, videoData: VideoData): Prom
       console.error('Database error:', dbError);
       throw dbError;
     } else {
-      console.log("✅ Insert successful");
+      console.log("✅ Video record created successfully");
     }
     
     toast({

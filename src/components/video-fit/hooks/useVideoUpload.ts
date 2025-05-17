@@ -26,11 +26,10 @@ export const useVideoUpload = ({ onSuccess, onClose }: UseVideoUploadProps) => {
     onClose
   });
 
-  // Calculate if form is valid for submit button state
+  // Calculate if form is valid for submit button state (removed selectedFile requirement)
   const isFormValid = Boolean(
     formState.selectedClientId &&
     formState.selectedCampaignId &&
-    formState.selectedFile &&
     formState.videoTitle &&
     formState.creatorName
   );
