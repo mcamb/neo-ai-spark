@@ -18,7 +18,7 @@ export const useClientRealtime = ({ refetch }: UseClientRealtimeProps) => {
     const initializeRealtime = async () => {
       const success = await setupRealtimeForClients();
       if (!success) {
-        console.error("Failed to setup realtime for clients table");
+        console.warn("Couldn't confirm realtime setup for clients table, but subscription will be attempted anyway");
       }
     };
     
@@ -57,10 +57,18 @@ export const useClientRealtime = ({ refetch }: UseClientRealtimeProps) => {
           }
         }
       )
-      .subscribe();
+      .subscribe((status) => {
+        console.log('Real-time subscription status:', status);
+        if (status === 'SUBSCRIBED') {
+          console.log('Successfully subscribed to client status changes');
+        } else if (status === 'TIMED_OUT' || status === 'CHANNEL_ERROR') {
+          console.error('Failed to subscribe to client status changes:', status);
+        }
+      });
 
     // Cleanup subscription when component unmounts
     return () => {
+      console.log('Cleaning up client realtime subscription');
       supabase.removeChannel(channel);
     };
   }, [refetch]);
