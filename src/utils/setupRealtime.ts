@@ -4,8 +4,9 @@ import { supabase } from '@/integrations/supabase/client';
 export const setupRealtimeForClients = async () => {
   try {
     // First check if the clients table is already added to the realtime publication
+    // We need to use any here because the function is not typed in the generated types
     const { data: publicationData, error: checkError } = await supabase.rpc(
-      'check_table_in_publication', 
+      'check_table_in_publication' as any, 
       { 
         table_name: 'clients',
         publication_name: 'supabase_realtime'
@@ -35,7 +36,9 @@ export const setupRealtimeForClients = async () => {
     }
     
     // If we successfully checked and table is already in publication
-    if (publicationData && publicationData.exists) {
+    // Cast to the expected type since TypeScript doesn't know the structure
+    const typedData = publicationData as { exists: boolean };
+    if (typedData && typedData.exists) {
       console.log('Table clients is already configured for real-time updates.');
       return true;
     }
