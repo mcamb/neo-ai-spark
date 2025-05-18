@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { uploadVideo, UploadResult } from '../services/videoUploadService';
 import { validateVideoForm } from '../utils/formValidation';
@@ -108,7 +109,7 @@ export const useVideoHandlers = ({ formState, onSuccess, onClose }: VideoHandler
           title: videoTitle,
           format: videoFormat,
           created_by: videoCraft,
-          campaignId: selectedCampaignId,
+          campaign_id: selectedCampaignId, // Changed from campaignId to campaign_id
           creator: creatorName
         }
       );

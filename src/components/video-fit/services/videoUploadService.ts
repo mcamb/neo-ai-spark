@@ -6,8 +6,8 @@ interface VideoData {
   title: string;
   format: string;
   created_by: string;
-  campaignId: string;
-  creator?: string;
+  campaign_id: string; // Changed from campaignId to campaign_id
+  creator: string; // Removed optional flag
 }
 
 export interface UploadResult {
@@ -26,8 +26,8 @@ const isValidUUID = (uuid: string) => {
 export const uploadVideo = async (file: File | null, videoData: VideoData): Promise<UploadResult> => {
   try {
     // Enhanced validation for campaign UUID - check if it's actually a valid UUID format
-    if (!videoData.campaignId || !isValidUUID(videoData.campaignId)) {
-      console.error('Invalid campaign ID format:', videoData.campaignId);
+    if (!videoData.campaign_id || !isValidUUID(videoData.campaign_id)) {
+      console.error('Invalid campaign ID format:', videoData.campaign_id);
       throw new Error('Invalid campaign ID format. Please select a valid campaign.');
     }
     
@@ -62,7 +62,7 @@ export const uploadVideo = async (file: File | null, videoData: VideoData): Prom
     // Wait a small amount of time to ensure the URL is accessible
     await new Promise(resolve => setTimeout(resolve, 1000));
     
-    console.log('Preparing to insert video record with campaign_id:', videoData.campaignId);
+    console.log('Preparing to insert video record with campaign_id:', videoData.campaign_id);
     
     // Fix: Explicitly specify columns and values for the insert operation
     const { data: insertedData, error: dbError } = await supabase
@@ -71,8 +71,8 @@ export const uploadVideo = async (file: File | null, videoData: VideoData): Prom
         title: videoData.title,
         format: videoData.format,
         created_by: videoData.created_by,
-        campaign_id: videoData.campaignId,  // Make sure this is passed as a valid UUID
-        creator: videoData.creator || null,
+        campaign_id: videoData.campaign_id,  // Using campaign_id instead of campaignId
+        creator: videoData.creator,  // Removed the || null fallback
         video_url: publicUrl
       })
       .select('id')
