@@ -403,7 +403,7 @@ export type Database = {
         Row: {
           assessment: string | null
           campaign_id: string
-          created_at: string
+          created_at: string | null
           created_by: string
           creator: string
           description: string | null
@@ -416,7 +416,7 @@ export type Database = {
         Insert: {
           assessment?: string | null
           campaign_id: string
-          created_at?: string
+          created_at?: string | null
           created_by: string
           creator: string
           description?: string | null
@@ -429,7 +429,7 @@ export type Database = {
         Update: {
           assessment?: string | null
           campaign_id?: string
-          created_at?: string
+          created_at?: string | null
           created_by?: string
           creator?: string
           description?: string | null
